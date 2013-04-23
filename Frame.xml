@@ -1,0 +1,261 @@
+<Ui xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="Frame.lua" />
+	<Frame name="MyPetBattleForm" movable="true" enableMouse="true">
+		<Size>
+			<AbsDimension x="272" y="116" />
+		</Size>
+		<Anchors>
+			<Anchor point="CENTER" relativeTo="UIParent">
+				<Offset>
+					<AbsDimension x="0" y="0" />
+				</Offset>
+			</Anchor>
+		</Anchors>
+		<TitleRegion setAllPoints="true" />
+		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Gold-Border" tile="true">
+			<BackgroundInsets>
+				<AbsInset left="11" right="12" top="12" bottom="11" />
+			</BackgroundInsets>
+			<TileSize val="32" />
+			<EdgeSize val="32" />
+		</Backdrop>
+		<Layers>
+			<Layer>
+				<FontString inherits="GameFontNormalSmall" font="Fonts\ARIALN.TTF" text="My Pet Battle">
+					<Size x="78" y="20" />
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="22" y="-11" />
+						</Anchor>
+					</Anchors>
+					<FontHeight val="10" />
+				</FontString>
+				<Texture name="Pet1_texture" file="Interface\PetBattles\MountJournalEmptyIcon">
+					<Size x="22" y="22" />
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="228" y="-29" />
+						</Anchor>
+					</Anchors>
+				</Texture>
+				<Texture name="Pet2_texture" file="Interface\PetBattles\MountJournalEmptyIcon">
+					<Size x="22" y="22" />
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="228" y="-53" />
+						</Anchor>
+					</Anchors>
+				</Texture>
+				<Texture name="Pet3_texture" file="Interface\PetBattles\MountJournalEmptyIcon">
+					<Size x="22" y="22" />
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="228" y="-77" />
+						</Anchor>
+					</Anchors>
+				</Texture>
+			</Layer>
+			<Layer level="OVERLAY">
+				<FontString font="Fonts\ARIALN.TTF" text="Enable / Disable" justifyH="LEFT">
+					<Size x="93" y="10" />
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="36" y="-40" />
+						</Anchor>
+					</Anchors>
+					<FontHeight val="8" />
+					<Color r="1" g="0.82" b="0" />
+				</FontString>
+				<FontString inherits="GameFontNormalSmall" font="Fonts\ARIALN.TTF" text="Join PvP" justifyH="LEFT">
+					<Size x="50" y="20" />
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="36" y="-71" />
+						</Anchor>
+					</Anchors>
+					<FontHeight val="8" />
+				</FontString>
+				<FontString inherits="GameFontNormalSmall" font="Fonts\ARIALN.TTF" text="Automatic capture rare pets if not capped (3/3)" justifyH="LEFT">
+					<Size x="87" y="20" />
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="36" y="-53" />
+						</Anchor>
+					</Anchors>
+					<FontHeight val="8" />
+				</FontString>
+				<FontString inherits="GameFontNormal" font="Fonts\ARIALN.TTF" text="Set desired level" justifyH="LEFT">
+					<Size x="60" y="20" />
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="132" y="-28" />
+						</Anchor>
+					</Anchors>
+					<FontHeight val="8" />
+				</FontString>
+				<FontString inherits="GameFontNormal" font="Fonts\ARIALN.TTF" text="- Team -">
+					<Size x="35" y="20" />
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="221" y="-10" />
+						</Anchor>
+					</Anchors>
+					<FontHeight val="8" />
+				</FontString>
+				<FontString inherits="GameFontNormal" font="Fonts\ARIALN.TTF" text="- Leveling -" justifyH="LEFT">
+					<Size x="42" y="20" />
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="133" y="-11" />
+						</Anchor>
+					</Anchors>
+					<FontHeight val="8" />
+				</FontString>
+				<FontString name="GUI_FontString_version" inherits="GameFontNormalSmall" font="Fonts\ARIALN.TTF" text="v1.0.2">
+					<Size x="35" y="15" />
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="6" y="-95" />
+						</Anchor>
+					</Anchors>
+					<FontHeight val="7" />
+				</FontString>
+				<FontString name="Pet1_level_string" inherits="GameFontNormalSmall" font="Fonts\ARIALN.TTF" text="x">
+					<Size x="16" y="14" />
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="238" y="-40" />
+						</Anchor>
+					</Anchors>
+					<FontHeight val="8" />
+				</FontString>
+				<FontString name="Pet2_level_string" inherits="GameFontNormalSmall" font="Fonts\ARIALN.TTF" text="x">
+					<Size x="16" y="18" />
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="238" y="-62" />
+						</Anchor>
+					</Anchors>
+					<FontHeight val="8" />
+				</FontString>
+				<FontString name="Pet3_level_string" inherits="GameFontNormalSmall" font="Fonts\ARIALN.TTF" text="x">
+					<Size x="16" y="19" />
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="238" y="-85" />
+						</Anchor>
+					</Anchors>
+					<FontHeight val="8" />
+				</FontString>
+			</Layer>
+		</Layers>
+		<Frames>
+			<CheckButton name="CheckButton1" inherits="UICheckButtonTemplate" text="EnableDisable">
+				<Size x="15" y="15" />
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="19" y="-38" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						CheckButton1_OnClick()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="CheckButton2" inherits="UICheckButtonTemplate" text="Join PvP">
+				<Size x="15" y="15" />
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="19" y="-74" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						CheckButton2_OnClick()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="CheckButton3" inherits="UICheckButtonTemplate" text="Capture Blues (rares)">
+				<Size x="15" y="15" />
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="19" y="-56" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						CheckButton3_OnClick()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<Button name="Button_MakeRandomTeam" inherits="UIPanelButtonTemplate" text="Make random team">
+				<Size x="85" y="20" />
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="131" y="-49" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						Button_MakeRandomTeam_OnClick()
+					</OnClick>
+				</Scripts>
+				<ButtonText name="$parentText" font="Fonts\ARIALN.TTF">
+					<FontHeight val="8" />
+				</ButtonText>
+			</Button>
+			<EditBox name="EditBox_PetLevel" inherits="InputBoxTemplate" enableKeyboard="true" letters="2" numeric="true" autoFocus="false">
+				<Size x="20" y="20" />
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="196" y="-28" />
+					</Anchor>
+				</Anchors>
+				<FontString>
+					<FontHeight val="8" />
+				</FontString>
+			</EditBox>
+			<Button name="Button_PetJournalSummary" inherits="UIPanelButtonTemplate" text="Pet Journal Summary">
+				<Size x="85" y="20" />
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="131" y="-78" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						Button_PetJournalSummary_OnClick()
+					</OnClick>
+				</Scripts>
+				<ButtonText name="$parentText" font="Fonts\ARIALN.TTF">
+					<FontHeight val="8" />
+				</ButtonText>
+			</Button>
+			<Button name="Button_open_config_panel" inherits="UIPanelButtonTemplate" text="Config">
+				<Size>
+					<AbsDimension x="45" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="84" y="-78" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						Button_open_config_panel_OnClick()
+					</OnClick>
+				</Scripts>
+				<ButtonText name="$parentText" font="Fonts\ARIALN.TTF">
+					<FontHeight val="8" />
+				</ButtonText>
+			</Button>
+		</Frames>
+		<Scripts>
+			<OnLoad>
+				MyPetBattleForm_OnLoad()
+			</OnLoad>
+		</Scripts>
+	</Frame>
+	<GameTooltip name="pet_texture_tooltip" inherits="GameTooltipTemplate" />
+</Ui>
