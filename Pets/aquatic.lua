@@ -235,6 +235,26 @@ elseif petName == "Spawn of G'nathus" then
 			{"Thunderbolt", 	},	-- Slot 3
 			{"Paralyzing Shock",},	-- Slot 3
 		}
+elseif petName == "Gahz'rooki" then
+	aquatic_abilities = 
+		{
+			{"Bite",			},	-- Slot 1
+			{"Tail Slap", 		},	-- Slot 1
+			{"Devour", 			},	-- Slot 2
+			{"Swallow You Whole",},	-- Slot 2
+			{"Whirlpool", 		},	-- Slot 3
+			{"Geyser",			},	-- Slot 3
+		}
+elseif petName == "Tideskipper" then
+	aquatic_abilities = 
+		{
+			{"Crush",			},	-- Slot 1
+			{"Grasp", 			},	-- Slot 1
+			{"Tidal Wave", 		},	-- Slot 2
+			{"Body Slam",		},	-- Slot 2
+			{"Clobber", 		},	-- Slot 3
+			{"Geyser",			},	-- Slot 3
+		}
 
 -------------------
 else -- Unknown aquatic

@@ -41,6 +41,26 @@ elseif petName == "Twilight Fiendling" then
 			{"Andrenal Glands", },	-- Slot 3
 			{"Siphone Life", 	},	-- Slot 3
 		}
+elseif petName == "Lesser Voidcaller" then
+	magic_abilities = 
+		{
+			{"Shadow Shock", 	},	-- Slot 1
+			{"Nether Blast",	},	-- Slot 1
+			{"Siphon Life",		},	-- Slot 2
+			{"Prismatic Barrier",},	-- Slot 2
+			{"Curse of Doom", 	},	-- Slot 3
+			{"Drain Power", 	},	-- Slot 3
+		}
+elseif petName == "Netherspace Abyssal" then
+	magic_abilities = 
+		{
+			{"Crush",			},	-- Slot 1
+			{"Immolate",		},	-- Slot 1
+			{"Immolation",		},	-- Slot 2
+			{"Explode",			},	-- Slot 2
+			{"Meteor Strike", 	},	-- Slot 3
+			{"Nether Gate", 	},	-- Slot 3
+		}
 ------------------------
 -- JEWELED COMPANIONS --
 ------------------------
@@ -129,6 +149,36 @@ elseif petName == "Viscidus Globule" then
 			{"Poison Spit", 	},	-- Slot 2
 			{"Expunge", 		},	-- Slot 3
 			{"Creeping Ooze", 	},	-- Slot 3
+		}
+elseif petName == "Filthling" then
+	magic_abilities = 
+		{
+			{"Dreadful Breath", },	-- Slot 1
+			{"Absorb", 			},	-- Slot 1
+			{"Stench", 			},	-- Slot 2
+			{"Expunge", 		},	-- Slot 2
+			{"Corrosion", 		},	-- Slot 3
+			{"Creeping Ooze", 	},	-- Slot 3
+		}
+elseif petName == "Living Fluid" then
+	magic_abilities = 
+		{
+			{"Ooze Touch", 		},	-- Slot 1
+			{"Absorb", 			},	-- Slot 1
+			{"Corrosion", 		},	-- Slot 2
+			{"Acidic Goo", 		},	-- Slot 2
+			{"Expunge", 		},	-- Slot 3
+			{"Evolution",		},	-- Slot 3
+		}
+elseif petName == "Viscous Horror" then
+	magic_abilities = 
+		{
+			{"Ooze Touch", 		},	-- Slot 1
+			{"Absorb", 			},	-- Slot 1
+			{"Corrosion", 		},	-- Slot 2
+			{"Plagued Blood", 	},	-- Slot 2
+			{"Expunge", 		},	-- Slot 3
+			{"Evolution", 		},	-- Slot 3
 		}
 ---------------
 -- WYRMLINGS --
@@ -265,6 +315,16 @@ elseif petName == "Willy" then
 			{"Eye Blast", 		},	-- Slot 2
 			{"Agony", 			},	-- Slot 3
 			{"Dark Simulacrum", },	-- Slot 3
+		}
+elseif petName == "Coilfang Stalker" then
+	magic_abilities = 
+		{
+			{"Laser", 			},	-- Slot 1
+			{"Focused Beams", 	},	-- Slot 1
+			{"Gravity",			},	-- Slot 2
+			{"Illusionary Barrier",},	-- Slot 2
+			{"Surge of Power", 	},	-- Slot 3
+			{"Amplify Magic",	},	-- Slot 3
 		}
 ---------------------
 -- ZERG COMPANIONS --

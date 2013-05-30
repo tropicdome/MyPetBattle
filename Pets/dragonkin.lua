@@ -144,6 +144,16 @@ elseif petName == "Blue Dragonhawk Hatchling" or petName == "Golden Dragonhawk H
 			{"Flame Breath", 	},	-- Slot 3
 			{"Flamethrower", 	},	-- Slot 3
 		}
+elseif petName == "Phoenix Hawk Hatchling" then
+	dragonkin_abilities = 
+		{
+			{"Claw", 			},	-- Slot 1
+			{"Quills", 			},	-- Slot 1
+			{"Rake", 			},	-- Slot 2
+			{"Flyby", 			},	-- Slot 2
+			{"Flame Breath", 	},	-- Slot 3
+			{"Lift-Off", 		},	-- Slot 3
+		}
 --------------
 -- SERPENTS --
 --------------

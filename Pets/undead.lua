@@ -233,6 +233,16 @@ elseif petName == "Vampiric Batling" then
 			{"Reckless Strike", },	-- 
 			{"Nocturnal Strike", },	-- 
 		}
+elseif petName == "Unborn Val'kyr" then
+	undead_abilities = 
+		{
+			{"Shadow Slash", 	},	-- Slot 1
+			{"Shadow Shock", 	},	-- Slot 1
+			{"Siphon Life", 	},	-- Slot 2
+			{"Curse of Doom", 	},	-- Slot 2
+			{"Haunt",			},	-- Slot 3
+			{"Unholy Ascension", },	-- Slot 3
+		}
 -------------------
 else -- Unknown undead
 	print("|cFFFF0000 Unknown undead")

@@ -39,6 +39,39 @@ elseif petName == "Feral Vermling" or petName == "Hopling" then
 ------------
 -- None able to battle
 
+----------
+-- IMPS --
+----------
+elseif petName == "Corefire Imp" then
+	humanoid_abilities = 
+		{
+			{"Rush", 			MyPetBattle.currentPetSpeed(1) < MyPetBattle.currentPetSpeed(2) and not MyPetBattle.buff("Speed Boost") },	-- Slot 1
+			{"Immolation", 		not MyPetBattle.buff("Immolation") },	-- Slot 2
+			{"Burn", 			},	-- Slot 1
+			{"Flamethrower", 	},	-- Slot 2
+			{"Cauterize", 		},	-- Slot 3
+			{"Wild Magic", 		},	-- Slot 3
+		}
+elseif petName == "Fiendish Imp" then
+	humanoid_abilities = 
+		{
+			{"Rush", 			MyPetBattle.currentPetSpeed(1) < MyPetBattle.currentPetSpeed(2) and not MyPetBattle.buff("Speed Boost") },	-- Slot 3
+			{"Immolation", 		not MyPetBattle.buff("Immolation") },	-- Slot 2
+			{"Burn", 			},	-- Slot 1
+			{"Sear Magic",		},	-- Slot 1
+			{"Flamethrower", 	},	-- Slot 2
+			{"Nether Gate", 	},	-- Slot 3
+		}
+elseif petName == "Gregarious Grell" then
+	humanoid_abilities = 
+		{
+			{"Immolate", 		not MyPetBattle.debuff("Immolate") },	-- Slot 2
+			{"Punch", 			},	-- Slot 1
+			{"Burn", 			},	-- Slot 1
+			{"Phase Shift", 	},	-- Slot 2
+			{"Cauterize", 		},	-- Slot 3
+			{"Sear Magic", 		},	-- Slot 3
+		}
 -------------
 -- MOONKIN --
 -------------
@@ -123,16 +156,6 @@ elseif petName == "Anubisath Idol" then
 			{"Deflection", 		},	-- Slot 3
 			{"Rupture", 		},	-- Slot 3
 		}
-elseif petName == "Corefire Imp" then
-	humanoid_abilities = 
-		{
-			{"Rush", 			MyPetBattle.currentPetSpeed(1) < MyPetBattle.currentPetSpeed(2) and not MyPetBattle.buff("Speed Boost") },	-- Slot 1
-			{"Immolation", 		not MyPetBattle.buff("Immolation") },	-- Slot 2
-			{"Burn", 			},	-- Slot 1
-			{"Flamethrower", 	},	-- Slot 2
-			{"Cauterize", 		},	-- Slot 3
-			{"Wild Magic", 		},	-- Slot 3
-		}
 elseif petName == "Curious Oracle Hatchling" then
 	humanoid_abilities = 
 		{
@@ -162,16 +185,6 @@ elseif petName == "Flayer Youngling" then
 			{"Deflection", 		},	-- Slot 2
 			{"Kick", 			},	-- Slot 3
 			{"Rampage", 		},	-- Slot 3
-		}
-elseif petName == "Gregarious Grell" then
-	humanoid_abilities = 
-		{
-			{"Immolate", 		not MyPetBattle.debuff("Immolate") },	-- Slot 2
-			{"Punch", 			},	-- Slot 1
-			{"Burn", 			},	-- Slot 1
-			{"Phase Shift", 	},	-- Slot 2
-			{"Cauterize", 		},	-- Slot 3
-			{"Sear Magic", 		},	-- Slot 3
 		}
 elseif petName == "Harbinger of Flame" then
 	humanoid_abilities = 
@@ -262,6 +275,16 @@ elseif petName == "Stunted Yeti" then
 			{"Haymaker", 		},	-- Slot 2
 			{"Rampage", 		},	-- Slot 3
 			{"Bash", 			},	-- Slot 3
+		}
+elseif petName == "Lil' Bad Wolf" then
+	humanoid_abilities = 
+		{
+			{"Claw", 			},	-- Slot 1
+			{"Counterstrike", 	},	-- Slot 1
+			{"Mangle", 			},	-- Slot 2
+			{"Dodge", 			},	-- Slot 2
+			{"Howl", 			},	-- Slot 3
+			{"Pounce", 			},	-- Slot 3
 		}
 	
 -------------------

@@ -237,6 +237,27 @@ elseif petName == "Warbot" then
 			{"Extra Plating", 	},	-- Slot 3
 			{"Launch Rocket", 	},	-- Slot 3
 		}	
+elseif petName == "Menagerie Custodian" then
+	mechanical_abilities = 
+		{
+			{"Zap", 			},	-- Slot 1
+			{"Overtune", 		},	-- Slot 1
+			{"Shock and Awe", 	},	-- Slot 2
+			{"Demolish", 		},	-- Slot 2
+			{"Lock-On",			},	-- Slot 3
+			{"Ion Cannon",		},	-- Slot 3
+		}	
+elseif petName == "Pocket Reaver" then
+	mechanical_abilities = 
+		{
+			{"Repair", 			MyPetBattle.hp() < 0.7 },	-- Slot 2
+			{"Metal Fist", 		},	-- Slot 1
+			{"Thrash", 			},	-- Slot 1
+			{"Fel Immolate", 	},	-- Slot 3
+			{"Supercharge",		},	-- Slot 3
+			{"Quake", 			},	-- Slot 2
+		}
+
 -------------------
 -- MISCELLANEOUS --
 -------------------

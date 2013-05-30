@@ -44,6 +44,29 @@ elseif petName == "Alpine Foxling" or petName == "Alpine Foxling Kit" or petName
 			{"Crouch", 			},	-- Slot 2
 			{"Howl", 			},	-- Slot 2
 		}
+elseif petName == "Tito" then
+	beast_abilities = 
+		{
+			{"Bite", 			},	-- Slot 1
+			{"Triple Snap", 	},	-- Slot 1
+			{"Impale",			},	-- Slot 2
+			{"Howl", 			},	-- Slot 2
+			{"Cyclone", 		},	-- Slot 3
+			{"Buried Treasure", },	-- Slot 3
+		}
+---------------
+-- DIREHORNS --
+---------------
+elseif petName == "Direhorn Runt" or petName == "Pygmy Direhorn" or petName == "Stunted Direhorn" then
+	beast_abilities = 
+		{
+			{"Trihorn Charge", 	},	-- Slot 1
+			{"Trample", 		},	-- Slot 1
+			{"Horn Attack", 	},	-- Slot 2
+			{"Stampede", 		},	-- Slot 2
+			{"Primal Cry", 		},	-- Slot 3
+			{"Trihorn Shield", 	},	-- Slot 3
+		}
 -------------
 -- FELINES --
 -------------

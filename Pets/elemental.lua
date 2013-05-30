@@ -131,6 +131,16 @@ elseif petName == "Water Waveling" then
 			{"Geyser", 			},	-- Slot 3
 			{"Tidal Wave",		},	-- Slot 3
 		}
+elseif petName == "Tainted Waveling" then
+	elemental_abilities = 
+		{
+			{"Ooze Touch", 		},	-- Slot 1
+			{"Poison Spit", 	},	-- Slot 1
+			{"Acidic Goo", 		},	-- Slot 2
+			{"Corrosion",		},	-- Slot 2
+			{"Healing Wave", 	},	-- Slot 3
+			{"Creeping Ooze",	},	-- Slot 3
+		}
 ------------
 -- GEODES --
 ------------
@@ -289,6 +299,16 @@ elseif petName == "Withers" then
 			{"Poisoned Branch", },	-- Slot 2
 			{"Thorns", 			},	-- Slot 3
 			{"Entangling Roots",},	-- Slot 3
+		}
+elseif petName == "Blossoming Ancient" then
+	elemental_abilities = 
+		{
+			{"Photosynthesis",	not MyPetBattle.buff("Photosynthesis") and MyPetBattle.hp() < 0.8 },	-- Slot 2
+			{"Poisoned Branch",	},	-- Slot 1
+			{"Ironbark", 		},	-- Slot 1
+			{"Autumn Breeze", 	},	-- Slot 2
+			{"Stun Seed", 		},	-- Slot 3
+			{"Sunlight",		},	-- Slot 3
 		}
 -------------------
 -- SHALE SPIDERS --
