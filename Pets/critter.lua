@@ -86,12 +86,12 @@ elseif petName == "Beetle" or petName == "Cockroach" or petName == "Creepy Crawl
 elseif petName == "Fire Beetle" or petName == "Lava Beetle" then
 	critter_abilities = 
 		{
+			{"Apocalypse", 		},	-- Slot 3
+			{"Cauterize", MyPetBattle.hp() < 0.7		},	-- Slot 2
 			{"Burn", 			},	-- Slot 1
 			{"Flank", 			},	-- Slot 1
 			{"Hiss", 			},	-- Slot 2
-			{"Cauterize", 		},	-- Slot 2
 			{"Scorched Earth", 	},	-- Slot 3
-			{"Apocalypse", 		},	-- Slot 3
 		}
 elseif petName == "Grassland Hopper" or petName == "Marsh Fiddler" or petName == "Red Cricket" or petName == "Singing Cricket" then
 	critter_abilities = 

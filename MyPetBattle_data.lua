@@ -25,7 +25,7 @@ function MyPetBattle.buff(auraName,petIndex)
 	for auraIndex = 1,numAuras do 
 		local auraID, instanceID, turnsRemaining, isBuff = C_PetBattles.GetAuraInfo(LE_BATTLE_PET_ALLY, petIndex, auraIndex)
 		local id, name, icon, maxCooldown, unparsedDescription, numTurns, petType, noStrongWeakHints = C_PetBattles.GetAbilityInfoByID(auraID)
-		if name == auraName then  return true end
+		if name == auraName then  return true,turnsRemaining end
 	end
 
 	-- Checking team wide buffs
@@ -33,7 +33,7 @@ function MyPetBattle.buff(auraName,petIndex)
 	for auraIndex = 1, numTeamwideAuras do
 		local auraID, instanceID, turnsRemaining, isBuff = C_PetBattles.GetAuraInfo(LE_BATTLE_PET_ALLY, PET_BATTLE_PAD_INDEX, auraIndex)
 		local id, name, icon, maxCooldown, unparsedDescription, numTurns, petType, noStrongWeakHints = C_PetBattles.GetAbilityInfoByID(auraID)
-		if name == auraName then  return true end
+		if name == auraName then  return true,turnsRemaining end
 	end
 	
 	return false
