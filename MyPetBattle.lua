@@ -104,6 +104,7 @@ function events:ADDON_LOADED(...)
 
 	-- MISC	
 	CheckButton13:SetChecked(MPB_CONFIG_MISC_AUTOMATIC_RELEASE_NON_RARES)
+	CheckButtonKillRares:SetChecked(MPB_CONFIG_MISC_KILL_RARES)
 
 	-- LOAD LAST USED DESIRED_PET_LEVEL FOR THE RANDOM TEAM GENERATION
 	local loadLastUsedDesiredPetLevel = MPB_EDITBOX_DESIRED_PET_LEVEL
@@ -391,7 +392,7 @@ function events:PET_BATTLE_PET_ROUND_PLAYBACK_COMPLETE(...)	--
 	local rarity = C_PetBattles.GetBreedQuality(LE_BATTLE_PET_ENEMY, C_PetBattles.GetActivePet(LE_BATTLE_PET_ENEMY))
 	
 	if isNPC and (rarity == 4 or rarity == 5 or rarity == 6) and not mypetbattle_capture_rares then -- 4: "Rare", 5: "Epic", 6: "Legendary"
-        if not mypetbattle_kill_rares then
+	    if not MPB_CONFIG_MISC_KILL_RARES then
 		    mypetbattle_enabled = false
 		    CheckButton1:SetChecked(false)
 		    print("|cFF8A2BE2 WE FOUND A RARE!")
@@ -406,7 +407,6 @@ function events:PET_BATTLE_PET_ROUND_PLAYBACK_COMPLETE(...)	--
 		C_PetBattles.UseTrap() -- Use the trap
 	end
 
-	if mypetbattle_enabled then
 		local spell = nil
 		local petOwner = LE_BATTLE_PET_ALLY
 		local petIndex = C_PetBattles.GetActivePet(petOwner)
@@ -434,6 +434,7 @@ function events:PET_BATTLE_PET_ROUND_PLAYBACK_COMPLETE(...)	--
 			spell = mechanical()
 		end
 
+	if mypetbattle_enabled then
 		-- Switch pet at health threshold before it dies. CAN BE SET FROM CONFIG MENU
 		if MyPetBattle.hp(petIndex) < MPB_CONFIG_COMBAT_SWAP_PET_HEALTH_THRESHOLD then
 			for j=1,3 do
@@ -451,6 +452,10 @@ function events:PET_BATTLE_PET_ROUND_PLAYBACK_COMPLETE(...)	--
 --			print("actionIndex: ", actionIndex)
 			C_PetBattles.UseAbility(actionIndex)	-- Use pet ability 
 		end
+    elseif mypetbattle_debug then
+        -- if we're not enabled but in debug mode then show what we would have cast
+		print("|cffFF4500 Would be Casting: ", spell)
+
 	end
 end
 
@@ -541,8 +546,9 @@ function SlashCmdList.MYPETBATTLE(msg, editbox)
         print("Debugging:",status)
     elseif msg == "kill_rares" then
         -- sometimes we want to kill rares (leveling a toon not pets)
-        mypetbattle_kill_rares =  not mypetbattle_kill_rares
-		if mypetbattle_kill_rares then status = "\124cFF00FF00Enabled" else status = "\124cFFFF0000Disabled" end
+	    MPB_CONFIG_MISC_KILL_RARES = not MPB_CONFIG_MISC_KILL_RARES
+		if MPB_CONFIG_MISC_KILL_RARES then status = "\124cFF00FF00Enabled" else status = "\124cFFFF0000Disabled" end
         print("Kill Rares:",status)
+		CheckButtonKillRares:SetChecked(MPB_CONFIG_MISC_KILL_RARES)
     end
 end
