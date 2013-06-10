@@ -7,6 +7,13 @@ local aquatic_abilities = nil
 
 -- Get pet name
 petName = MyPetBattle.petName()
+tf,renewing_mist_cd = MyPetBattle.buff("Renewing Mists")
+tf,shell_shield_cd = MyPetBattle.buff("Shell Shield")
+tf,apocalypse_cd = MyPetBattle.buff("Apocalypse")
+if apocalypse_cd and apocalypse_cd < 2 then 
+    print ("need to swap to a beetle")
+    return nil
+end
 
 ----------------
 -- CROCOLISKS --
@@ -27,11 +34,11 @@ if petName == "Chuck" or petName == "Muckbreath" or petName == "Snarly" or petNa
 elseif petName == "Emperor Crab" or petName == "Shore Crab" or petName == "Shore Crawler" or petName == "Spirebound Crab" or petName == "Strand Crab" or petName == "Strand Crawler" then
 	aquatic_abilities = 
 		{
+			{"Renewing Mists", not MyPetBattle.buff("Renewing Mists") or renewing_mist_cd < 2	},	-- Slot 2
 			{"Healing Wave", 	MyPetBattle.hp() < 0.7 },	-- Slot 2
-			{"Shell Shield", 	not MyPetBattle.buff("Shell Shield") },	-- Slot 3
+			{"Shell Shield", 	not MyPetBattle.buff("Shell Shield") or shell_shield_cd < 2},	-- Slot 3
 			{"Snap", 			},	-- Slot 1
 			{"Surge", 			},	-- Slot 1
-			{"Renewing Mists", 	},	-- Slot 2
 			{"Whirlpool", 		},	-- Slot 3
 		}
 elseif petName == "Magical Crawdad" then

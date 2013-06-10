@@ -8,6 +8,12 @@ local humanoid_abilities = nil
 -- Get pet name
 petName = MyPetBattle.petName()
 
+tf,apocalypse_cd = MyPetBattle.buff("Apocalypse")
+if apocalypse_cd and apocalypse_cd < 2 then 
+    print ("need to swap to a beetle")
+    return nil
+end
+
 ------------
 -- GNOMES --
 ------------
@@ -149,11 +155,11 @@ elseif petName == "Murkimus the Gladiator" then
 elseif petName == "Anubisath Idol" then
 	humanoid_abilities = 
 		{
-			{"Crush", 			},	-- Slot 1
-			{"Demolish", 		},	-- Slot 1
-			{"Sandstorm", 		},	-- Slot 2
+			{"Deflection",MyPetBattle.debuff("Underwater") 		},	-- Slot 3
+			{"Crush", not MyPetBattle.canCast("Sandstorm") 			},	-- Slot 1
+			{"Demolish",not MyPetBattle.canCast("Sandstorm") 		},	-- Slot 1
+			{"Sandstorm",MyPetBattle.canCast("Sandstorm") 		},	-- Slot 2
 			{"Stoneskin", 		},	-- Slot 2
-			{"Deflection", 		},	-- Slot 3
 			{"Rupture", 		},	-- Slot 3
 		}
 elseif petName == "Curious Oracle Hatchling" then

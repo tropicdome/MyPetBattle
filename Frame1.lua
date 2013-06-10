@@ -46,6 +46,7 @@ function Frame1Panel_Close()
 
 	-- MISC	
 	MPB_CONFIG_MISC_AUTOMATIC_RELEASE_NON_RARES = CheckButton13:GetChecked()
+	MPB_CONFIG_MISC_KILL_RARES = CheckButtonKillRares:GetChecked()
 end
 
 -- When the player clicks cancel, run this function to cancel the changes made.

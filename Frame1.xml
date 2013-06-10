@@ -210,6 +210,19 @@
 					</OnLoad>
 				</Scripts>
 			</CheckButton>
+			<CheckButton name="CheckButtonKillRares" inherits="InterfaceOptionsSmallCheckButtonTemplate" text="Kill rare pets rather than stop fighting.">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="31" y="-467" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						Frame1_Checkbutton_OnLoad(self)
+						self.tooltipText = 'WARNING! This will kill rares rather than collect them!'
+					</OnLoad>
+				</Scripts>
+			</CheckButton>
 			<CheckButton name="CheckButton12" inherits="InterfaceOptionsSmallCheckButtonTemplate" text="Use &quot;Revive Battle Pets&quot; to heal/revive team after combat.">
 				<Anchors>
 					<Anchor point="TOPLEFT">

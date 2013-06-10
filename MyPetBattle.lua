@@ -104,6 +104,7 @@ function events:ADDON_LOADED(...)
 
 	-- MISC	
 	CheckButton13:SetChecked(MPB_CONFIG_MISC_AUTOMATIC_RELEASE_NON_RARES)
+	CheckButtonKillRares:SetChecked(MPB_CONFIG_MISC_KILL_RARES)
 
 	-- LOAD LAST USED DESIRED_PET_LEVEL FOR THE RANDOM TEAM GENERATION
 	local loadLastUsedDesiredPetLevel = MPB_EDITBOX_DESIRED_PET_LEVEL
@@ -175,14 +176,15 @@ function events:PET_BATTLE_HEALTH_CHANGED(...)				--
 	else
 		textPetOwner = "Enemy: "
 	end
-	
-	if healthChange > 0 then 
---		print("gained " .. healthChange .. " health") 
-		print(textPetOwner.."\124T"..pet_icon..":0\124t |cFF0066FF[" .. pet_name .. "]|r gained \124cFF00FF00" .. healthChange .. "\124r health. Current health: " .. textColor .. pet_currentHealth .. "/" .. pet_maxHealth .. string.format(" (%2.0f%%)", pet_healthPercentage)) 
-	elseif healthChange < 0 then
---		print("lost " .. abs(healthChange) .. " health") 
-		print(textPetOwner.."\124T"..pet_icon..":0\124t |cFF0066FF[" .. pet_name .. "]|r lost \124cFFFF0000" .. abs(healthChange) .. "\124r health. Current health: " .. textColor .. pet_currentHealth .. "/" .. pet_maxHealth .. string.format(" (%2.0f%%)", pet_healthPercentage)) 
-	end
+    if mypetbattle_debug then	
+	    if healthChange > 0 then 
+    --		print("gained " .. healthChange .. " health") 
+		    print(textPetOwner.."\124T"..pet_icon..":0\124t |cFF0066FF[" .. pet_name .. "]|r gained \124cFF00FF00" .. healthChange .. "\124r health. Current health: " .. textColor .. pet_currentHealth .. "/" .. pet_maxHealth .. string.format(" (%2.0f%%)", pet_healthPercentage)) 
+	    elseif healthChange < 0 then
+    --		print("lost " .. abs(healthChange) .. " health") 
+		    print(textPetOwner.."\124T"..pet_icon..":0\124t |cFF0066FF[" .. pet_name .. "]|r lost \124cFFFF0000" .. abs(healthChange) .. "\124r health. Current health: " .. textColor .. pet_currentHealth .. "/" .. pet_maxHealth .. string.format(" (%2.0f%%)", pet_healthPercentage)) 
+	    end
+    end
 	
 --	print(textPetOwner.."\124T"..pet_icon..":0\124t |cFF0066FF[" .. pet_name .. "]|r current health: " .. textColor .. pet_currentHealth .. "/" .. pet_maxHealth .. string.format(" (%2.0f%%)", pet_healthPercentage) .. " point") 
 
@@ -390,9 +392,13 @@ function events:PET_BATTLE_PET_ROUND_PLAYBACK_COMPLETE(...)	--
 	local rarity = C_PetBattles.GetBreedQuality(LE_BATTLE_PET_ENEMY, C_PetBattles.GetActivePet(LE_BATTLE_PET_ENEMY))
 	
 	if isNPC and (rarity == 4 or rarity == 5 or rarity == 6) and not mypetbattle_capture_rares then -- 4: "Rare", 5: "Epic", 6: "Legendary"
-		mypetbattle_enabled = false
-		CheckButton1:SetChecked(false)
-		print("|cFF8A2BE2 WE FOUND A RARE!")
+	    if not MPB_CONFIG_MISC_KILL_RARES then
+		    mypetbattle_enabled = false
+		    CheckButton1:SetChecked(false)
+		    print("|cFF8A2BE2 WE FOUND A RARE!")
+        else
+		    print("|cFF8A2BE2 WE FOUND A RARE BUT WE DON'T CARE!")
+        end
 	end	
 
 	-- Check if we should and can capture rare pets
@@ -401,7 +407,6 @@ function events:PET_BATTLE_PET_ROUND_PLAYBACK_COMPLETE(...)	--
 		C_PetBattles.UseTrap() -- Use the trap
 	end
 
-	if mypetbattle_enabled then
 		local spell = nil
 		local petOwner = LE_BATTLE_PET_ALLY
 		local petIndex = C_PetBattles.GetActivePet(petOwner)
@@ -429,6 +434,7 @@ function events:PET_BATTLE_PET_ROUND_PLAYBACK_COMPLETE(...)	--
 			spell = mechanical()
 		end
 
+	if mypetbattle_enabled then
 		-- Switch pet at health threshold before it dies. CAN BE SET FROM CONFIG MENU
 		if MyPetBattle.hp(petIndex) < MPB_CONFIG_COMBAT_SWAP_PET_HEALTH_THRESHOLD then
 			for j=1,3 do
@@ -446,13 +452,17 @@ function events:PET_BATTLE_PET_ROUND_PLAYBACK_COMPLETE(...)	--
 --			print("actionIndex: ", actionIndex)
 			C_PetBattles.UseAbility(actionIndex)	-- Use pet ability 
 		end
+    elseif mypetbattle_debug then
+        -- if we're not enabled but in debug mode then show what we would have cast
+		print("|cffFF4500 Would be Casting: ", spell)
+
 	end
 end
 
 function events:PET_BATTLE_PET_ROUND_RESULTS(...)			-- 
 --	print("PET_BATTLE_PET_ROUND_RESULTS")
 	local roundNumber = ...
-	if roundNumber ~= 0 then
+	if roundNumber ~= 0 and mypetbattle_debug then
 		print("Round "..roundNumber)
 	end
 end
@@ -511,6 +521,8 @@ function SlashCmdList.MYPETBATTLE(msg, editbox)
 	if msg == "" then
 		mypetbattle_enabled = not mypetbattle_enabled
 		if mypetbattle_enabled then status = "\124cFF00FF00Enabled" else status = "\124cFFFF0000Disabled" end
+	    print("My pet battle:", status)
+		CheckButton1:SetChecked(mypetbattle_enabled)
 	elseif msg == "join_pvp" then
 		mypetbattle_join_pvp = not mypetbattle_join_pvp
 		if mypetbattle_join_pvp then 
@@ -527,6 +539,16 @@ function SlashCmdList.MYPETBATTLE(msg, editbox)
 	elseif msg == "capture_rares" then
 		mypetbattle_capture_rares = not mypetbattle_capture_rares
 		if mypetbattle_capture_rares then status = "\124cFF00FF00Automatic capture rare pets enabled" else status = "\124cFFFF0000Automatic capture rare pets disabled" end
-	end
-	print("My pet battle:", status)
+    elseif msg == "debug" then
+        -- turn off debug messages as required
+        mypetbattle_debug =  not mypetbattle_debug
+		if mypetbattle_debug then status = "\124cFF00FF00Enabled" else status = "\124cFFFF0000Disabled" end
+        print("Debugging:",status)
+    elseif msg == "kill_rares" then
+        -- sometimes we want to kill rares (leveling a toon not pets)
+	    MPB_CONFIG_MISC_KILL_RARES = not MPB_CONFIG_MISC_KILL_RARES
+		if MPB_CONFIG_MISC_KILL_RARES then status = "\124cFF00FF00Enabled" else status = "\124cFFFF0000Disabled" end
+        print("Kill Rares:",status)
+		CheckButtonKillRares:SetChecked(MPB_CONFIG_MISC_KILL_RARES)
+    end
 end
