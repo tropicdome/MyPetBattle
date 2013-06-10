@@ -44,11 +44,11 @@ elseif petName == "Twilight Fiendling" then
 elseif petName == "Lesser Voidcaller" then
 	magic_abilities = 
 		{
+			{"Curse of Doom", 	},	-- Slot 3
 			{"Shadow Shock", 	},	-- Slot 1
 			{"Nether Blast",	},	-- Slot 1
 			{"Siphon Life",		},	-- Slot 2
 			{"Prismatic Barrier",},	-- Slot 2
-			{"Curse of Doom", 	},	-- Slot 3
 			{"Drain Power", 	},	-- Slot 3
 		}
 elseif petName == "Netherspace Abyssal" then
