@@ -20,7 +20,6 @@ end
 function MyPetBattle.buff(auraName,petIndex)
 	if petIndex == nil then petIndex = C_PetBattles.GetActivePet(LE_BATTLE_PET_ALLY) end
 	local numAuras = C_PetBattles.GetNumAuras(LE_BATTLE_PET_ALLY, petIndex)
-
 	-- Checking front pet buffs
 	for auraIndex = 1,numAuras do 
 		local auraID, instanceID, turnsRemaining, isBuff = C_PetBattles.GetAuraInfo(LE_BATTLE_PET_ALLY, petIndex, auraIndex)
@@ -48,7 +47,7 @@ function MyPetBattle.debuff(auraName,petIndex)
 	for auraIndex=1,numAuras do 
 		local auraID, instanceID, turnsRemaining, isBuff = C_PetBattles.GetAuraInfo(LE_BATTLE_PET_ENEMY, petIndex, auraIndex)
 		local id, name, icon, maxCooldown, unparsedDescription, numTurns, petType, noStrongWeakHints = C_PetBattles.GetAbilityInfoByID(auraID)
-		if name == auraName then  return true end
+		if name == auraName then  return true,turnsRemaining end
 	end
 
 	-- Checking team wide buffs
@@ -56,7 +55,7 @@ function MyPetBattle.debuff(auraName,petIndex)
 	for auraIndex = 1, numTeamwideAuras do
 		local auraID, instanceID, turnsRemaining, isBuff = C_PetBattles.GetAuraInfo(LE_BATTLE_PET_ENEMY, PET_BATTLE_PAD_INDEX, auraIndex)
 		local id, name, icon, maxCooldown, unparsedDescription, numTurns, petType, noStrongWeakHints = C_PetBattles.GetAbilityInfoByID(auraID)
-		if name == auraName then  return true end
+		if name == auraName then  return true,turnsRemaining end
 	end
 
 	return false
@@ -376,4 +375,23 @@ function MyPetBattle.revive_and_heal_Pets()
 		UseItemByName("Battle Pet Bandage")
 		print("Using: \124T"..Bandage_itemTexture..":0\124t "..Bandage_itemLink )
 	end
+end
+
+-- shouldIHide - return true if the enemy pet has an ability likely to hit
+--               us hard. This might also be used to decide NOT to cast a
+--               big ability given they are hit but another function might
+--               be better given this is a 'hide', enemy hidden can also be
+--               a wrap that doesn't end in a big hit (we'd just want to not
+--               waste a big hit on that)
+function MyPetBattle.shouldIHide()
+    -- cannot check flying as it's also a buff when it's a bird. which is dumb
+    -- local hidefrom={"Underwater","Flying"}
+    local hidefrom={"Underwater","Underground","Chew"}
+    for k,v in pairs(hidefrom) do
+        t,d = MyPetBattle.debuff(v) 
+        if t == true then
+            return true
+        end
+    end
+    return false
 end

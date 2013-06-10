@@ -550,5 +550,11 @@ function SlashCmdList.MYPETBATTLE(msg, editbox)
 		if MPB_CONFIG_MISC_KILL_RARES then status = "\124cFF00FF00Enabled" else status = "\124cFFFF0000Disabled" end
         print("Kill Rares:",status)
 		CheckButtonKillRares:SetChecked(MPB_CONFIG_MISC_KILL_RARES)
+    elseif msg == "ui" then
+            if MyPetBattleForm:IsVisible() then
+                MyPetBattleForm:Hide()
+            else
+                MyPetBattleForm:Show()
+            end
     end
 end
