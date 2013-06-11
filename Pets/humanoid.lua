@@ -155,7 +155,7 @@ elseif petName == "Murkimus the Gladiator" then
 elseif petName == "Anubisath Idol" then
 	humanoid_abilities = 
 		{
-			{"Deflection",MyPetBattle.debuff("Underwater") 		},	-- Slot 3
+			{"Deflection",MyPetBattle.shouldIHide() 		},	-- Slot 3
 			{"Crush", not MyPetBattle.canCast("Sandstorm") 			},	-- Slot 1
 			{"Demolish",not MyPetBattle.canCast("Sandstorm") 		},	-- Slot 1
 			{"Sandstorm",MyPetBattle.canCast("Sandstorm") 		},	-- Slot 2
