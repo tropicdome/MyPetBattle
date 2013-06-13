@@ -59,3 +59,19 @@ end
 function Button_open_config_panel_OnClick()
 	InterfaceOptionsFrame_OpenToCategory("MPB Options Panel")
 end
+
+-- Show the text for checkbuttons
+function Frame_Checkbutton_OnLoad(checkButton)
+	getglobal(checkButton:GetName().."Text"):SetText(checkButton:GetText())
+end
+
+-- Set variable for checkbuttons to lock pets for random team generation
+function Check_lock_pet_1_OnClick()
+	MPB_LOCK_PET1 = Check_lock_pet_1:GetChecked()
+end
+function Check_lock_pet_2_OnClick()
+	MPB_LOCK_PET2 = Check_lock_pet_2:GetChecked()
+end
+function Check_lock_pet_3_OnClick()
+	MPB_LOCK_PET3 = Check_lock_pet_3:GetChecked()
+end

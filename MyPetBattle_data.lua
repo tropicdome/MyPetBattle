@@ -232,7 +232,7 @@ function MyPetBattle.setTeam(avgLevel)
 		pet1_step = -1
 	end
 	for p_ = pet1_start, pet1_end, pet1_step do
-		if pet1_set then break end
+		if pet1_set or MPB_LOCK_PET1 then break end -- Also check if pet is locked
 		for n_ = 1, numPets do			
 			local petID, _, owned, _, level, _, isRevoked, speciesName, icon, petType, _, _, _, _, canBattle, _, _, obtainable = C_PetJournal.GetPetInfoByIndex(n_)
 			local health, maxHealth, power, speed, rarity = C_PetJournal.GetPetStats(petID)
@@ -274,7 +274,7 @@ function MyPetBattle.setTeam(avgLevel)
 		pet2_step = -1
 	end
 	for p_ = pet2_start, pet2_end, pet2_step do
-		if pet2_set then break end
+		if pet2_set or MPB_LOCK_PET2 then break end -- Also check if pet is locked
 		for n_ = 1, numPets do
 			local petID, _, owned, _, level, _, isRevoked, speciesName, icon, petType, _, _, _, _, canBattle, _, _, obtainable = C_PetJournal.GetPetInfoByIndex(n_)
 			local health, maxHealth, power, speed, rarity = C_PetJournal.GetPetStats(petID)
@@ -315,7 +315,7 @@ function MyPetBattle.setTeam(avgLevel)
 		pet3_step = -1
 	end
 	for p_ = pet3_start, pet3_end, pet3_step do
-		if pet3_set then break end
+		if pet3_set or MPB_LOCK_PET3 then break end -- Also check if pet is locked
 		for n_ = 1, numPets do
 			local petID, _, owned, _, level, _, isRevoked, speciesName, icon, petType, _, _, _, _, canBattle, _, _, obtainable = C_PetJournal.GetPetInfoByIndex(n_)
 			local health, maxHealth, power, speed, rarity = C_PetJournal.GetPetStats(petID)
@@ -340,13 +340,13 @@ function MyPetBattle.setTeam(avgLevel)
 	end		
 		
 	-- Print to chat
-	if pet1_set and pet2_set and pet3_set then
+	if (pet1_set or MPB_LOCK_PET1) and (pet2_set or MPB_LOCK_PET2) and (pet3_set or MPB_LOCK_PET3) then
 		print("|cFFADFF2F Done setting team!")
 	else
 		print("|cFFFF0033 Could not set a team, please check health, levels or set the team manually!")
-		if not pet1_set then print("- Failed to set pet 1") end
-		if not pet2_set then print("- Failed to set pet 2") end
-		if not pet3_set then print("- Failed to set pet 3") end
+		if not pet1_set and not MPB_LOCK_PET1 then print("- Failed to set pet 1") end
+		if not pet2_set and not MPB_LOCK_PET2 then print("- Failed to set pet 2") end
+		if not pet3_set and not MPB_LOCK_PET3 then print("- Failed to set pet 3") end
 	end
 
 	-- Update the WoW pet journal UI with our new pets

@@ -2,7 +2,7 @@
 	<Script file="Frame.lua" />
 	<Frame name="MyPetBattleForm" movable="true" enableMouse="true">
 		<Size>
-			<AbsDimension x="272" y="116" />
+			<AbsDimension x="270" y="116" />
 		</Size>
 		<Anchors>
 			<Anchor point="CENTER" relativeTo="UIParent">
@@ -34,7 +34,7 @@
 					<Size x="22" y="22" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="228" y="-29" />
+							<Offset x="223" y="-29" />
 						</Anchor>
 					</Anchors>
 				</Texture>
@@ -42,7 +42,7 @@
 					<Size x="22" y="22" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="228" y="-53" />
+							<Offset x="223" y="-53" />
 						</Anchor>
 					</Anchors>
 				</Texture>
@@ -50,54 +50,54 @@
 					<Size x="22" y="22" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="228" y="-77" />
+							<Offset x="223" y="-77" />
 						</Anchor>
 					</Anchors>
 				</Texture>
 			</Layer>
 			<Layer level="OVERLAY">
 				<FontString font="Fonts\ARIALN.TTF" text="Enable / Disable" justifyH="LEFT">
-					<Size x="93" y="10" />
+					<Size x="68" y="10" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="36" y="-40" />
+							<Offset x="32" y="-39" />
 						</Anchor>
 					</Anchors>
-					<FontHeight val="8" />
+					<FontHeight val="7" />
 					<Color r="1" g="0.82" b="0" />
 				</FontString>
 				<FontString inherits="GameFontNormalSmall" font="Fonts\ARIALN.TTF" text="Join PvP" justifyH="LEFT">
-					<Size x="50" y="20" />
+					<Size x="41" y="20" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="36" y="-71" />
+							<Offset x="32" y="-70" />
 						</Anchor>
 					</Anchors>
-					<FontHeight val="8" />
+					<FontHeight val="7" />
 				</FontString>
-				<FontString inherits="GameFontNormalSmall" font="Fonts\ARIALN.TTF" text="Automatic capture rare pets if not capped (3/3)" justifyH="LEFT">
-					<Size x="87" y="20" />
+				<FontString inherits="GameFontNormalSmall" font="Fonts\ARIALN.TTF" text="Automatic capture rare (otherwise kill it)" justifyH="LEFT">
+					<Size x="74" y="20" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="36" y="-53" />
+							<Offset x="32" y="-52" />
 						</Anchor>
 					</Anchors>
-					<FontHeight val="8" />
+					<FontHeight val="7" />
 				</FontString>
 				<FontString inherits="GameFontNormal" font="Fonts\ARIALN.TTF" text="Set desired level" justifyH="LEFT">
 					<Size x="60" y="20" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="132" y="-28" />
+							<Offset x="128" y="-28" />
 						</Anchor>
 					</Anchors>
-					<FontHeight val="8" />
+					<FontHeight val="7" />
 				</FontString>
 				<FontString inherits="GameFontNormal" font="Fonts\ARIALN.TTF" text="- Team -">
 					<Size x="35" y="20" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="221" y="-10" />
+							<Offset x="217" y="-10" />
 						</Anchor>
 					</Anchors>
 					<FontHeight val="8" />
@@ -106,7 +106,7 @@
 					<Size x="42" y="20" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="133" y="-11" />
+							<Offset x="128" y="-11" />
 						</Anchor>
 					</Anchors>
 					<FontHeight val="8" />
@@ -124,7 +124,7 @@
 					<Size x="16" y="14" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="238" y="-40" />
+							<Offset x="234" y="-41" />
 						</Anchor>
 					</Anchors>
 					<FontHeight val="8" />
@@ -133,7 +133,7 @@
 					<Size x="16" y="18" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="238" y="-62" />
+							<Offset x="234" y="-63" />
 						</Anchor>
 					</Anchors>
 					<FontHeight val="8" />
@@ -142,7 +142,7 @@
 					<Size x="16" y="19" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="238" y="-85" />
+							<Offset x="234" y="-86" />
 						</Anchor>
 					</Anchors>
 					<FontHeight val="8" />
@@ -151,10 +151,10 @@
 		</Layers>
 		<Frames>
 			<CheckButton name="CheckButton1" inherits="UICheckButtonTemplate" text="EnableDisable">
-				<Size x="15" y="15" />
+				<Size x="14" y="14" />
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset x="19" y="-38" />
+						<Offset x="17" y="-37" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
@@ -164,10 +164,10 @@
 				</Scripts>
 			</CheckButton>
 			<CheckButton name="CheckButton2" inherits="UICheckButtonTemplate" text="Join PvP">
-				<Size x="15" y="15" />
+				<Size x="14" y="14" />
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset x="19" y="-74" />
+						<Offset x="17" y="-73" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
@@ -177,10 +177,10 @@
 				</Scripts>
 			</CheckButton>
 			<CheckButton name="CheckButton3" inherits="UICheckButtonTemplate" text="Capture Blues (rares)">
-				<Size x="15" y="15" />
+				<Size x="14" y="14" />
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset x="19" y="-56" />
+						<Offset x="17" y="-55" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
@@ -193,7 +193,7 @@
 				<Size x="85" y="20" />
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset x="131" y="-49" />
+						<Offset x="126" y="-49" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
@@ -209,7 +209,7 @@
 				<Size x="20" y="20" />
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset x="196" y="-28" />
+						<Offset x="189" y="-28" />
 					</Anchor>
 				</Anchors>
 				<FontString>
@@ -220,7 +220,7 @@
 				<Size x="85" y="20" />
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset x="131" y="-78" />
+						<Offset x="126" y="-78" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
@@ -238,7 +238,7 @@
 				</Size>
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset x="84" y="-78" />
+						<Offset x="79" y="-78" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
@@ -250,6 +250,99 @@
 					<FontHeight val="8" />
 				</ButtonText>
 			</Button>
+			<CheckButton name="Check_lock_pet_1" inherits="UICheckButtonTemplate" text="Lock pet 1">
+				<Size x="10" y="10" />
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="222" y="-42" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						self.tooltipText = 'Lock pet 1'
+					</OnLoad>
+					<OnEnter>
+						if ( self.tooltipText ) then
+							GameTooltip:SetOwner(self, self.tooltipOwnerPoint or "ANCHOR_RIGHT");
+							GameTooltip:SetText(self.tooltipText, nil, nil, nil, nil, 1);
+						end
+						if ( self.tooltipRequirement ) then
+							GameTooltip:AddLine(self.tooltipRequirement, 1.0, 1.0, 1.0, 1.0);
+							GameTooltip:Show();
+						end
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide();
+					</OnLeave>
+					<OnClick>
+						Check_lock_pet_1_OnClick()
+					</OnClick>
+				</Scripts>
+				<NormalTexture file="Interface\BUTTONS\LockButton-Border" />
+				<CheckedTexture file="Interface\BUTTONS\LockButton-Locked-Up" />
+			</CheckButton>
+			<CheckButton name="Check_lock_pet_2" inherits="UICheckButtonTemplate" text="Lock pet 2">
+				<Size x="10" y="10" />
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="222" y="-66" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						self.tooltipText = 'Lock pet 2'
+					</OnLoad>
+					<OnEnter>
+						if ( self.tooltipText ) then
+						GameTooltip:SetOwner(self, self.tooltipOwnerPoint or "ANCHOR_RIGHT");
+						GameTooltip:SetText(self.tooltipText, nil, nil, nil, nil, 1);
+						end
+						if ( self.tooltipRequirement ) then
+						GameTooltip:AddLine(self.tooltipRequirement, 1.0, 1.0, 1.0, 1.0);
+						GameTooltip:Show();
+						end
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide();
+					</OnLeave>
+					<OnClick>
+						Check_lock_pet_2_OnClick()
+					</OnClick>
+				</Scripts>
+				<NormalTexture file="Interface\BUTTONS\LockButton-Border" />
+				<CheckedTexture file="Interface\BUTTONS\LockButton-Locked-Up" />
+			</CheckButton>
+			<CheckButton name="Check_lock_pet_3" inherits="UICheckButtonTemplate" text="Lock pet 3">
+				<Size x="10" y="10" />
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="222" y="-90" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						self.tooltipText = 'Lock pet 3'
+					</OnLoad>
+					<OnEnter>
+						if ( self.tooltipText ) then
+						GameTooltip:SetOwner(self, self.tooltipOwnerPoint or "ANCHOR_RIGHT");
+						GameTooltip:SetText(self.tooltipText, nil, nil, nil, nil, 1);
+						end
+						if ( self.tooltipRequirement ) then
+						GameTooltip:AddLine(self.tooltipRequirement, 1.0, 1.0, 1.0, 1.0);
+						GameTooltip:Show();
+						end
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide();
+					</OnLeave>
+					<OnClick>
+						Check_lock_pet_3_OnClick()
+					</OnClick>
+				</Scripts>
+				<NormalTexture file="Interface\BUTTONS\LockButton-Border" />
+				<CheckedTexture file="Interface\BUTTONS\LockButton-Locked-Up" />
+			</CheckButton>
 		</Frames>
 		<Scripts>
 			<OnLoad>

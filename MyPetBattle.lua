@@ -104,12 +104,16 @@ function events:ADDON_LOADED(...)
 
 	-- MISC	
 	CheckButton13:SetChecked(MPB_CONFIG_MISC_AUTOMATIC_RELEASE_NON_RARES)
-	CheckButtonKillRares:SetChecked(MPB_CONFIG_MISC_KILL_RARES)
 
 	-- LOAD LAST USED DESIRED_PET_LEVEL FOR THE RANDOM TEAM GENERATION
 	local loadLastUsedDesiredPetLevel = MPB_EDITBOX_DESIRED_PET_LEVEL
 	EditBox_PetLevel:SetText(loadLastUsedDesiredPetLevel) 
 --	EditBox_PetLevel:SetText("25") 
+	
+	-- LOCK PETS FOR RANDOM TEAM GENERATION
+	Check_lock_pet_1:SetChecked(MPB_LOCK_PET1)
+	Check_lock_pet_2:SetChecked(MPB_LOCK_PET2)
+	Check_lock_pet_3:SetChecked(MPB_LOCK_PET3)
 end
 
 function events:PLAYER_LOGIN(...)				-- 
@@ -387,21 +391,8 @@ function events:PET_BATTLE_PET_ROUND_PLAYBACK_COMPLETE(...)	--
 		C_PetBattles.SkipTurn()
 	end
 
-	-- Stop what we are doing if fighting a rare UNLESS automatic capture is enabled
-	local isNPC = C_PetBattles.IsPlayerNPC(2) -- wild pet battle and not PvP/other player
-	local rarity = C_PetBattles.GetBreedQuality(LE_BATTLE_PET_ENEMY, C_PetBattles.GetActivePet(LE_BATTLE_PET_ENEMY))
-	
-	if isNPC and (rarity == 4 or rarity == 5 or rarity == 6) and not mypetbattle_capture_rares then -- 4: "Rare", 5: "Epic", 6: "Legendary"
-	    if not MPB_CONFIG_MISC_KILL_RARES then
-		    mypetbattle_enabled = false
-		    CheckButton1:SetChecked(false)
-		    print("|cFF8A2BE2 WE FOUND A RARE!")
-        else
-		    print("|cFF8A2BE2 WE FOUND A RARE BUT WE DON'T CARE!")
-        end
-	end	
-
-	-- Check if we should and can capture rare pets
+	-- Check if we should and can capture rare pets we are fighting
+	-- The function canCaptureRare() in MyPetBattle_data.lua will check if we can capture the rare we are fighting
 	if mypetbattle_capture_rares and MyPetBattle.canCaptureRare() and mypetbattle_enabled then
 		print("|cFF8A2BE2 We are trying to capture a rare!")
 		C_PetBattles.UseTrap() -- Use the trap
@@ -536,20 +527,16 @@ function SlashCmdList.MYPETBATTLE(msg, editbox)
 				C_PetBattles.StopPVPMatchmaking()
 			-- end
 		end
+	    print("My pet battle:", status)
 	elseif msg == "capture_rares" then
 		mypetbattle_capture_rares = not mypetbattle_capture_rares
 		if mypetbattle_capture_rares then status = "\124cFF00FF00Automatic capture rare pets enabled" else status = "\124cFFFF0000Automatic capture rare pets disabled" end
+	    print("My pet battle:", status)
     elseif msg == "debug" then
         -- turn off debug messages as required
         mypetbattle_debug =  not mypetbattle_debug
 		if mypetbattle_debug then status = "\124cFF00FF00Enabled" else status = "\124cFFFF0000Disabled" end
         print("Debugging:",status)
-    elseif msg == "kill_rares" then
-        -- sometimes we want to kill rares (leveling a toon not pets)
-	    MPB_CONFIG_MISC_KILL_RARES = not MPB_CONFIG_MISC_KILL_RARES
-		if MPB_CONFIG_MISC_KILL_RARES then status = "\124cFF00FF00Enabled" else status = "\124cFFFF0000Disabled" end
-        print("Kill Rares:",status)
-		CheckButtonKillRares:SetChecked(MPB_CONFIG_MISC_KILL_RARES)
     elseif msg == "ui" then
             if MyPetBattleForm:IsVisible() then
                 MyPetBattleForm:Hide()
