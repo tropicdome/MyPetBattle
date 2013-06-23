@@ -5,13 +5,11 @@ Kill those bastards
 Version History:
 
 v. 1.0.6
-
 •Lock pet slots. To lock a pet slot, click the checkbutton on the pet portrait
 •Checkbutton "Automatic capture rare" will capture rares if checked unless we are capped or fighting legendary. Not checked and we will kill everything
 •"/mypetbattle ui" to hide/show the UI
 
 v. 1.0.5
-
 •Updated TOC to version 50300
 •Added 20 new pets for WoW 5.3
 
