@@ -299,10 +299,10 @@ elseif petName == "Amethyst Spiderling" or petName == "Ash Spiderling" or petNam
 		{
 			{"Strike", 			},	-- Slot 1
 			{"Poison Spit", 	},	-- Slot 1
-			{"Sticky Web", 		},	-- Slot 2
-			{"Brittle Webbing", },	-- Slot 2
-			{"Leech Life", 		},	-- Slot 3
-			{"Spiderling Swarm",},	-- Slot 3
+			{"Sticky Web",		not MyPetBattle.debuff("Webbed") },  -- Slot 2
+			{"Brittle Webbing", not MyPetBattle.debuff("Brittle Webbing") },  -- Slot 2
+			{"Leech Life",		MyPetBattle.debuff("Webbed") or MyPetBattle.debuff("Brittle Webbing") },  -- Slot 3
+			{"Spiderling Swarm", MyPetBattle.debuff("Webbed") or MyPetBattle.debuff("Brittle Webbing") },  -- Slot 3
 		}
 elseif petName == "Crystal Spider" then
 	beast_abilities = 

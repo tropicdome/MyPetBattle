@@ -146,9 +146,9 @@ elseif petName == "Aqua Strider" or petName == "Dancing Water Skimmer" or petNam
 			{"Healing Wave", 	MyPetBattle.hp() < 0.7 },	-- Slot 2
 			{"Cleansing Rain", 	MyPetBattle.hp() < 0.9 },	-- Slot 2
 			{"Water Jet", 		},	-- Slot 1
-			{"Poison Spit", 	},	-- Slot 1
+			{"Poison Spit",		MyPetBattle.buff("Pumped Up")},	-- Slot 1
 			{"Soothe", 			},	-- Slot 3
-			{"Pump", 			},	-- Slot 3
+			{"Pump",       		not MyPetBattle.buff("Pumped Up") },  -- Slot 3
 		}
 -------------
 -- MAMMALS --

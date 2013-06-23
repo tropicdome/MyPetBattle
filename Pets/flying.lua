@@ -95,10 +95,10 @@ elseif petName == "Effervescent Glowfly" or petName == "Firefly" or petName == "
 		{
 			{"Scratch", 		},	-- Slot 1
 			{"Slicing Wind", 	},	-- Slot 1
-			{"Confusing Sting", },	-- Slot 2
+			{"Confusing Sting", not MyPetBattle.debuff("Confusing Sting") },  -- Slot 2
 			{"Cocoon Strike", 	},	-- Slot 2
-			{"Swarm", 			},	-- Slot 3
-			{"Glowing Toxin", 	},	-- Slot 3
+			{"Swarm",			not MyPetBattle.debuff("Shattered Defenses")},  -- Slot 3
+			{"Glowing Toxin",	not MyPetBattle.debuff("Glowing Toxin")},  -- Slot 3
 		}
 elseif petName == "Tiny Flamefly" then
 	flying_abilities = 
@@ -162,9 +162,9 @@ elseif petName == "Rustberg Gull" or petName == "Sandy Petrel" or petName == "Se
 			{"Lift-Off", 		},	-- Slot 3
 			{"Slicing Wind", 	},	-- Slot 1
 			{"Thrash", 			},	-- Slot 1
-			{"Hawk Eye", 		},	-- Slot 2
-			{"Adrenaline Rush", },	-- Slot 2
-			{"Cyclone", 		},	-- Slot 3
+			{"Hawk Eye",		not MyPetBattle.buff("Hawk Eye") },  -- Slot 2
+			{"Adrenaline Rush",	not MyPetBattle.buff("Adrenaline") },  -- Slot 2
+			{"Cyclone",			not MyPetBattle.debuff("Cyclone") },  -- Slot 3
 		}
 -----------
 -- MOTHS --

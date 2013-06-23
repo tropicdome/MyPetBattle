@@ -97,42 +97,42 @@ elseif petName == "Stitched Pup" then
 elseif petName == "Fossilized Hatchling" then
 	undead_abilities = 
 		{
-			{"Claw", 			},	-- 
-			{"Bone Bite", 		},	-- 
-			{"Ancient Blessing",},	-- 
-			{"Death and Decay",	},	-- 
-			{"Bone Prison", 	},	-- 
-			{"BONESTORM", 		},	-- 
+			{"Claw", 			},	-- Slot 1
+			{"Bone Bite", 		},	-- Slot 1
+			{"Ancient Blessing",},	-- Slot 2
+			{"Death and Decay",	},	-- Slot 2
+			{"Bone Prison", 	},	-- Slot 3
+			{"BONESTORM", 		},	-- Slot 3
 		}
 elseif petName == "Frosty" then
 	undead_abilities = 
 		{
-			{"Diseased Bite", 	},	-- 
-			{"Frost Breath", 	},	-- 
-			{"Call Blizzard", 	},	-- 
-			{"Shriek",			},	-- 
-			{"Ice Tomb", 		},	-- 
-			{"Blistering Cold", },	-- 
+			{"Diseased Bite", 	},	-- Slot 1
+			{"Frost Breath", 	},	-- Slot 1
+			{"Call Blizzard", 	},	-- Slot 2
+			{"Shriek",			},	-- Slot 2
+			{"Ice Tomb", 		},	-- Slot 3
+			{"Blistering Cold", },	-- Slot 3
 		}
 elseif petName == "Ghostly Skull" then
 	undead_abilities = 
 		{
-			{"Shadow Slash", 	},	-- 
-			{"Death Coil", 		},	-- 
-			{"Ghostly Bite", 	},	-- 
-			{"Spectral Strike",	},	-- 
-			{"Siphon Life", 	},	-- 
-			{"Unholy Ascension", },	-- 
+			{"Shadow Slash", 	},	-- Slot 1
+			{"Death Coil", 		},	-- Slot 1
+			{"Ghostly Bite", 	},	-- Slot 2
+			{"Spectral Strike",	},	-- Slot 2
+			{"Siphon Life", 	},	-- Slot 3
+			{"Unholy Ascension", },	-- Slot 3
 		}
 elseif petName == "Landro's Lichling" or petName == "Lil' K.T." then
 	undead_abilities = 
 		{
-			{"Shadow Slash", 	},	-- 
-			{"Howling Blast", 	},	-- 
-			{"Siphon Life", 	},	-- 
-			{"Death and Decay",	},	-- 
-			{"Frost Nova", 		},	-- 
-			{"Curse of Doom", 	},	-- 
+			{"Shadow Slash", 	},	-- Slot 1
+			{"Howling Blast", 	MyPetBattle.debuff("Frost Nova") },	-- Slot 1
+			{"Siphon Life", 	},	-- Slot 2
+			{"Death and Decay",	},	-- Slot 2
+			{"Frost Nova", 		},	-- Slot 3
+			{"Curse of Doom", 	},	-- Slot 3
 		}
 ---------------------
 -- SPECTRAL BEINGS --
@@ -140,32 +140,32 @@ elseif petName == "Landro's Lichling" or petName == "Lil' K.T." then
 elseif petName == "Lost of Lordaeron" then
 	undead_abilities = 
 		{
-			{"Shadow Slash", 	},	-- 
-			{"Absorb", 			},	-- 
-			{"Siphon Life", 	},	-- 
-			{"Arcane Explosion",},	-- 
-			{"Bone Prison", 	},	-- 
-			{"Curse of Doom", 	},	-- 
+			{"Curse of Doom", 	not MyPetBattle.debuff("Curse of Doom") },	-- Slot 3
+			{"Shadow Slash", 	},	-- Slot 1
+			{"Absorb", 			},	-- Slot 1
+			{"Siphon Life", 	},	-- Slot 2
+			{"Arcane Explosion",},	-- Slot 2
+			{"Bone Prison", 	},	-- Slot 3
 		}
 elseif petName == "Restless Shadeling" then
 	undead_abilities = 
 		{
-			{"Shadow Shock", 	},	-- 
-			{"Arcane Blast", 	},	-- 
-			{"Plagued Blood", 	},	-- 
-			{"Death and Decay", },	-- 
-			{"Death Coil", 		},	-- 
-			{"Phase Shift", 	},	-- 
+			{"Shadow Shock", 	},	-- Slot 1
+			{"Arcane Blast", 	},	-- Slot 1
+			{"Plagued Blood", 	},	-- Slot 2
+			{"Death and Decay", },	-- Slot 2
+			{"Death Coil", 		},	-- Slot 3
+			{"Phase Shift", 	},	-- Slot 3
 		}
 elseif petName == "Spirit Crab" then
 	undead_abilities = 
 		{
-			{"Snap", 			},	-- 
-			{"Amplify Magic", 	},	-- 
-			{"Surge", 			},	-- 
-			{"Whirlpool", 		},	-- 
-			{"Shell Shield", 	},	-- 
-			{"Dark Simulacrum", },	-- 
+			{"Snap", 			},	-- Slot 1
+			{"Amplify Magic", 	},	-- Slot 1
+			{"Surge", 			},	-- Slot 2
+			{"Whirlpool", 		},	-- Slot 2
+			{"Shell Shield", 	},	-- Slot 3
+			{"Dark Simulacrum", },	-- Slot 3
 		}
 -----------------------
 -- VOODOO COMPANIONS --
@@ -173,12 +173,12 @@ elseif petName == "Spirit Crab" then
 elseif petName == "Fetish Shaman" or petName == "Sen'jin Fetish" or petName == "Voodoo Figurine" then
 	undead_abilities = 
 		{
-			{"Shadow Slash", 	},	-- 
-			{"Flame Breath", 	},	-- 
-			{"Immolate", 		},	-- 
-			{"Wild Magic", 		},	-- 
-			{"Sear Magic", 		},	-- 
-			{"Dark Simulacrum", },	-- 
+			{"Shadow Slash", 	},	-- Slot 1
+			{"Flame Breath", 	},	-- Slot 1
+			{"Immolate", 		},	-- Slot 2
+			{"Wild Magic", 		},	-- Slot 2
+			{"Sear Magic", 		},	-- Slot 3
+			{"Dark Simulacrum", },	-- Slot 3
 		}
 -------------------
 -- MISCELLANEOUS --
@@ -186,62 +186,62 @@ elseif petName == "Fetish Shaman" or petName == "Sen'jin Fetish" or petName == "
 elseif petName == "Crawling Claw" then
 	undead_abilities = 
 		{
-			{"Shadow Slash", 	},	-- 
-			{"Agony", 			},	-- 
-			{"Ancient", 		},	-- 
-			{"Death Grip", 		},	-- 
-			{"Curse of Doom", 	},	-- 
-			{"Dark Simulacrum", },	-- 
+			{"Curse of Doom", 	not MyPetBattle.debuff("Curse of Doom") },	-- Slot 3
+			{"Shadow Slash", 	},	-- Slot 1
+			{"Agony", 			},	-- Slot 1
+			{"Ancient", 		},	-- Slot 2
+			{"Death Grip", 		},	-- Slot 2
+			{"Dark Simulacrum", },	-- Slot 3
 		}
 elseif petName == "Creepy Crate" then
 	undead_abilities = 
 		{
-			{"Creepy Chomp", 	},	-- 
-			{"Agony", 			},	-- 
-			{"Death Grip", 		},	-- 
-			{"Curse of Doom", 	},	-- 
-			{"Devour", 			},	-- 
-			{"BONESTORM", 		},	-- 
+			{"Curse of Doom", 	not MyPetBattle.debuff("Curse of Doom") },	-- Slot 2
+			{"Creepy Chomp", 	},	-- Slot 1
+			{"Agony", 			},	-- Slot 1
+			{"Death Grip", 		},	-- Slot 2
+			{"Devour", 			},	-- Slot 3
+			{"BONESTORM", 		},	-- Slot 3
 		}
 elseif petName == "Eye of the Legion" then
 	undead_abilities = 
 		{
-			{"Shadow Slash", 	},	-- 
-			{"Eyeblast", 		},	-- 
-			{"Agony", 			},	-- 
-			{"Gravity", 		},	-- 
-			{"Soul Ward", 		},	-- 
-			{"Dark Simulacrum", },	-- 
+			{"Shadow Slash", 	},	-- Slot 1
+			{"Eyeblast", 		},	-- Slot 1
+			{"Agony", 			},	-- Slot 2
+			{"Gravity", 		},	-- Slot 2
+			{"Soul Ward", 		},	-- Slot 3
+			{"Dark Simulacrum", },	-- Slot 3
 		}
 elseif petName == "Fungal Abomination" then
 	undead_abilities = 
 		{
-			{"Absorb", 			},	-- 
-			{"Consume", 		},	--
-			{"Creeping Fungus", },	-- 
-			{"Leech Seed", 		},	-- 
-			{"Spore Shrooms", 	},	-- 
-			{"Stun Seed", 		},	-- 
+			{"Absorb", 			},	-- Slot 1
+			{"Consume", 		},	-- Slot 1
+			{"Creeping Fungus", },	-- Slot 2
+			{"Leech Seed", 		},	-- Slot 2
+			{"Spore Shrooms", 	},	-- Slot 3
+			{"Stun Seed", 		},	-- Slot 3
 		}
 elseif petName == "Vampiric Batling" then
 	undead_abilities = 
 		{
-			{"Bite", 			},	-- 
-			{"Screech", 		},	-- 
-			{"Leech Life", 		},	-- 
-			{"Hawk Eye", 		},	-- 
-			{"Reckless Strike", },	-- 
-			{"Nocturnal Strike", },	-- 
+			{"Bite", 			},	-- Slot 1
+			{"Screech", 		},	-- Slot 1
+			{"Leech Life", 		},	-- Slot 2
+			{"Hawk Eye", 		},	-- Slot 2
+			{"Reckless Strike", },	-- Slot 3
+			{"Nocturnal Strike", },	-- Slot 3
 		}
 elseif petName == "Unborn Val'kyr" then
 	undead_abilities = 
 		{
+			{"Unholy Ascension", MyPetBattle.hp() < 0.3 },	-- Slot 3
+			{"Curse of Doom", 	not MyPetBattle.debuff("Curse of Doom") },	-- Slot 2
 			{"Shadow Slash", 	},	-- Slot 1
 			{"Shadow Shock", 	},	-- Slot 1
 			{"Siphon Life", 	},	-- Slot 2
-			{"Curse of Doom", 	},	-- Slot 2
 			{"Haunt",			},	-- Slot 3
-			{"Unholy Ascension", },	-- Slot 3
 		}
 -------------------
 else -- Unknown undead
