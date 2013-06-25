@@ -311,7 +311,7 @@ function events:UPDATE_SUMMONPETS_ACTION(...)					--
 		-- Save desired pet level for next time we log in
 		MPB_EDITBOX_DESIRED_PET_LEVEL = desiredPetLevel
 		-- Clear focus from the editbox
-		EditBox_PetLevel:ClearFocus()       
+		EditBox_PetLevel:ClearFocus()
 	end
 
 	-- Setting global variable to false so we will heal after combat if needed
@@ -367,6 +367,11 @@ function events:PET_JOURNAL_LIST_UPDATE(...)
 			Pet3_texture:SetTexture(icon) 
 			Pet3_level_string:SetText(level)
 		end
+	end
+
+	-- Dismiss pet so we do not have it running around
+	if C_PetJournal.GetSummonedPetGUID() then -- Check if we have a pet summoned already, or we will get an error
+		C_PetJournal.SummonPetByGUID(C_PetJournal.GetSummonedPetGUID()) -- Dismiss pet
 	end
 
 end

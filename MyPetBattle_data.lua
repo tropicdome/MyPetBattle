@@ -351,7 +351,7 @@ function MyPetBattle.setTeam(avgLevel)
 
 	-- Update the WoW pet journal UI with our new pets
 	PetJournal_UpdatePetLoadOut() 
-
+	
 	return
 end
 
