@@ -374,6 +374,11 @@ function events:PET_JOURNAL_LIST_UPDATE(...)
 		C_PetJournal.SummonPetByGUID(C_PetJournal.GetSummonedPetGUID()) -- Dismiss pet
 	end
 
+	-- Check if we should be in the PvP matchmaking queue, but we are not
+	if not C_PetBattles.IsInBattle() and (C_PetBattles.GetPVPMatchmakingInfo() == nil) and mypetbattle_join_pvp then
+		C_PetBattles.StartPVPMatchmaking()
+
+	end
 end
 
 function events:PET_BATTLE_PET_CHANGED(...)					-- 
