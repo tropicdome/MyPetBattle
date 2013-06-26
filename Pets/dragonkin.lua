@@ -164,7 +164,7 @@ elseif petName == "Celestial Dragon" then
 			{"Starfall", 		not MyPetBattle.currentWeather("Moonlight") },	-- Slot 3
 			{"Ancient Blessing", not MyPetBattle.buff("Ancient Blessing") or MyPetBattle.hp() < 0.75 },	-- Slot 2
 			{"Roar", 			not MyPetBattle.buff("Attack Boost") },	-- Slot 1
-			{"Breath", 			},	-- Slot 1
+			{"Flamethrower", 	},	-- Slot 1
 			{"Arcane Storm", 	},	-- Slot 2 -- Can it remove a root if already rooted or only prevent future roots cast against you?
 		}
 elseif petName == "Essence of Competition" or petName == "Spirit of Competition" then
