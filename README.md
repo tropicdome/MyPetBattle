@@ -4,6 +4,10 @@ Kill those bastards
 
 Version History:
 
+v. 1.0.7
+- Option to capture 1 common/uncommon if you own 0/3 of that specie
+- New and smaller Config button icon
+
 v. 1.0.6
 - Lock pet slots. To lock a pet slot, click the checkbutton on the pet portrait
 - Checkbutton "Automatic capture rare" will capture rares if checked unless we are capped or fighting legendary. Not checked and we will kill everything
