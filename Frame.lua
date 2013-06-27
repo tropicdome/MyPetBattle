@@ -13,6 +13,11 @@ function CheckButton3_OnClick()
 	SlashCmdList.MYPETBATTLE('capture_rares')
 end
 
+-- Enable automatic capture common/uncommon if you have room for more of that specie
+function CheckButton4_OnClick()
+	SlashCmdList.MYPETBATTLE('capture_common_uncommon')
+end
+
 -- Make random team based on desired pet level
 function Button_MakeRandomTeam_OnClick()
 	local desiredPetLevel = EditBox_PetLevel:GetText()  -- Get user input for desired pet level

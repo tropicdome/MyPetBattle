@@ -174,6 +174,23 @@ function MyPetBattle.canCaptureRare()
 	return false
 end
 
+-- Check if we can capture the common/uncommon we are fighting. Used to determine if we should capture or kill our enemy.
+function MyPetBattle.canCaptureCommon()
+	local petOwner = LE_BATTLE_PET_ENEMY
+	local activeEnemyPetIndex = C_PetBattles.GetActivePet(petOwner)
+	local rarity = C_PetBattles.GetBreedQuality(petOwner, activeEnemyPetIndex)
+	local trapIsUsable = C_PetBattles.IsTrapAvailable() -- Check if we can use trap e.g. pet is at low health
+
+	local speciesID = C_PetBattles.GetPetSpeciesID(petOwner, activeEnemyPetIndex)
+	local numCollected, limit = C_PetJournal.GetNumCollectedInfo(speciesID)
+
+	if numCollected == 0 and limit > 0 and trapIsUsable and (rarity == 2 or rarity == 3) then -- 2: "Common", 3: "Uncommon"
+--		print("|cFF8A2BE2 We are trying to capture a common/uncommon!")
+		return true
+	end
+	return false
+end
+
 -- New improved team setup
 function MyPetBattle.setTeam(avgLevel)
 --	print("Set team v2")

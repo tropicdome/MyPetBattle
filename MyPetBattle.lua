@@ -57,6 +57,7 @@ MyPetBattle = {}
 mypetbattle_enabled = false
 mypetbattle_join_pvp = false
 mypetbattle_capture_rares = false
+mypetbattle_capture_common_uncommon = false
 
 -- Variable used to make sure we only call the heal function 1 time after combat.
 -- It will be set to "false" on events:PET_BATTLE_OPENING_DONE
@@ -114,6 +115,10 @@ function events:ADDON_LOADED(...)
 	Check_lock_pet_1:SetChecked(MPB_LOCK_PET1)
 	Check_lock_pet_2:SetChecked(MPB_LOCK_PET2)
 	Check_lock_pet_3:SetChecked(MPB_LOCK_PET3)
+
+	-- Set texture for Config Button (gear) manually as the XML file do not want do what I want!
+	MPB_Config_Button:SetNormalTexture("Interface\\Addons\\MyPetBattle\\Images\\icon-config")
+	MPB_Config_Button:SetHighlightTexture("Interface\\Buttons\\UI-Panel-MinimizeButton-Highlight.blp")
 end
 
 function events:PLAYER_LOGIN(...)				-- 
@@ -408,6 +413,12 @@ function events:PET_BATTLE_PET_ROUND_PLAYBACK_COMPLETE(...)	--
 		C_PetBattles.UseTrap() -- Use the trap
 	end
 
+	-- Check if we should capture common/uncommon if we do not own the pet
+	if mypetbattle_capture_common_uncommon and MyPetBattle.canCaptureCommon() and mypetbattle_enabled then
+		print("|cFF00FF00 We do not have this pet (0/3), let us capture it (common/uncommon)!")
+		C_PetBattles.UseTrap() -- Use the trap
+	end
+
 		local spell = nil
 		local petOwner = LE_BATTLE_PET_ALLY
 		local petIndex = C_PetBattles.GetActivePet(petOwner)
@@ -542,7 +553,12 @@ function SlashCmdList.MYPETBATTLE(msg, editbox)
 		mypetbattle_capture_rares = not mypetbattle_capture_rares
 		if mypetbattle_capture_rares then status = "\124cFF00FF00Automatic capture rare pets enabled" else status = "\124cFFFF0000Automatic capture rare pets disabled" end
 	    print("My pet battle:", status)
-    elseif msg == "debug" then
+		CheckButton3:SetChecked(mypetbattle_capture_rares)
+	elseif msg == "capture_common_uncommon" then
+		mypetbattle_capture_common_uncommon = not mypetbattle_capture_common_uncommon
+		if mypetbattle_capture_common_uncommon then status = "\124cFF00FF00Automatic capture common/uncommon (0/3 owned) pets enabled" else status = "\124cFFFF0000Automatic capture common/uncommon pets (0/3 owned) disabled" end
+	    print("My pet battle:", status)
+	elseif msg == "debug" then
         -- turn off debug messages as required
         mypetbattle_debug =  not mypetbattle_debug
 		if mypetbattle_debug then status = "\124cFF00FF00Enabled" else status = "\124cFFFF0000Disabled" end
