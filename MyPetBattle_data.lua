@@ -191,6 +191,15 @@ function MyPetBattle.canCaptureCommon()
 	return false
 end
 
+function MyPetBattle.isSpeciesIgnored(speciesID)
+    ignoredSpeciesIDs = {}
+    ignoredSpeciesIDs[296] = UnitFactionGroup("player") ~= "Alliance" -- Alliance Moonkin
+    ignoredSpeciesIDs[298] = UnitFactionGroup("player") ~= "Horde" -- Horde Moonkin
+    --ignoredSpeciesIDs[256] = true -- Blizzard Bug, can't call Lil' XT
+
+    return ignoredSpeciesIDs[speciesID]
+end
+
 -- New improved team setup
 function MyPetBattle.setTeam(avgLevel)
 --	print("Set team v2")
@@ -251,13 +260,13 @@ function MyPetBattle.setTeam(avgLevel)
 	for p_ = pet1_start, pet1_end, pet1_step do
 		if pet1_set or MPB_LOCK_PET1 then break end -- Also check if pet is locked
 		for n_ = 1, numPets do			
-			local petID, _, owned, _, level, _, isRevoked, speciesName, icon, petType, _, _, _, _, canBattle, _, _, obtainable = C_PetJournal.GetPetInfoByIndex(n_)
+			local petID, speciesID, owned, _, level, _, isRevoked, speciesName, icon, petType, _, _, _, _, canBattle, _, _, obtainable = C_PetJournal.GetPetInfoByIndex(n_)
 			local health, maxHealth, power, speed, rarity = C_PetJournal.GetPetStats(petID)
 			
 			local healthPercent = health / maxHealth
 
 			-- Check if we own the pet, it is a battle pet, it is alive and of rare quality
-			if owned and canBattle and not isRevoked and healthPercent > healthThreshold and rarity == 4 and level == avgLevel+p_ then
+			if owned and not MyPetBattle.isSpeciesIgnored(speciesID) and canBattle and not isRevoked and healthPercent > healthThreshold and rarity == 4 and level == avgLevel+p_ then
 				-- Set found pet to pet 1	
 				C_PetJournal.SetPetLoadOutInfo(1, petID) -- Pet slot 1
 				-- Save pet 1 guid
@@ -293,13 +302,13 @@ function MyPetBattle.setTeam(avgLevel)
 	for p_ = pet2_start, pet2_end, pet2_step do
 		if pet2_set or MPB_LOCK_PET2 then break end -- Also check if pet is locked
 		for n_ = 1, numPets do
-			local petID, _, owned, _, level, _, isRevoked, speciesName, icon, petType, _, _, _, _, canBattle, _, _, obtainable = C_PetJournal.GetPetInfoByIndex(n_)
+			local petID, speciesID, owned, _, level, _, isRevoked, speciesName, icon, petType, _, _, _, _, canBattle, _, _, obtainable = C_PetJournal.GetPetInfoByIndex(n_)
 			local health, maxHealth, power, speed, rarity = C_PetJournal.GetPetStats(petID)
 			
 			local healthPercent = health / maxHealth
 
 			-- Check if we own the pet, it is a battle pet, it is alive and of rare quality
-			if owned and canBattle and not isRevoked and healthPercent > healthThreshold and rarity == 4 and level == avgLevel+p_ and petID ~= pet1_guid then
+			if owned and not MyPetBattle.isSpeciesIgnored(speciesID) and canBattle and not isRevoked and healthPercent > healthThreshold and rarity == 4 and level == avgLevel+p_ and petID ~= pet1_guid then
 				-- Set found pet to pet 2	
 				C_PetJournal.SetPetLoadOutInfo(2, petID) -- Pet slot 2
 				-- Save pet 1 guid
@@ -334,13 +343,13 @@ function MyPetBattle.setTeam(avgLevel)
 	for p_ = pet3_start, pet3_end, pet3_step do
 		if pet3_set or MPB_LOCK_PET3 then break end -- Also check if pet is locked
 		for n_ = 1, numPets do
-			local petID, _, owned, _, level, _, isRevoked, speciesName, icon, petType, _, _, _, _, canBattle, _, _, obtainable = C_PetJournal.GetPetInfoByIndex(n_)
+			local petID, speciesID, owned, _, level, _, isRevoked, speciesName, icon, petType, _, _, _, _, canBattle, _, _, obtainable = C_PetJournal.GetPetInfoByIndex(n_)
 			local health, maxHealth, power, speed, rarity = C_PetJournal.GetPetStats(petID)
 			
 			local healthPercent = health / maxHealth
 
 			-- Check if we own the pet, it is a battle pet, it is alive and of rare quality
-			if owned and canBattle and not isRevoked and healthPercent > healthThreshold and rarity == 4 and level == avgLevel+p_ and petID ~= pet1_guid and petID ~= pet2_guid then
+			if owned and not MyPetBattle.isSpeciesIgnored(speciesID) and canBattle and not isRevoked and healthPercent > healthThreshold and rarity == 4 and level == avgLevel+p_ and petID ~= pet1_guid and petID ~= pet2_guid then
 				-- Set found pet to pet 3	
 				C_PetJournal.SetPetLoadOutInfo(3, petID) -- Pet slot 3
 				-- Save pet 1 guid
