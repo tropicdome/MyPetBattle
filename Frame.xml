@@ -361,6 +361,32 @@
 					</OnClick>
 				</Scripts>
 			</Button>
+			<CheckButton name="CheckButton_auto_forfeit" inherits="UICheckButtonTemplate" text="CheckButton5">
+				<Size x="14" y="14" />
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="92" y="-89" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						CheckButton_auto_forfeit_OnClick()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="CheckButton_wintrade_enable" inherits="UICheckButtonTemplate" text="CheckButton5">
+				<Size x="14" y="14" />
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="72" y="-89" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						CheckButton_wintrade_enable_OnClick()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
 		</Frames>
 		<Scripts>
 			<OnLoad>

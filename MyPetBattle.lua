@@ -58,11 +58,15 @@ mypetbattle_enabled = false
 mypetbattle_join_pvp = false
 mypetbattle_capture_rares = false
 mypetbattle_capture_common_uncommon = false
+mypetbattle_auto_forfeit = false
+mypetbattle_wintrade_enabled = false
 
 -- Variable used to make sure we only call the heal function 1 time after combat.
 -- It will be set to "false" on events:PET_BATTLE_OPENING_DONE
 -- and set back to "true" on events:UPDATE_SUMMONPETS_ACTION
 mypetbattle_hasHealedAfterCombat = true
+
+RegisterAddonMessagePrefix("MPB")
 
 --------------------
 ---- SETUP DONE ----
@@ -151,6 +155,13 @@ function events:PET_BATTLE_CAPTURED(...)					--
 end
 function events:PET_BATTLE_CLOSE(...)						-- 
 --	print("PET_BATTLE_CLOSE")
+	-- Close the Stopwatch window after battle
+	if ( StopwatchFrame:IsShown() ) then
+		StopwatchFrame:Hide();
+	end
+	
+	-- Resetting variable opening is done
+	petBattleOpeningIsDone = false
 end
 
 function events:PET_BATTLE_FINAL_ROUND(...)					-- 
@@ -244,10 +255,16 @@ function events:PET_BATTLE_MAX_HEALTH_CHANGED(...)			--
 end
 
 function events:PET_BATTLE_OPENING_DONE(...)				-- Opening done and ready to battle
---	print("PET_BATTLE_OPENING_DONE")
+	-- Stopwatch
+	if Stopwatch_IsPlaying() then Stopwatch_Clear() end
+	Stopwatch_StartCountdown(0, 0, 60) -- Set Stop Watch to count down from 60 sec
+	Stopwatch_Play() -- Starts the Stop Watch
+	print("Started Stopwatch")
+
+	--	print("PET_BATTLE_OPENING_DONE")
 	print("We have to fight " .. C_PetBattles.GetNumPets(LE_BATTLE_PET_ENEMY) .. " enemy pets")
 	-- Auto-select first available pet
-	if C_PetBattles.ShouldShowPetSelect() == true and mypetbattle_enabled then
+	if C_PetBattles.ShouldShowPetSelect() == true and (mypetbattle_enabled or mypetbattle_wintrade_enabled) then
 		for i=1,3 do
 			if MyPetBattle.hp(i) > 0 then
 				C_PetBattles.ChangePet(i)
@@ -257,6 +274,10 @@ function events:PET_BATTLE_OPENING_DONE(...)				-- Opening done and ready to bat
 
 	-- Setting global variable to false so we will heal after combat if needed
 	mypetbattle_hasHealedAfterCombat = false
+	
+	-- Setting variable that opening is done
+	petBattleOpeningIsDone = true
+	MPB_timerTotal = 0		-- Reset timer for automatic forfeit
 end
 
 function events:PET_BATTLE_OPENING_START(...)				-- 
@@ -392,8 +413,11 @@ end
 
 function events:PET_BATTLE_PET_ROUND_PLAYBACK_COMPLETE(...)	-- 
 --	print("PET_BATTLE_PET_ROUND_PLAYBACK_COMPLETE")
+	local round = ...
+--	print(round)
+	
 	-- Auto-select first available pet
-	if C_PetBattles.ShouldShowPetSelect() == true and mypetbattle_enabled then
+	if C_PetBattles.ShouldShowPetSelect() == true and (mypetbattle_enabled or mypetbattle_wintrade_enabled) then
 		for i=1,3 do
 			if MyPetBattle.hp(i) > 0 then
 				C_PetBattles.ChangePet(i)
@@ -446,7 +470,7 @@ function events:PET_BATTLE_PET_ROUND_PLAYBACK_COMPLETE(...)	--
 			spell = mechanical()
 		end
 
-	if mypetbattle_enabled then
+	if mypetbattle_enabled or (mypetbattle_wintrade_enabled and round <= 1) then -- Only attack in round 0 (the first round) if we are doing wt (also attack in second round just to do something)
 		-- Switch pet at health threshold before it dies. CAN BE SET FROM CONFIG MENU
 		if MyPetBattle.hp(petIndex) < MPB_CONFIG_COMBAT_SWAP_PET_HEALTH_THRESHOLD then
 			for j=1,3 do
@@ -499,8 +523,22 @@ end
 
 function events:PET_BATTLE_QUEUE_PROPOSE_MATCH(...)			-- 
 --	print("PET_BATTLE_QUEUE_PROPOSE_MATCH")
-	print("Auto-accepting pet PvP match!")
-	C_PetBattles.AcceptQueuedPVPMatch()
+
+	-- Sync setup for wt
+	local MPB_SyncTimeSent = GetTime()
+	SendAddonMessage("MPB", MPB_SyncTimeSent, "PARTY")
+	
+	if MPB_SyncTimeReceived == nil then MPB_SyncTimeReceived = 0 end
+	if MPB_SyncTimeReceived > 0 then
+		local delay = abs(MPB_SyncTimeSent - MPB_SyncTimeReceived)
+		print("Current delay: "..delay)
+	end
+	
+	-- Automatic join PvP queue if enabled	
+	if mypetbattle_join_pvp then
+		print("Auto-accepting pet PvP match!")
+		C_PetBattles.AcceptQueuedPVPMatch()
+	end
 end
 
 function events:PET_BATTLE_QUEUE_STATUS(...)				-- 
@@ -515,6 +553,37 @@ function events:PET_BATTLE_XP_CHANGED(...)					--
 --	print("PET_BATTLE_XP_CHANGED")
 end
 
+function events:CHAT_MSG_ADDON(...)							-- 
+--	print("PET_BATTLE_XP_CHANGED")
+	local prefix, message, channel, sender = ...
+
+	-- Check if message comes from MPB addon
+	if prefix == "MPB" and channel == "PARTY" and sender ~= UnitName("player") then
+--		print(prefix .. ". We received: " .. message)
+--		print("Local time: "..GetTime())
+				
+		local syncThreshold = 1
+		local queueState, estimatedTime, queuedTime = C_PetBattles.GetPVPMatchmakingInfo() -- Get PvP queue info
+		-- Check that we are ready to accept when receiving the message from our partner
+		if queueState == "proposal" and tonumber(message) > 0 then
+--			local my_message = abs(tonumber(queuedTime)-tonumber(message))
+			local my_message = abs(GetTime()-tonumber(message))
+			print(prefix .. " sync: " .. my_message)
+			-- If sync time is less than 'syncThreshold' then accept battle
+			if my_message < syncThreshold then
+				print("Sync is ok, accepting battle")
+				C_PetBattles.AcceptQueuedPVPMatch()
+			else
+				print("Not in sync, declining battle")
+				C_PetBattles.DeclineQueuedPVPMatch()
+			end
+		else
+			MPB_SyncTimeReceived = tonumber(message)
+		end
+
+	end
+end
+
 mypetbattle_frame:SetScript("OnEvent", function(self, event, ...)
  events[event](self, ...); -- call one of the functions above
 end);
@@ -524,6 +593,32 @@ for k, v in pairs(events) do
  mypetbattle_frame:RegisterEvent(k); 
 end
 
+--------------------
+--- Timer frame ----
+--------------------
+--local total = 0
+MPB_timerTotal = 0
+
+local function MPB_onUpdate(self,elapsed)	
+	if petBattleOpeningIsDone then
+	    MPB_timerTotal = MPB_timerTotal + elapsed
+		if MPB_timerTotal >= 55 then
+			DEFAULT_CHAT_FRAME:AddMessage("60 sec. almost up!")
+			MPB_timerTotal = 0
+			petBattleOpeningIsDone = false
+    	    -- Forfeit
+    	    if mypetbattle_auto_forfeit then
+    	    	print("Forfeiting!")
+	    	    C_PetBattles.ForfeitGame()
+	    	end
+	    end
+	else
+		MPB_timerTotal = 0
+    end
+end
+ 
+local f = CreateFrame("frame")
+f:SetScript("OnUpdate", MPB_onUpdate)
 
 --------------------
 -- SLASH COMMANDS --
@@ -557,6 +652,14 @@ function SlashCmdList.MYPETBATTLE(msg, editbox)
 	elseif msg == "capture_common_uncommon" then
 		mypetbattle_capture_common_uncommon = not mypetbattle_capture_common_uncommon
 		if mypetbattle_capture_common_uncommon then status = "\124cFF00FF00Automatic capture common/uncommon (0/3 owned) pets enabled" else status = "\124cFFFF0000Automatic capture common/uncommon pets (0/3 owned) disabled" end
+	    print("My pet battle:", status)
+	elseif msg == "auto_forfeit" then
+		mypetbattle_auto_forfeit = not mypetbattle_auto_forfeit
+		if mypetbattle_auto_forfeit then status = "\124cFF00FF00Automatic forfeit after 60 enabled" else status = "\124cFFFF0000Automatic forfeit after 60 sec disabled" end
+	    print("My pet battle:", status)
+	elseif msg == "wintrade_enable" then
+		mypetbattle_wintrade_enabled = not mypetbattle_wintrade_enabled
+		if mypetbattle_wintrade_enabled then status = "\124cFF00FF00Automatic wintrade enabled" else status = "\124cFFFF0000Automatic wintrade disabled" end
 	    print("My pet battle:", status)
 	elseif msg == "debug" then
         -- turn off debug messages as required

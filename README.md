@@ -4,9 +4,15 @@ Kill those bastards
 
 Version History:
 
+v. 1.0.8
+- Added win trading capability between two toons
+
 v. 1.0.7
+- Fixed PvP re-queue
 - Option to capture 1 common/uncommon if you own 0/3 of that specie
 - New and smaller Config button icon
+- Auto-dismiss pet
+- Added check for faction only pets e.g. Moonkin Hatchling
 
 v. 1.0.6
 - Lock pet slots. To lock a pet slot, click the checkbutton on the pet portrait

@@ -80,3 +80,11 @@ end
 function Check_lock_pet_3_OnClick()
 	MPB_LOCK_PET3 = Check_lock_pet_3:GetChecked()
 end
+
+function CheckButton_auto_forfeit_OnClick()
+	SlashCmdList.MYPETBATTLE('auto_forfeit')
+end
+
+function CheckButton_wintrade_enable_OnClick()
+	SlashCmdList.MYPETBATTLE('wintrade_enable')
+end
