@@ -3,7 +3,7 @@
 	<Animation />
 	<Frame name="MyPetBattleForm" movable="true" enableMouse="true">
 		<Size>
-			<AbsDimension x="262" y="116" />
+			<AbsDimension x="262" y="130" />
 		</Size>
 		<Anchors>
 			<Anchor point="CENTER" relativeTo="UIParent">
@@ -125,7 +125,7 @@
 					<Size x="35" y="15" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="6" y="-95" />
+							<Offset x="6" y="-110" />
 						</Anchor>
 					</Anchors>
 					<FontHeight val="7" />
@@ -156,6 +156,24 @@
 						</Anchor>
 					</Anchors>
 					<FontHeight val="8" />
+				</FontString>
+				<FontString inherits="GameFontNormal" font="Fonts\ARIALN.TTF" text="WT" justifyH="LEFT">
+					<Size x="21" y="20" />
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="31" y="-95" />
+						</Anchor>
+					</Anchors>
+					<FontHeight val="7" />
+				</FontString>
+				<FontString inherits="GameFontNormal" font="Fonts\ARIALN.TTF" text="Auto forfeit" justifyH="LEFT">
+					<Size x="43" y="20" />
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="59" y="-95" />
+						</Anchor>
+					</Anchors>
+					<FontHeight val="7" />
 				</FontString>
 			</Layer>
 		</Layers>
@@ -365,7 +383,7 @@
 				<Size x="14" y="14" />
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset x="92" y="-89" />
+						<Offset x="46" y="-98" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
@@ -378,7 +396,7 @@
 				<Size x="14" y="14" />
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset x="72" y="-89" />
+						<Offset x="17" y="-98" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
