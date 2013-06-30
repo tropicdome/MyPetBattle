@@ -161,7 +161,7 @@
 					<Size x="21" y="20" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="31" y="-95" />
+							<Offset x="38" y="-93" />
 						</Anchor>
 					</Anchors>
 					<FontHeight val="7" />
@@ -170,7 +170,7 @@
 					<Size x="43" y="20" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="59" y="-95" />
+							<Offset x="66" y="-93" />
 						</Anchor>
 					</Anchors>
 					<FontHeight val="7" />
@@ -383,7 +383,7 @@
 				<Size x="14" y="14" />
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset x="46" y="-98" />
+						<Offset x="53" y="-96" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
@@ -396,7 +396,7 @@
 				<Size x="14" y="14" />
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset x="17" y="-98" />
+						<Offset x="24" y="-96" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
