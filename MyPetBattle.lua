@@ -247,7 +247,6 @@ function events:PET_BATTLE_LOOT_RECEIVED(...)				--
 	--	MoneyWonAlertFrame_ShowAlert(quantity);
 	--end
 
-
 end
 
 function events:PET_BATTLE_MAX_HEALTH_CHANGED(...)			-- 
@@ -259,8 +258,10 @@ function events:PET_BATTLE_OPENING_DONE(...)				-- Opening done and ready to bat
 	if Stopwatch_IsPlaying() then Stopwatch_Clear() end
 	Stopwatch_StartCountdown(0, 0, 60) -- Set Stop Watch to count down from 60 sec
 	Stopwatch_Play() -- Starts the Stop Watch
-	print("Started Stopwatch")
-
+	if mypetbattle_debug then
+		print("Started Stopwatch")
+	end
+		
 	--	print("PET_BATTLE_OPENING_DONE")
 	print("We have to fight " .. C_PetBattles.GetNumPets(LE_BATTLE_PET_ENEMY) .. " enemy pets")
 	-- Auto-select first available pet
@@ -394,17 +395,6 @@ function events:PET_JOURNAL_LIST_UPDATE(...)
 			Pet3_level_string:SetText(level)
 		end
 	end
-
-	-- Dismiss pet so we do not have it running around
-	if C_PetJournal.GetSummonedPetGUID() then -- Check if we have a pet summoned already, or we will get an error
-		C_PetJournal.SummonPetByGUID(C_PetJournal.GetSummonedPetGUID()) -- Dismiss pet
-	end
-
-	-- Check if we should be in the PvP matchmaking queue, but we are not
-	if not C_PetBattles.IsInBattle() and (C_PetBattles.GetPVPMatchmakingInfo() == nil) and mypetbattle_join_pvp then
-		C_PetBattles.StartPVPMatchmaking()
-
-	end
 end
 
 function events:PET_BATTLE_PET_CHANGED(...)					-- 
@@ -443,34 +433,34 @@ function events:PET_BATTLE_PET_ROUND_PLAYBACK_COMPLETE(...)	--
 		C_PetBattles.UseTrap() -- Use the trap
 	end
 
-		local spell = nil
-		local petOwner = LE_BATTLE_PET_ALLY
-		local petIndex = C_PetBattles.GetActivePet(petOwner)
-		local petType = C_PetBattles.GetPetType(petOwner, petIndex)
+	local spell = nil
+	local petOwner = LE_BATTLE_PET_ALLY
+	local petIndex = C_PetBattles.GetActivePet(petOwner)
+	local petType = C_PetBattles.GetPetType(petOwner, petIndex)
 
-		if petType == 1 then 		-- HUMANOID
-			spell = humanoid()		
-		elseif petType == 2 then 	-- DRAGONKIN
-			spell = dragonkin()
-		elseif petType == 3 then 	-- FLYING
-			spell = flying()
-		elseif petType == 4 then 	-- UNDEAD
-			spell = undead()
-		elseif petType == 5 then 	-- CRITTER
-			spell = critter()
-		elseif petType == 6 then 	-- MAGIC
-			spell = magic()
-		elseif petType == 7 then 	-- ELEMENTAL
-			spell = elemental()
-		elseif petType == 8 then 	-- BEAST
-			spell = beast()
-		elseif petType == 9 then 	-- WATER / AQUATIC
-			spell = aquatic()
-		elseif petType == 10 then 	-- MECHANICAL
-			spell = mechanical()
-		end
+	if petType == 1 then 		-- HUMANOID
+		spell = humanoid()		
+	elseif petType == 2 then 	-- DRAGONKIN
+		spell = dragonkin()
+	elseif petType == 3 then 	-- FLYING
+		spell = flying()
+	elseif petType == 4 then 	-- UNDEAD
+		spell = undead()
+	elseif petType == 5 then 	-- CRITTER
+		spell = critter()
+	elseif petType == 6 then 	-- MAGIC
+		spell = magic()
+	elseif petType == 7 then 	-- ELEMENTAL
+		spell = elemental()
+	elseif petType == 8 then 	-- BEAST
+		spell = beast()
+	elseif petType == 9 then 	-- WATER / AQUATIC
+		spell = aquatic()
+	elseif petType == 10 then 	-- MECHANICAL
+		spell = mechanical()
+	end
 
-	if mypetbattle_enabled or (mypetbattle_wintrade_enabled and round <= 1) then -- Only attack in round 0 (the first round) if we are doing wt (also attack in second round just to do something)
+	if mypetbattle_enabled or (mypetbattle_wintrade_enabled and round <= math.random(1,3)) then -- Attack a random number of times between 2-4 if we are doing wt (1 and 3 since round 0 exists)
 		-- Switch pet at health threshold before it dies. CAN BE SET FROM CONFIG MENU
 		if MyPetBattle.hp(petIndex) < MPB_CONFIG_COMBAT_SWAP_PET_HEALTH_THRESHOLD then
 			for j=1,3 do
@@ -513,7 +503,7 @@ end
 
 function events:PET_BATTLE_QUEUE_PROPOSAL_ACCEPTED(...)		-- 
 --	print("PET_BATTLE_QUEUE_PROPOSAL_ACCEPTED")
-	print("Pet Battle PvP queue accepted")
+	if mypetbattle_debug then  print("Pet Battle PvP queue accepted") end
 end
 
 function events:PET_BATTLE_QUEUE_PROPOSAL_DECLINED(...)		-- 
@@ -534,9 +524,9 @@ function events:PET_BATTLE_QUEUE_PROPOSE_MATCH(...)			--
 		print("Current delay: "..delay)
 	end
 	
-	-- Automatic join PvP queue if enabled	
+	-- Automatic accept PvP queue popup if enabled	
 	if mypetbattle_join_pvp then
-		print("Auto-accepting pet PvP match!")
+		if mypetbattle_debug then  print("Auto-accepting pet PvP match!") end
 		C_PetBattles.AcceptQueuedPVPMatch()
 	end
 end
@@ -597,24 +587,42 @@ end
 --- Timer frame ----
 --------------------
 --local total = 0
-MPB_timerTotal = 0
+MPB_timerTotal = 0 -- Timer init for automatic forfeit
+MPB_timerOneSec = 0 -- 1 sec timer init for different mechanics e.g. auto re-queue PvP
 
-local function MPB_onUpdate(self,elapsed)	
+local function MPB_onUpdate(self,elapsed)
+	-- Automatic forfeit timer
 	if petBattleOpeningIsDone then
 	    MPB_timerTotal = MPB_timerTotal + elapsed
 		if MPB_timerTotal >= 55 then
-			DEFAULT_CHAT_FRAME:AddMessage("60 sec. almost up!")
+			if mypetbattle_debug then  print("60 sec. almost up!") end
 			MPB_timerTotal = 0
 			petBattleOpeningIsDone = false
     	    -- Forfeit
     	    if mypetbattle_auto_forfeit then
-    	    	print("Forfeiting!")
+    	    	if mypetbattle_debug then  print("Forfeiting!") end
 	    	    C_PetBattles.ForfeitGame()
 	    	end
 	    end
 	else
 		MPB_timerTotal = 0
     end
+
+	-- 1 sec timer check
+	MPB_timerOneSec = MPB_timerOneSec + elapsed
+	if MPB_timerOneSec >= 1 then
+		-- Check if we should be in the PvP matchmaking queue, but we are not
+		if not C_PetBattles.IsInBattle() and (C_PetBattles.GetPVPMatchmakingInfo() == nil) and mypetbattle_join_pvp then
+			C_PetBattles.StartPVPMatchmaking()
+		end
+		-- Dismiss pet so we do not have it running around
+		if C_PetJournal.GetSummonedPetGUID() then -- Check if we have a pet summoned already, or we will get an error
+			C_PetJournal.SummonPetByGUID(C_PetJournal.GetSummonedPetGUID()) -- Dismiss pet
+		end
+		-- Reset the timer
+		MPB_timerOneSec = 0
+	end
+
 end
  
 local f = CreateFrame("frame")
@@ -655,7 +663,7 @@ function SlashCmdList.MYPETBATTLE(msg, editbox)
 	    print("My pet battle:", status)
 	elseif msg == "auto_forfeit" then
 		mypetbattle_auto_forfeit = not mypetbattle_auto_forfeit
-		if mypetbattle_auto_forfeit then status = "\124cFF00FF00Automatic forfeit after 60 enabled" else status = "\124cFFFF0000Automatic forfeit after 60 sec disabled" end
+		if mypetbattle_auto_forfeit then status = "\124cFF00FF00Automatic forfeit after 60 sec enabled" else status = "\124cFFFF0000Automatic forfeit after 60 sec disabled" end
 	    print("My pet battle:", status)
 	elseif msg == "wintrade_enable" then
 		mypetbattle_wintrade_enabled = not mypetbattle_wintrade_enabled
