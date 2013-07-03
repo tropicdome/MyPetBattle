@@ -254,12 +254,12 @@ function events:PET_BATTLE_MAX_HEALTH_CHANGED(...)			--
 end
 
 function events:PET_BATTLE_OPENING_DONE(...)				-- Opening done and ready to battle
-	-- Stopwatch
-	if Stopwatch_IsPlaying() then Stopwatch_Clear() end
-	Stopwatch_StartCountdown(0, 0, 60) -- Set Stop Watch to count down from 60 sec
-	Stopwatch_Play() -- Starts the Stop Watch
-	if mypetbattle_debug then
-		print("Started Stopwatch")
+	-- Stopwatch for WT
+	if mypetbattle_wintrade_enabled then
+		if Stopwatch_IsPlaying() then Stopwatch_Clear() end
+		Stopwatch_StartCountdown(0, 0, 60) -- Set Stop Watch to count down from 60 sec
+		Stopwatch_Play() -- Starts the Stop Watch
+		if mypetbattle_debug then  print("Started Stopwatch") end
 	end
 		
 	--	print("PET_BATTLE_OPENING_DONE")
