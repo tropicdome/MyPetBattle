@@ -586,7 +586,6 @@ end
 --------------------
 --- Timer frame ----
 --------------------
---local total = 0
 MPB_timerTotal = 0 -- Timer init for automatic forfeit
 MPB_timerOneSec = 0 -- 1 sec timer init for different mechanics e.g. auto re-queue PvP
 
@@ -594,7 +593,7 @@ local function MPB_onUpdate(self,elapsed)
 	-- Automatic forfeit timer
 	if petBattleOpeningIsDone then
 	    MPB_timerTotal = MPB_timerTotal + elapsed
-		if MPB_timerTotal >= 55 then
+		if MPB_timerTotal >= 55 then -- 55
 			if mypetbattle_debug then  print("60 sec. almost up!") end
 			MPB_timerTotal = 0
 			petBattleOpeningIsDone = false

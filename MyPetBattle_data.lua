@@ -80,6 +80,32 @@ function MyPetBattle.currentWeather(weather)
 	return false		
 end
 
+-- Check if a spell is strong against our current target
+function MyPetBattle.abilityIsStrong(spell)
+	local activePetSlot = C_PetBattles.GetActivePet(LE_BATTLE_PET_ALLY)
+	local enemyPetSlot = C_PetBattles.GetActivePet(LE_BATTLE_PET_ENEMY)
+	local enemyType = C_PetBattles.GetPetType(LE_BATTLE_PET_ENEMY, enemyPetSlot)
+	-- Check if the spell is on the actionbar 
+	for i_=1,3 do 
+		local abilityName, abilityType, noHints
+		_, abilityName, _, _, _, _, abilityType, noHints = C_PetBattles.GetAbilityInfo(LE_BATTLE_PET_ALLY, activePetSlot, i_)
+		if spell == abilityName then
+			local modifier = C_PetBattles.GetAttackModifier(abilityType, enemyType)
+			if(modifier < 1) then
+--				print(abilityName .. " is weak against enemy")
+				return false
+			elseif(modifier > 1) then
+--				print(abilityName .. " is strong against enemy")
+				return true
+			else
+--				print(abilityName .. " is normal strength against enemy")
+				return false
+			end
+		end
+	end
+	return false
+end
+
 -----------------------------
 ---- FRAMEWORK FUNCTIONS ----
 -----------------------------
