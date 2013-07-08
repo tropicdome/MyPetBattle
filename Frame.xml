@@ -405,6 +405,70 @@
 					</OnClick>
 				</Scripts>
 			</CheckButton>
+			<Button name="MPB_MMButton" parent="Minimap" movable="true" frameStrata="MEDIUM" enableMouse="true">
+				<Size>
+					<AbsDimension x="31" y="31" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" />
+				</Anchors>
+				<Layers>
+					<Layer level="BACKGROUND">
+						<Texture name="MPB_MMButton_Icon" file="Interface\PetBattles\PetBattlesQueue">
+							<Size>
+								<AbsDimension x="20" y="20" />
+							</Size>
+							<Anchors>
+								<Anchor point="TOPLEFT">
+									<Offset>
+										<AbsDimension x="6" y="-5" />
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</Texture>
+					</Layer>
+					<Layer level="OVERLAY">
+						<Texture file="Interface\Minimap\MiniMap-TrackingBorder">
+							<Size>
+								<AbsDimension x="53" y="53" />
+							</Size>
+							<Anchors>
+								<Anchor point="TOPLEFT" />
+							</Anchors>
+						</Texture>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnLoad>
+						self:RegisterForClicks("LeftButtonUp","RightButtonUp")
+						self:RegisterForDrag("LeftButton","RightButton")
+						self.dragme = false;
+					</OnLoad>
+					<OnDragStart>
+						self:LockHighlight()
+						self.dragme = true;
+					</OnDragStart>
+					<OnDragStop>
+						self:UnlockHighlight()
+						self.dragme = false;
+					</OnDragStop>
+					<OnUpdate>
+						if(self.dragme == true) then
+						MPB_MMButton_BeingDragged();
+						end
+					</OnUpdate>
+					<OnClick>
+						MPB_MMButton_OnClick();
+					</OnClick>
+					<OnEnter>
+						MPB_MMButton_OnEnter(self);
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+				<HighlightTexture file="Interface\BUTTONS\UI-Panel-MinimizeButton-Highlight" alphaMode="ADD" />
+			</Button>
 		</Frames>
 		<Scripts>
 			<OnLoad>

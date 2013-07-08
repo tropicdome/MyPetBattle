@@ -123,6 +123,9 @@ function events:ADDON_LOADED(...)
 	-- Set texture for Config Button (gear) manually as the XML file do not want do what I want!
 	MPB_Config_Button:SetNormalTexture("Interface\\Addons\\MyPetBattle\\Images\\icon-config")
 	MPB_Config_Button:SetHighlightTexture("Interface\\Buttons\\UI-Panel-MinimizeButton-Highlight.blp")
+
+	-- Call function in Frame.lua to update the position of the minimap button
+	MPB_MMButton_UpdatePosition()
 end
 
 function events:PLAYER_LOGIN(...)				-- 
@@ -346,55 +349,14 @@ function events:UPDATE_SUMMONPETS_ACTION(...)					--
 		MyPetBattle.revive_and_heal_Pets() -- function in MyPetBattle_data.lua
 		mypetbattle_hasHealedAfterCombat = true
 	end
+end
 
-	-- Set UI textures for current pet team when the UI is loaded -- IS NOT NEEDED ANYMORE SINCE setTeam() IS CALLED ABOVE, AND THAT FUNCTION SETS THE TEXTURES
-	-- MIGHT BE NEEDED ANYWAY, IF AUTO NEW TEAM IS ACTIVE, THEN THE TEXTURE WILL NOT BE LOADED ON LOGIN
-	for i_ = 1, 3 do
-		local petGUID = C_PetJournal.GetPetLoadOutInfo(i_)
-		local speciesID, customName, level, xp, maxXp, displayID, isFavorite, name, icon, petType, creatureID, sourceText, description, isWild, canBattle, tradable, unique, obtainable = C_PetJournal.GetPetInfoByPetID(petGUID) 
-
-		-- Set pet 1 UI texture
-		if i_ == 1 then 
-			Pet1_texture:SetTexture(icon) 
-			Pet1_level_string:SetText(level)
-		end
-		-- Set pet 2 UI texture
-		if i_ == 2 then 
-			Pet2_texture:SetTexture(icon) 
-			Pet2_level_string:SetText(level)
-		end
-		-- Set pet 3 UI texture
-		if i_ == 3 then 
-			Pet3_texture:SetTexture(icon) 
-			Pet3_level_string:SetText(level)
-		end
-	end
-
+function events:COMPANION_UPDATE(...)					-- 
+--	print("COMPANION_UPDATE")
 end
 
 function events:PET_JOURNAL_LIST_UPDATE(...)
-	-- Set UI textures for current pet team when the UI is loaded -- IS NOT NEEDED ANYMORE SINCE setTeam() IS CALLED ABOVE, AND THAT FUNCTION SETS THE TEXTURES
-	-- MIGHT BE NEEDED ANYWAY, IF AUTO NEW TEAM IS ACTIVE, THEN THE TEXTURE WILL NOT BE LOADED ON LOGIN
-	for i_ = 1, 3 do
-		local petGUID = C_PetJournal.GetPetLoadOutInfo(i_)
-		local speciesID, customName, level, xp, maxXp, displayID, isFavorite, name, icon, petType, creatureID, sourceText, description, isWild, canBattle, tradable, unique, obtainable = C_PetJournal.GetPetInfoByPetID(petGUID) 
-
-		-- Set pet 1 UI texture
-		if i_ == 1 then 
-			Pet1_texture:SetTexture(icon) 
-			Pet1_level_string:SetText(level)
-		end
-		-- Set pet 2 UI texture
-		if i_ == 2 then 
-			Pet2_texture:SetTexture(icon) 
-			Pet2_level_string:SetText(level)
-		end
-		-- Set pet 3 UI texture
-		if i_ == 3 then 
-			Pet3_texture:SetTexture(icon) 
-			Pet3_level_string:SetText(level)
-		end
-	end
+--	print(PET_JOURNAL_LIST_UPDATE)
 end
 
 function events:PET_BATTLE_PET_CHANGED(...)					-- 
@@ -588,6 +550,7 @@ end
 --------------------
 MPB_timerTotal = 0 -- Timer init for automatic forfeit
 MPB_timerOneSec = 0 -- 1 sec timer init for different mechanics e.g. auto re-queue PvP
+MPB_petguids = {0,0,0}
 
 local function MPB_onUpdate(self,elapsed)
 	-- Automatic forfeit timer
@@ -615,8 +578,37 @@ local function MPB_onUpdate(self,elapsed)
 			C_PetBattles.StartPVPMatchmaking()
 		end
 		-- Dismiss pet so we do not have it running around
-		if C_PetJournal.GetSummonedPetGUID() then -- Check if we have a pet summoned already, or we will get an error
-			C_PetJournal.SummonPetByGUID(C_PetJournal.GetSummonedPetGUID()) -- Dismiss pet
+        local petGUID = C_PetJournal.GetSummonedPetGUID()
+        if petGUID and petGUID == C_PetJournal.GetPetLoadOutInfo(1) then -- Check if we have a pet summoned already, or we will get an error
+            C_PetJournal.SummonPetByGUID(petGUID) -- Dismiss pet
+        end
+		-- Set UI textures for current pet team when the UI is loaded -- IS NOT NEEDED ANYMORE SINCE setTeam() IS CALLED ABOVE, AND THAT FUNCTION SETS THE TEXTURES
+		-- MIGHT BE NEEDED ANYWAY, IF AUTO NEW TEAM IS ACTIVE, THEN THE TEXTURE WILL NOT BE LOADED ON LOGIN
+		-- Moved texture updates to the timer, because the events used before, we cannot be sure they are always called when we want to update
+		for i_ = 1, 3 do
+			local petGUID = C_PetJournal.GetPetLoadOutInfo(i_)
+			if not petGUID then  break end -- Break the loop if there are no pets yet or we will get an error
+
+			local speciesID, customName, level, xp, maxXp, displayID, isFavorite, name, icon, petType, creatureID, sourceText, description, isWild, canBattle, tradable, unique, obtainable = C_PetJournal.GetPetInfoByPetID(petGUID) 
+
+			if MPB_petguids[i_] ~= petGUID then -- Check if we already have the pet, then no need to set the texture
+				MPB_petguids[i_] = petGUID
+				-- Set pet 1 UI texture
+				if i_ == 1 then 
+					Pet1_texture:SetTexture(icon) 
+					Pet1_level_string:SetText(level)
+				end
+				-- Set pet 2 UI texture
+				if i_ == 2 then 
+					Pet2_texture:SetTexture(icon) 
+					Pet2_level_string:SetText(level)
+				end
+				-- Set pet 3 UI texture
+				if i_ == 3 then 
+					Pet3_texture:SetTexture(icon) 
+					Pet3_level_string:SetText(level)
+				end
+			end
 		end
 		-- Reset the timer
 		MPB_timerOneSec = 0

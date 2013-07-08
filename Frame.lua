@@ -88,3 +88,45 @@ end
 function CheckButton_wintrade_enable_OnClick()
 	SlashCmdList.MYPETBATTLE('wintrade_enable')
 end
+
+------------------------------
+-- Minimap button functions --
+------------------------------
+function MPB_MMButton_UpdatePosition()
+	-- Initialize minimap button the first time
+	if MPB_MMBUTTONPOSITION == nil or MPB_MMBUTTONPOSITION[1] == nil or MPB_MMBUTTONPOSITION[2] == nil then 
+		MPB_MMBUTTONPOSITION = {50, 50} 
+	end
+
+	-- Set new position of the minimap button
+    MPB_MMButton:SetPoint(
+        "TOPLEFT",
+        "Minimap",
+        "TOPLEFT",
+        54 - MPB_MMBUTTONPOSITION[1],
+        MPB_MMBUTTONPOSITION[2] - 55
+    )
+end
+
+function MPB_MMButton_OnEnter(self)
+	MPB_BUTTON_TOOLTIP = "Click to hide/show MPB window\nClick and hold to move this icon" 
+	GameTooltip:SetOwner(self, "ANCHOR_LEFT")
+    GameTooltip:SetText(MPB_BUTTON_TOOLTIP)
+    GameTooltipTextLeft1:SetTextColor(1, 1, 1)
+    GameTooltip:Show()
+end
+
+
+function MPB_MMButton_OnClick(self,button)
+    SlashCmdList.MYPETBATTLE('ui')
+end
+
+function MPB_MMButton_BeingDragged()
+    local w,x = GetCursorPosition() 
+    local y,z = Minimap:GetLeft(), Minimap:GetBottom() 
+    w = y-w/UIParent:GetScale()+70 
+    x = x/UIParent:GetScale()-z-100
+	-- Update position
+    MPB_MMBUTTONPOSITION = {w,x}
+    MPB_MMButton_UpdatePosition()
+end
