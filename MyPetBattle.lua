@@ -84,10 +84,9 @@ local mypetbattle_frame, events = CreateFrame("Frame"), {};
 -- LOAD A LOT OF STUFF WHEN THE ADDON HAS BEEN LOADED --
 function events:ADDON_LOADED(...)
 --	print("ADDON_LOADED")
---	local arg1, arg2 = ...
---	print(arg1, arg2)
---	if ... == "MyPetBattle" then
---		print("Loaded MPB")
+	local addonName = ...
+--	if addonName == "MyPetBattle" then
+--		print("Loaded |cffff8000MPB")
 --	end
 
 	-- Set UI elements to SavedVariables
@@ -126,6 +125,10 @@ function events:ADDON_LOADED(...)
 
 	-- Call function in Frame.lua to update the position of the minimap button
 	MPB_MMButton_UpdatePosition()
+
+	-- Show/hide ui at login according to character specific savedvariable
+	if MPB_SHOW_UI == nil then MPB_SHOW_UI = true end -- Set variable to true the first time
+	SlashCmdList.MYPETBATTLE('ui') -- Call slash command to show/hide ui
 end
 
 function events:PLAYER_LOGIN(...)				-- 
@@ -666,10 +669,8 @@ function SlashCmdList.MYPETBATTLE(msg, editbox)
 		if mypetbattle_debug then status = "\124cFF00FF00Enabled" else status = "\124cFFFF0000Disabled" end
         print("Debugging:",status)
     elseif msg == "ui" then
-            if MyPetBattleForm:IsVisible() then
-                MyPetBattleForm:Hide()
-            else
-                MyPetBattleForm:Show()
-            end
+		-- Show/hide ui
+		MPB_SHOW_UI = not MPB_SHOW_UI
+		if MPB_SHOW_UI then MyPetBattleForm:Show() else MyPetBattleForm:Hide() end
     end
 end

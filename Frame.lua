@@ -92,6 +92,7 @@ end
 ------------------------------
 -- Minimap button functions --
 ------------------------------
+-- Update the position of the minimap button
 function MPB_MMButton_UpdatePosition()
 	-- Initialize minimap button the first time
 	if MPB_MMBUTTONPOSITION == nil or MPB_MMBUTTONPOSITION[1] == nil or MPB_MMBUTTONPOSITION[2] == nil then 
@@ -108,19 +109,21 @@ function MPB_MMButton_UpdatePosition()
     )
 end
 
+-- Show tooltip on mouseover
 function MPB_MMButton_OnEnter(self)
-	MPB_BUTTON_TOOLTIP = "Click to hide/show MPB window\nClick and hold to move this icon" 
+	MPB_BUTTON_TOOLTIP = "Click to hide/show |cffff8000MPB|r window\nClick and hold to move this icon" 
 	GameTooltip:SetOwner(self, "ANCHOR_LEFT")
     GameTooltip:SetText(MPB_BUTTON_TOOLTIP)
     GameTooltipTextLeft1:SetTextColor(1, 1, 1)
     GameTooltip:Show()
 end
 
-
+-- Show/hide ui
 function MPB_MMButton_OnClick(self,button)
     SlashCmdList.MYPETBATTLE('ui')
 end
 
+-- Calculate position when button is dragged
 function MPB_MMButton_BeingDragged()
     local w,x = GetCursorPosition() 
     local y,z = Minimap:GetLeft(), Minimap:GetBottom() 

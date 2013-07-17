@@ -217,15 +217,6 @@ function MyPetBattle.canCaptureCommon()
 	return false
 end
 
-function MyPetBattle.isSpeciesIgnored(speciesID)
-    ignoredSpeciesIDs = {}
-    ignoredSpeciesIDs[296] = UnitFactionGroup("player") ~= "Alliance" -- Alliance Moonkin
-    ignoredSpeciesIDs[298] = UnitFactionGroup("player") ~= "Horde" -- Horde Moonkin
-    --ignoredSpeciesIDs[256] = true -- Blizzard Bug, can't call Lil' XT
-
-    return ignoredSpeciesIDs[speciesID]
-end
-
 -- New improved team setup
 function MyPetBattle.setTeam(avgLevel)
 --	print("Set team v2")
@@ -291,8 +282,10 @@ function MyPetBattle.setTeam(avgLevel)
 			
 			local healthPercent = health / maxHealth
 
+			local petIsSummonable = C_PetJournal.PetIsSummonable(petID) -- Check if we can actually summon the pet e.g. alliance/horde only (also works for revoked)
+
 			-- Check if we own the pet, it is a battle pet, it is alive and of rare quality
-			if owned and not MyPetBattle.isSpeciesIgnored(speciesID) and canBattle and not isRevoked and healthPercent > healthThreshold and rarity == 4 and level == avgLevel+p_ then
+			if owned and petIsSummonable and canBattle and not isRevoked and healthPercent > healthThreshold and rarity == 4 and level == avgLevel+p_ then
 				-- Set found pet to pet 1	
 				C_PetJournal.SetPetLoadOutInfo(1, petID) -- Pet slot 1
 				-- Save pet 1 guid
@@ -333,8 +326,10 @@ function MyPetBattle.setTeam(avgLevel)
 			
 			local healthPercent = health / maxHealth
 
+			local petIsSummonable = C_PetJournal.PetIsSummonable(petID) -- Check if we can actually summon the pet e.g. alliance/horde only (also works for revoked)
+
 			-- Check if we own the pet, it is a battle pet, it is alive and of rare quality
-			if owned and not MyPetBattle.isSpeciesIgnored(speciesID) and canBattle and not isRevoked and healthPercent > healthThreshold and rarity == 4 and level == avgLevel+p_ and petID ~= pet1_guid then
+			if owned and petIsSummonable and canBattle and not isRevoked and healthPercent > healthThreshold and rarity == 4 and level == avgLevel+p_ and petID ~= pet1_guid then
 				-- Set found pet to pet 2	
 				C_PetJournal.SetPetLoadOutInfo(2, petID) -- Pet slot 2
 				-- Save pet 1 guid
@@ -374,8 +369,10 @@ function MyPetBattle.setTeam(avgLevel)
 			
 			local healthPercent = health / maxHealth
 
+			local petIsSummonable = C_PetJournal.PetIsSummonable(petID) -- Check if we can actually summon the pet e.g. alliance/horde only (also works for revoked)
+
 			-- Check if we own the pet, it is a battle pet, it is alive and of rare quality
-			if owned and not MyPetBattle.isSpeciesIgnored(speciesID) and canBattle and not isRevoked and healthPercent > healthThreshold and rarity == 4 and level == avgLevel+p_ and petID ~= pet1_guid and petID ~= pet2_guid then
+			if owned and petIsSummonable and canBattle and not isRevoked and healthPercent > healthThreshold and rarity == 4 and level == avgLevel+p_ and petID ~= pet1_guid and petID ~= pet2_guid then
 				-- Set found pet to pet 3	
 				C_PetJournal.SetPetLoadOutInfo(3, petID) -- Pet slot 3
 				-- Save pet 1 guid
