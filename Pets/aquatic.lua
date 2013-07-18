@@ -1,12 +1,15 @@
 ---------------------
 -- AQUATIC / WATER --
 ---------------------
-function aquatic()
+function aquatic(petName)
 
 local aquatic_abilities = nil
 
 -- Get pet name
-petName = MyPetBattle.petName()
+if petName == nil then
+	petName = MyPetBattle.petName()
+end
+
 tf,renewing_mist_cd = MyPetBattle.buff("Renewing Mists")
 tf,shell_shield_cd = MyPetBattle.buff("Shell Shield")
 tf,apocalypse_cd = MyPetBattle.buff("Apocalypse")
@@ -117,7 +120,7 @@ elseif petName == "Tiny White Carp" then
 ---------------------
 -- FROGS AND TOADS --
 ---------------------
-elseif petName == "Biletoad" or petName == "Frog" or petName == "Garden Frog" or petName == "Huge Toad" or petName == "Jubling" or petName == "Jungle Darter" or petName == "Leopard Tree Frog" or petName == "Mac Frog" or petName == "Mojo" or petName == "Small Frog" or petName == "Spotted Bell Frog" or petName == "Tree Toad" or petName == "Wood Frog" or petName == "Yellow-Bellied Bullfrog" or petName == "Toad" then
+elseif petName == "Biletoad" or petName == "Frog" or petName == "Garden Frog" or petName == "Huge Toad" or petName == "Jubling" or petName == "Jungle Darter" or petName == "Leopard Tree Frog" or petName == "Mac Frog" or petName == "Mojo" or petName == "Small Frog" or petName == "Spotted Bell Frog" or petName == "Tree Toad" or petName == "Wood Frog" or petName == "Yellow-Bellied Bullfrog" or petName == "Toad" or petName == "Tree Frog" then
 	aquatic_abilities = 
 		{
 			{"Healing Wave", 	MyPetBattle.hp() < 0.7 },	-- 
@@ -265,7 +268,8 @@ elseif petName == "Tideskipper" then
 
 -------------------
 else -- Unknown aquatic
-	print("Unknown aquatic pet")
+	print("|cFFFF0000 Unknown aquatic pet: "..petName)
+	return "UNKNOWN"
 end
 
 	spell = MyPetBattle.parseSpellTable(aquatic_abilities)

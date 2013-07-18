@@ -1,12 +1,14 @@
 ----------------
 -- DRAGONKIN --
 ----------------
-function dragonkin()
+function dragonkin(petName)
 
 local dragonkin_abilities = nil
 
 -- Get pet name
-petName = MyPetBattle.petName()
+if petName == nil then
+	petName = MyPetBattle.petName()
+end
 
 -------------------
 -- DRAGON WHELPS --
@@ -187,7 +189,7 @@ elseif petName == "Soul of the Aspects" or petName == "Spirit of Competition" th
 			{"Surge of Light", 	},	-- Slot 3
 			{"Solar Beam", 		},	-- Slot 3
 		}
-elseif petName == "Thundering Serpent Hatchling" or petName == "Tiny Green Dragon" or petName == "Tiny Red Dragon" or petName == "Tiny Golden Dragon" or petName == "Wild Jade Hatchling" then
+elseif petName == "Thundering Serpent Hatchling" or petName == "Tiny Green Dragon" or petName == "Tiny Red Dragon" or petName == "Wild Golden Hatchling" or petName == "Wild Jade Hatchling" then
 	dragonkin_abilities = 
 		{
 			{"Roar", 			not MyPetBattle.buff("Attack Boost") },	-- Slot 2
@@ -252,7 +254,8 @@ elseif petName == "Untamed Hatchling" then
 		}
 -------------------
 else -- Unknown dragonkin pet
-	print("|cFFFF0000 Unknown dragonkin pet")
+	print("|cFFFF0000 Unknown dragonkin pet: "..petName)
+	return "UNKNOWN"
 end
 
 	spell = MyPetBattle.parseSpellTable(dragonkin_abilities)

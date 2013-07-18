@@ -1,17 +1,29 @@
 ------------
 -- UNDEAD --
 ------------
-function undead()
+function undead(petName)
 
 local undead_abilities = nil
 
 -- Get pet name
-petName = MyPetBattle.petName()
+if petName == nil then
+	petName = MyPetBattle.petName()
+end
 
 -----------------------
 -- DISEASED CRITTERS --
 -----------------------
-if petName == "Blighthawk" then
+if petName == "Blighted Squirrel" then
+	undead_abilities = 
+		{
+			{"Scratch", 		},	-- Slot 1
+			{"Woodchipper", 	},	-- Slot 1
+			{"Adrenaline Rush", },	-- Slot 2
+			{"Crouch", 			},	-- Slot 2
+			{"Rabid Strike", 	},	-- Slot 3
+			{"Stampede", 		},	-- Slot 3
+		}
+elseif petName == "Blighthawk" then
 	undead_abilities = 
 		{
 			{"Infected Claw", 	},	-- Slot 1
@@ -245,7 +257,8 @@ elseif petName == "Unborn Val'kyr" then
 		}
 -------------------
 else -- Unknown undead
-	print("|cFFFF0000 Unknown undead")
+	print("|cFFFF0000 Unknown undead: "..petName)
+	return "UNKNOWN"
 end
 
 	spell = MyPetBattle.parseSpellTable(undead_abilities)

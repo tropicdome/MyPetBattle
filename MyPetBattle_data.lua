@@ -20,6 +20,8 @@ end
 function MyPetBattle.buff(auraName,petIndex)
 	if petIndex == nil then petIndex = C_PetBattles.GetActivePet(LE_BATTLE_PET_ALLY) end
 	local numAuras = C_PetBattles.GetNumAuras(LE_BATTLE_PET_ALLY, petIndex)
+	if numAuras == nil then return false end -- Return false if nil, e.g. when NOT in battle
+
 	-- Checking front pet buffs
 	for auraIndex = 1,numAuras do 
 		local auraID, instanceID, turnsRemaining, isBuff = C_PetBattles.GetAuraInfo(LE_BATTLE_PET_ALLY, petIndex, auraIndex)
@@ -42,6 +44,7 @@ end
 function MyPetBattle.debuff(auraName,petIndex)
 	if petIndex == nil then petIndex = C_PetBattles.GetActivePet(LE_BATTLE_PET_ENEMY) end
 	local numAuras = C_PetBattles.GetNumAuras(LE_BATTLE_PET_ENEMY, petIndex)
+	if numAuras == nil then return false end -- Return false if nil, e.g. when NOT in battle
 
 	-- Checking front pet buffs
 	for auraIndex=1,numAuras do 
@@ -443,4 +446,58 @@ function MyPetBattle.shouldIHide()
         end
     end
     return false
+end
+
+
+-----------------------------------------------------------------
+-- CHECK IF WE HAVE ALL PETS IN THE GAME IN THE ROTATION FILES --
+-----------------------------------------------------------------
+function MyPetBattle.checkMissingPets()
+	-- Sort the pet journal so we see all pets; collected and not collected
+	C_PetJournal.SetFlagFilter(LE_PET_JOURNAL_FLAG_COLLECTED, true) -- Pets you have collected
+	C_PetJournal.SetFlagFilter(LE_PET_JOURNAL_FLAG_FAVORITES, false) -- Pets you have set as favorites
+	C_PetJournal.SetFlagFilter(LE_PET_JOURNAL_FLAG_NOT_COLLECTED, true) -- Pets you have not collected
+
+	-- Get total number of pets in the game (regardless of owned/not owned)
+	local numPets, numOwned = C_PetJournal.GetNumPets()
+	print("Total number of pets: "..numPets)
+
+	-- Loop through all available pets in the game
+	for k_ = 1, numPets do
+--		print("Iteration #"..k_)
+		-- Get pet info
+		local petID, speciesID, owned, _, level, _, isRevoked, speciesName, icon, petType, _, _, _, _, canBattle, _, _, obtainable = C_PetJournal.GetPetInfoByIndex(k_)
+
+		-- Check if it is a battle pet
+		if canBattle then
+			local spell = nil
+			if petType == 1 then 		-- HUMANOID
+				spell = humanoid(speciesName)		
+			elseif petType == 2 then 	-- DRAGONKIN
+				spell = dragonkin(speciesName)
+			elseif petType == 3 then 	-- FLYING
+				spell = flying(speciesName)
+			elseif petType == 4 then 	-- UNDEAD
+				spell = undead(speciesName)
+			elseif petType == 5 then 	-- CRITTER
+				spell = critter(speciesName)
+			elseif petType == 6 then 	-- MAGIC
+				spell = magic(speciesName)
+			elseif petType == 7 then 	-- ELEMENTAL
+				spell = elemental(speciesName)
+			elseif petType == 8 then 	-- BEAST
+				spell = beast(speciesName)
+			elseif petType == 9 then 	-- WATER / AQUATIC
+				spell = aquatic(speciesName)
+			elseif petType == 10 then 	-- MECHANICAL
+				spell = mechanical(speciesName)
+			end
+			
+			-- Print the pets we are missing rotations for
+			if spell == "UNKNOWN" then
+				print("Missing rotation for: \124T"..icon..":0\124t "..speciesName)
+			end
+		end	
+	end
+
 end

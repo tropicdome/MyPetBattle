@@ -437,9 +437,12 @@ function events:PET_BATTLE_PET_ROUND_PLAYBACK_COMPLETE(...)	--
 		end	
 
 		-- If we have spell we can cast, then cast!
-		if spell ~= nil then	
+		if spell ~= nil and spell ~= "UNKNOWN" then	
 			actionIndex = MyPetBattle.getSpellSlotIndex(spell)
-			print("|cffFF4500 Casting: ", spell)
+			
+			local spellID, spellName, spellIcon, _, _, _, _, _ = C_PetBattles.GetAbilityInfo(petOwner, petIndex, actionIndex)
+				
+			print("|cffFF4500 Casting:\124r \124T"..spellIcon..":0\124t \124cff4e96f7\124HbattlePetAbil:"..spellID..":0:0:0\124h["..spell.."]\124h\124r");
 --			print("actionIndex: ", actionIndex)
 			C_PetBattles.UseAbility(actionIndex)	-- Use pet ability 
 		end

@@ -1,12 +1,14 @@
 ----------------
 -- BEAST --
 ----------------
-function beast()
+function beast(petName)
 
 local beast_abilities = nil
 
 -- Get pet name
-petName = MyPetBattle.petName()
+if petName == nil then
+	petName = MyPetBattle.petName()
+end
 
 -----------
 -- BEARS --
@@ -432,7 +434,8 @@ elseif petName == "Wind Rider Cub" then
 		}
 -------------------
 else -- Unknown beast pet
-	print("Unknown beast pet")
+	print("|cFFFF0000 Unknown beast pet: "..petName)
+	return "UNKNOWN"
 end
 
 	spell = MyPetBattle.parseSpellTable(beast_abilities)

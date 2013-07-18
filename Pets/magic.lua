@@ -1,12 +1,14 @@
 -----------
 -- MAGIC --
 -----------
-function magic()
+function magic(petName)
 
 local magic_abilities = nil
 
 -- Get pet name
-petName = MyPetBattle.petName()
+if petName == nil then
+	petName = MyPetBattle.petName()
+end
 
 ------------
 -- DEMONS --
@@ -130,7 +132,7 @@ elseif petName == "Magic Lamp" then
 ----------------------
 -- OOZES AND SLIMES --
 ----------------------
-elseif petName == "Jade Oozeling" or petName == "Oily Slimeling" or petName == "Toxic Wasteling" then
+elseif petName == "Jade Oozeling" or petName == "Oily Slimeling" or petName == "Toxic Wasteling" or petName == "Disgusting Oozeling" then
 	magic_abilities = 
 		{
 			{"Ooze Touch", 		},	-- Slot 1
@@ -351,7 +353,8 @@ elseif petName == "Zergling" then
 		}
 -------------------
 else -- Unknown magic pet
-	print("|cFFFF0000 Unknown magic pet")
+	print("|cFFFF0000 Unknown magic pet: "..petName)
+	return "UNKNOWN"
 end
 
 	spell = MyPetBattle.parseSpellTable(magic_abilities)

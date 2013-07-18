@@ -1,12 +1,14 @@
 ------------
 -- FLYING --
 ------------
-function flying()
+function flying(petName)
 
 local flying_abilities = nil
 
 -- Get pet name
-petName = MyPetBattle.petName()
+if petName == nil then
+	petName = MyPetBattle.petName()
+end
 
 ------------------------
 -- BALLOONS AND KITES --
@@ -275,6 +277,26 @@ elseif petName == "Miniwing" then
 -------------------
 -- MISCELLANEOUS --
 -------------------
+elseif petName == "Jade Crane Chick" then
+	flying_abilities = 
+		{
+			{"Slicing Wind", 	},	-- Slot 1
+			{"Thrash", 			},	-- Slot 1
+			{"Hawk Eye",		},	-- Slot 2
+			{"Jadeskin", 		},	-- Slot 2
+			{"Cyclone",			},	-- Slot 3
+			{"Cyclone",			},	-- Slot 3
+		}
+elseif petName == "Pterrordax Hatchling" then
+	flying_abilities = 
+		{
+			{"Slicing Wind", 	},	-- Slot 1
+			{"Flyby", 			},	-- Slot 1
+			{"Ancient Blessing", },	-- Slot 2
+			{"Apocalypse", 		},	-- Slot 2
+			{"Lift-Off",		},	-- Slot 3
+			{"Feign Death",		},	-- Slot 3
+		}
 elseif petName == "Tiny Sporebat" then
 	flying_abilities = 
 		{
@@ -287,7 +309,8 @@ elseif petName == "Tiny Sporebat" then
 		}
 -------------------
 else -- Unknown flying pet
-	print("|cFFFF0000 Unknown flying pet")
+	print("|cFFFF0000 Unknown flying pet: "..petName)
+	return "UNKNOWN"
 end
 
 	spell = MyPetBattle.parseSpellTable(flying_abilities)

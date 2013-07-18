@@ -1,12 +1,14 @@
 ---------------
 -- ELEMENTAL --
 ---------------
-function elemental()
+function elemental(petName)
 
 local elemental_abilities = nil
 
 -- Get pet name
-petName = MyPetBattle.petName()
+if petName == nil then
+	petName = MyPetBattle.petName()
+end
 
 ----------------
 -- ELEMENTALS --
@@ -398,7 +400,8 @@ elseif petName == "Tiny Snowman" then
 		}
 -------------------
 else -- Unknown elemental pet
-	print("|cFFFF0000 Unknown elemental pet")
+	print("|cFFFF0000 Unknown elemental pet: "..petName)
+	return "UNKNOWN"
 end
 
 	spell = MyPetBattle.parseSpellTable(elemental_abilities)
