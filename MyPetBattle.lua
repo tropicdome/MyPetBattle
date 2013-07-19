@@ -375,62 +375,28 @@ function events:PET_BATTLE_PET_ROUND_PLAYBACK_COMPLETE(...)	--
 	local round = ...
 --	print(round)
 	
-	-- Auto-select first available pet
-	if C_PetBattles.ShouldShowPetSelect() == true and (mypetbattle_enabled or mypetbattle_wintrade_enabled) then
-		for i=1,3 do
-			if MyPetBattle.hp(i) > 0 then
-				C_PetBattles.ChangePet(i)
+	if mypetbattle_enabled or (mypetbattle_wintrade_enabled and round <= math.random(1,3)) then -- ATTACK A RANDOM NUMBER OF TIMES BETWEEN 2-4 IF WE ARE DOING WT (1 AND 3 SINCE ROUND 0 EXISTS)
+		-------------------------------------
+		-- AUTO-SELECT FIRST AVAILABLE PET --
+		if C_PetBattles.ShouldShowPetSelect() == true then
+			for i=1,3 do
+				if MyPetBattle.hp(i) > 0 then
+					C_PetBattles.ChangePet(i)
+				end
 			end
 		end
-	end
-
-	-- Skip turn if polymorphed, stunned etc. by enemy (maybe change pet if low on health)
-	if MyPetBattle.buff("Polymorphed") or MyPetBattle.buff("Asleep") or MyPetBattle.buff("Crystal Prison") or MyPetBattle.buff("Stunned") or MyPetBattle.buff("Drowsy") then 
-		C_PetBattles.SkipTurn()
-	end
-
-	-- Check if we should and can capture rare pets we are fighting
-	-- The function canCaptureRare() in MyPetBattle_data.lua will check if we can capture the rare we are fighting
-	if MPB_CAPTURE_RARES and MyPetBattle.canCaptureRare() and mypetbattle_enabled then
-		print("|cFF8A2BE2 We are trying to capture a rare!")
-		C_PetBattles.UseTrap() -- Use the trap
-	end
-
-	-- Check if we should capture common/uncommon if we do not own the pet
-	if MPB_CAPTURE_COMMON_UNCOMMON and MyPetBattle.canCaptureCommon() and mypetbattle_enabled then
-		print("|cFF00FF00 We do not have this pet (0/3), let us capture it (common/uncommon)!")
-		C_PetBattles.UseTrap() -- Use the trap
-	end
-
-	local spell = nil
-	local petOwner = LE_BATTLE_PET_ALLY
-	local petIndex = C_PetBattles.GetActivePet(petOwner)
-	local petType = C_PetBattles.GetPetType(petOwner, petIndex)
-
-	if petType == 1 then 		-- HUMANOID
-		spell = humanoid()		
-	elseif petType == 2 then 	-- DRAGONKIN
-		spell = dragonkin()
-	elseif petType == 3 then 	-- FLYING
-		spell = flying()
-	elseif petType == 4 then 	-- UNDEAD
-		spell = undead()
-	elseif petType == 5 then 	-- CRITTER
-		spell = critter()
-	elseif petType == 6 then 	-- MAGIC
-		spell = magic()
-	elseif petType == 7 then 	-- ELEMENTAL
-		spell = elemental()
-	elseif petType == 8 then 	-- BEAST
-		spell = beast()
-	elseif petType == 9 then 	-- WATER / AQUATIC
-		spell = aquatic()
-	elseif petType == 10 then 	-- MECHANICAL
-		spell = mechanical()
-	end
-
-	if mypetbattle_enabled or (mypetbattle_wintrade_enabled and round <= math.random(1,3)) then -- Attack a random number of times between 2-4 if we are doing wt (1 and 3 since round 0 exists)
-		-- Switch pet at health threshold before it dies. CAN BE SET FROM CONFIG MENU
+		-------------------------------
+		-- GET PETOWNER AND PET INFO --
+		local petOwner = LE_BATTLE_PET_ALLY
+		local petIndex = C_PetBattles.GetActivePet(petOwner)
+		local petType = C_PetBattles.GetPetType(petOwner, petIndex)
+		-----------------------------------------------------------------------------------------
+		-- SKIP TURN IF POLYMORPHED, STUNNED ETC. BY ENEMY (MAYBE CHANGE PET IF LOW ON HEALTH) --
+		if MyPetBattle.buff("Polymorphed") or MyPetBattle.buff("Asleep") or MyPetBattle.buff("Crystal Prison") or MyPetBattle.buff("Stunned") or MyPetBattle.buff("Drowsy") then 
+			C_PetBattles.SkipTurn()
+		end
+		--------------------------------------------------------------------------------
+		-- SWITCH PET AT HEALTH THRESHOLD BEFORE IT DIES. CAN BE SET FROM CONFIG MENU --
 		if MyPetBattle.hp(petIndex) < MPB_CONFIG_COMBAT_SWAP_PET_HEALTH_THRESHOLD then
 			for j=1,3 do
 				if MyPetBattle.hp(j) >= MPB_CONFIG_COMBAT_SWAP_PET_HEALTH_THRESHOLD then
@@ -438,9 +404,46 @@ function events:PET_BATTLE_PET_ROUND_PLAYBACK_COMPLETE(...)	--
 					print("|cFFFF3300.. Changing pet due to low health! ..")
 				end
 			end
-		end	
-
-		-- If we have spell we can cast, then cast!
+		end
+		------------------------------------------------------------------
+		-- CHECK IF WE SHOULD AND CAN CAPTURE RARE PETS WE ARE FIGHTING --
+		-- THE FUNCTION canCaptureRare() IN MyPetBattle_data.lua WILL CHECK IF WE CAN CAPTURE THE RARE WE ARE FIGHTING
+		if MPB_CAPTURE_RARES and MyPetBattle.canCaptureRare() and mypetbattle_enabled then
+			print("|cFF8A2BE2 We are trying to capture a rare!")
+			C_PetBattles.UseTrap() -- USE THE TRAP
+		end
+		-------------------------------------------------------------------------
+		-- CHECK IF WE SHOULD CAPTURE COMMON/UNCOMMON IF WE DO NOT OWN THE PET --
+		if MPB_CAPTURE_COMMON_UNCOMMON and MyPetBattle.canCaptureCommon() and mypetbattle_enabled then
+			print("|cFF00FF00 We do not have this pet (0/3), let us capture it (common/uncommon)!")
+			C_PetBattles.UseTrap() -- USE THE TRAP
+		end
+		-----------------------------
+		-- GETTING READY TO ATTACK --
+		local spell = nil
+		if petType == 1 then 		-- HUMANOID
+			spell = humanoid()		
+		elseif petType == 2 then 	-- DRAGONKIN
+			spell = dragonkin()
+		elseif petType == 3 then 	-- FLYING
+			spell = flying()
+		elseif petType == 4 then 	-- UNDEAD
+			spell = undead()
+		elseif petType == 5 then 	-- CRITTER
+			spell = critter()
+		elseif petType == 6 then 	-- MAGIC
+			spell = magic()
+		elseif petType == 7 then 	-- ELEMENTAL
+			spell = elemental()
+		elseif petType == 8 then 	-- BEAST
+			spell = beast()
+		elseif petType == 9 then 	-- WATER / AQUATIC
+			spell = aquatic()
+		elseif petType == 10 then 	-- MECHANICAL
+			spell = mechanical()
+		end
+		----------------------------------------------
+		-- IF WE HAVE SPELL WE CAN CAST, THEN CAST! --
 		if spell ~= nil and spell ~= "UNKNOWN" then	
 			actionIndex = MyPetBattle.getSpellSlotIndex(spell)
 			
@@ -448,10 +451,11 @@ function events:PET_BATTLE_PET_ROUND_PLAYBACK_COMPLETE(...)	--
 				
 			print("|cffFF4500 Casting:\124r \124T"..spellIcon..":0\124t \124cff4e96f7\124HbattlePetAbil:"..spellID..":0:0:0\124h["..spell.."]\124h\124r");
 --			print("actionIndex: ", actionIndex)
-			C_PetBattles.UseAbility(actionIndex)	-- Use pet ability 
+			C_PetBattles.UseAbility(actionIndex) -- USE PET ABILITY 
 		end
     elseif mypetbattle_debug then
-        -- if we're not enabled but in debug mode then show what we would have cast
+        ------------------------------------------------------------------------------
+		-- IF WE'RE NOT ENABLED BUT IN DEBUG MODE THEN SHOW WHAT WE WOULD HAVE CAST --
 		print("|cffFF4500 Would be Casting: ", spell)
 
 	end
