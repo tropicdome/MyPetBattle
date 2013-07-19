@@ -89,7 +89,7 @@ function events:ADDON_LOADED(...)
 --		print("Loaded |cffff8000MPB")
 --	end
 
-	-- Set UI elements to SavedVariables
+	-- SET UI ELEMENTS TO SAVEDVARIABLES
 	-- TEAM SETUP
 	EditBox_min_team_pet_health:SetText(tostring(MPB_CONFIG_TEAMSETUP_RANDOM_TEAM_PET_HEALTH_THRESHOLD * 100)) 
 	Slider_pet1_level:SetValue(MPB_CONFIG_TEAMSETUP_PET1_LEVEL_ADJUSTMENT)
@@ -112,27 +112,26 @@ function events:ADDON_LOADED(...)
 	-- LOAD LAST USED DESIRED_PET_LEVEL FOR THE RANDOM TEAM GENERATION
 	local loadLastUsedDesiredPetLevel = MPB_EDITBOX_DESIRED_PET_LEVEL
 	EditBox_PetLevel:SetText(loadLastUsedDesiredPetLevel) 
---	EditBox_PetLevel:SetText("25") 
 	
 	-- LOCK PETS FOR RANDOM TEAM GENERATION
 	Check_lock_pet_1:SetChecked(MPB_LOCK_PET1)
 	Check_lock_pet_2:SetChecked(MPB_LOCK_PET2)
 	Check_lock_pet_3:SetChecked(MPB_LOCK_PET3)
 
-	-- Set texture for Config Button (gear) manually as the XML file do not want do what I want!
+	-- SET TEXTURE FOR CONFIG BUTTON (GEAR) MANUALLY AS THE XML FILE DO NOT WANT DO WHAT I WANT!
 	MPB_Config_Button:SetNormalTexture("Interface\\Addons\\MyPetBattle\\Images\\icon-config")
 	MPB_Config_Button:SetHighlightTexture("Interface\\Buttons\\UI-Panel-MinimizeButton-Highlight.blp")
 
-	-- Set capture rare/uncommon/common checkboxes
+	-- SET CAPTURE RARE/UNCOMMON/COMMON CHECKBOXES
 	CheckButton3:SetChecked(MPB_CAPTURE_RARES)
 	CheckButton4:SetChecked(MPB_CAPTURE_COMMON_UNCOMMON)
 
-	-- Call function in Frame.lua to update the position of the minimap button
+	-- CALL FUNCTION IN Frame.lua TO UPDATE THE POSITION OF THE MINIMAP BUTTON
 	MPB_MMButton_UpdatePosition()
 
-	-- Show/hide ui at login according to character specific savedvariable
+	-- SHOW/HIDE UI AT LOGIN ACCORDING TO CHARACTER SPECIFIC SAVEDVARIABLE
 	if MPB_SHOW_UI == nil then MPB_SHOW_UI = true end -- Set variable to true the first time
-	SlashCmdList.MYPETBATTLE('ui') -- Call slash command to show/hide ui
+	if MPB_SHOW_UI then MyPetBattleForm:Show() else MyPetBattleForm:Hide() end
 end
 
 function events:PLAYER_LOGIN(...)				-- 
@@ -554,27 +553,27 @@ mypetbattle_frame:SetScript("OnEvent", function(self, event, ...)
  events[event](self, ...); -- call one of the functions above
 end);
 
--- Register all events for which handlers have been defined
+-- REGISTER ALL EVENTS FOR WHICH HANDLERS HAVE BEEN DEFINED
 for k, v in pairs(events) do
  mypetbattle_frame:RegisterEvent(k); 
 end
 
 --------------------
---- Timer frame ----
+--- TIMER FRAME ----
 --------------------
-MPB_timerTotal = 0 -- Timer init for automatic forfeit
-MPB_timerOneSec = 0 -- 1 sec timer init for different mechanics e.g. auto re-queue PvP
+MPB_timerTotal = 0 -- TIMER INIT FOR AUTOMATIC FORFEIT
+MPB_timerOneSec = 0 -- 1 SEC TIMER INIT FOR DIFFERENT MECHANICS E.G. AUTO RE-QUEUE PVP
 MPB_petguids = {0,0,0}
 
 local function MPB_onUpdate(self,elapsed)
-	-- Automatic forfeit timer
+	-- AUTOMATIC FORFEIT TIMER
 	if petBattleOpeningIsDone then
 	    MPB_timerTotal = MPB_timerTotal + elapsed
 		if MPB_timerTotal >= 55 then -- 55
 			if mypetbattle_debug then  print("60 sec. almost up!") end
 			MPB_timerTotal = 0
 			petBattleOpeningIsDone = false
-    	    -- Forfeit
+    	    -- FORFEIT
     	    if mypetbattle_auto_forfeit then
     	    	if mypetbattle_debug then  print("Forfeiting!") end
 	    	    C_PetBattles.ForfeitGame()
@@ -584,47 +583,47 @@ local function MPB_onUpdate(self,elapsed)
 		MPB_timerTotal = 0
     end
 
-	-- 1 sec timer check
+	-- 1 SEC TIMER CHECK
 	MPB_timerOneSec = MPB_timerOneSec + elapsed
 	if MPB_timerOneSec >= 1 then
-		-- Check if we should be in the PvP matchmaking queue, but we are not
+		-- CHECK IF WE SHOULD BE IN THE PVP MATCHMAKING QUEUE, BUT WE ARE NOT
 		if not C_PetBattles.IsInBattle() and (C_PetBattles.GetPVPMatchmakingInfo() == nil) and mypetbattle_join_pvp then
 			C_PetBattles.StartPVPMatchmaking()
 		end
-		-- Dismiss pet so we do not have it running around
+		-- DISMISS PET SO WE DO NOT HAVE IT RUNNING AROUND
         local petGUID = C_PetJournal.GetSummonedPetGUID()
         if petGUID and petGUID == C_PetJournal.GetPetLoadOutInfo(1) then -- Check if we have a pet summoned already, or we will get an error
             C_PetJournal.SummonPetByGUID(petGUID) -- Dismiss pet
         end
-		-- Set UI textures for current pet team when the UI is loaded -- IS NOT NEEDED ANYMORE SINCE setTeam() IS CALLED ABOVE, AND THAT FUNCTION SETS THE TEXTURES
+		-- SET UI TEXTURES FOR CURRENT PET TEAM WHEN THE UI IS LOADED -- IS NOT NEEDED ANYMORE SINCE setTeam() IS CALLED ABOVE, AND THAT FUNCTION SETS THE TEXTURES
 		-- MIGHT BE NEEDED ANYWAY, IF AUTO NEW TEAM IS ACTIVE, THEN THE TEXTURE WILL NOT BE LOADED ON LOGIN
-		-- Moved texture updates to the timer, because the events used before, we cannot be sure they are always called when we want to update
+		-- MOVED TEXTURE UPDATES TO THE TIMER, BECAUSE THE EVENTS USED BEFORE, WE CANNOT BE SURE THEY ARE ALWAYS CALLED WHEN WE WANT TO UPDATE
 		for i_ = 1, 3 do
 			local petGUID = C_PetJournal.GetPetLoadOutInfo(i_)
-			if not petGUID then  break end -- Break the loop if there are no pets yet or we will get an error
+			if not petGUID then  break end -- BREAK THE LOOP IF THERE ARE NO PETS YET OR WE WILL GET AN ERROR
 
 			local speciesID, customName, level, xp, maxXp, displayID, isFavorite, name, icon, petType, creatureID, sourceText, description, isWild, canBattle, tradable, unique, obtainable = C_PetJournal.GetPetInfoByPetID(petGUID) 
 
-			if MPB_petguids[i_] ~= petGUID then -- Check if we already have the pet, then no need to set the texture
+			if MPB_petguids[i_] ~= petGUID then -- CHECK IF WE ALREADY HAVE THE PET, THEN NO NEED TO SET THE TEXTURE
 				MPB_petguids[i_] = petGUID
-				-- Set pet 1 UI texture
+				-- SET PET 1 UI TEXTURE
 				if i_ == 1 then 
 					Pet1_texture:SetTexture(icon) 
 					Pet1_level_string:SetText(level)
 				end
-				-- Set pet 2 UI texture
+				-- SET PET 2 UI TEXTURE
 				if i_ == 2 then 
 					Pet2_texture:SetTexture(icon) 
 					Pet2_level_string:SetText(level)
 				end
-				-- Set pet 3 UI texture
+				-- SET PET 3 UI TEXTURE
 				if i_ == 3 then 
 					Pet3_texture:SetTexture(icon) 
 					Pet3_level_string:SetText(level)
 				end
 			end
 		end
-		-- Reset the timer
+		-- RESET THE TIMER
 		MPB_timerOneSec = 0
 	end
 
@@ -675,12 +674,12 @@ function SlashCmdList.MYPETBATTLE(msg, editbox)
 		if mypetbattle_wintrade_enabled then status = "\124cFF00FF00Automatic wintrade enabled" else status = "\124cFFFF0000Automatic wintrade disabled" end
 	    print("My pet battle:", status)
 	elseif msg == "debug" then
-        -- turn off debug messages as required
+        -- TURN OFF DEBUG MESSAGES AS REQUIRED
         mypetbattle_debug =  not mypetbattle_debug
 		if mypetbattle_debug then status = "\124cFF00FF00Enabled" else status = "\124cFFFF0000Disabled" end
         print("Debugging:",status)
     elseif msg == "ui" then
-		-- Show/hide ui
+		-- SHOW/HIDE UI
 		MPB_SHOW_UI = not MPB_SHOW_UI
 		if MPB_SHOW_UI then MyPetBattleForm:Show() else MyPetBattleForm:Hide() end
     end
