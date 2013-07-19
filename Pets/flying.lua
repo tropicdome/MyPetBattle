@@ -95,12 +95,12 @@ elseif petName == "Darkmoon Glowfly" then
 elseif petName == "Effervescent Glowfly" or petName == "Firefly" or petName == "Mei Li Sparkler" or petName == "Shrine Fly" then
 	flying_abilities = 
 		{
-			{"Scratch", 		},	-- Slot 1
-			{"Slicing Wind", 	},	-- Slot 1
 			{"Confusing Sting", not MyPetBattle.debuff("Confusing Sting") },  -- Slot 2
-			{"Cocoon Strike", 	},	-- Slot 2
 			{"Swarm",			not MyPetBattle.debuff("Shattered Defenses")},  -- Slot 3
 			{"Glowing Toxin",	not MyPetBattle.debuff("Glowing Toxin")},  -- Slot 3
+			{"Scratch", 		},	-- Slot 1
+			{"Slicing Wind", 	},	-- Slot 1
+			{"Cocoon Strike", 	},	-- Slot 2
 		}
 elseif petName == "Tiny Flamefly" then
 	flying_abilities = 

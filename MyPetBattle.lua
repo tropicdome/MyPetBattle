@@ -56,8 +56,8 @@ MyPetBattle = {}
 -- INITIALIZATION -
 mypetbattle_enabled = false
 mypetbattle_join_pvp = false
-mypetbattle_capture_rares = false
-mypetbattle_capture_common_uncommon = false
+MPB_CAPTURE_RARES = false
+MPB_CAPTURE_COMMON_UNCOMMON = false
 mypetbattle_auto_forfeit = false
 mypetbattle_wintrade_enabled = false
 
@@ -122,6 +122,10 @@ function events:ADDON_LOADED(...)
 	-- Set texture for Config Button (gear) manually as the XML file do not want do what I want!
 	MPB_Config_Button:SetNormalTexture("Interface\\Addons\\MyPetBattle\\Images\\icon-config")
 	MPB_Config_Button:SetHighlightTexture("Interface\\Buttons\\UI-Panel-MinimizeButton-Highlight.blp")
+
+	-- Set capture rare/uncommon/common checkboxes
+	CheckButton3:SetChecked(MPB_CAPTURE_RARES)
+	CheckButton4:SetChecked(MPB_CAPTURE_COMMON_UNCOMMON)
 
 	-- Call function in Frame.lua to update the position of the minimap button
 	MPB_MMButton_UpdatePosition()
@@ -387,13 +391,13 @@ function events:PET_BATTLE_PET_ROUND_PLAYBACK_COMPLETE(...)	--
 
 	-- Check if we should and can capture rare pets we are fighting
 	-- The function canCaptureRare() in MyPetBattle_data.lua will check if we can capture the rare we are fighting
-	if mypetbattle_capture_rares and MyPetBattle.canCaptureRare() and mypetbattle_enabled then
+	if MPB_CAPTURE_RARES and MyPetBattle.canCaptureRare() and mypetbattle_enabled then
 		print("|cFF8A2BE2 We are trying to capture a rare!")
 		C_PetBattles.UseTrap() -- Use the trap
 	end
 
 	-- Check if we should capture common/uncommon if we do not own the pet
-	if mypetbattle_capture_common_uncommon and MyPetBattle.canCaptureCommon() and mypetbattle_enabled then
+	if MPB_CAPTURE_COMMON_UNCOMMON and MyPetBattle.canCaptureCommon() and mypetbattle_enabled then
 		print("|cFF00FF00 We do not have this pet (0/3), let us capture it (common/uncommon)!")
 		C_PetBattles.UseTrap() -- Use the trap
 	end
@@ -650,13 +654,13 @@ function SlashCmdList.MYPETBATTLE(msg, editbox)
 		end
 	    print("My pet battle:", status)
 	elseif msg == "capture_rares" then
-		mypetbattle_capture_rares = not mypetbattle_capture_rares
-		if mypetbattle_capture_rares then status = "\124cFF00FF00Automatic capture rare pets enabled" else status = "\124cFFFF0000Automatic capture rare pets disabled" end
+		MPB_CAPTURE_RARES = not MPB_CAPTURE_RARES
+		if MPB_CAPTURE_RARES then status = "\124cFF00FF00Automatic capture rare pets enabled" else status = "\124cFFFF0000Automatic capture rare pets disabled" end
 	    print("My pet battle:", status)
-		CheckButton3:SetChecked(mypetbattle_capture_rares)
+		CheckButton3:SetChecked(MPB_CAPTURE_RARES)
 	elseif msg == "capture_common_uncommon" then
-		mypetbattle_capture_common_uncommon = not mypetbattle_capture_common_uncommon
-		if mypetbattle_capture_common_uncommon then status = "\124cFF00FF00Automatic capture common/uncommon (0/3 owned) pets enabled" else status = "\124cFFFF0000Automatic capture common/uncommon pets (0/3 owned) disabled" end
+		MPB_CAPTURE_COMMON_UNCOMMON = not MPB_CAPTURE_COMMON_UNCOMMON
+		if MPB_CAPTURE_COMMON_UNCOMMON then status = "\124cFF00FF00Automatic capture common/uncommon (0/3 owned) pets enabled" else status = "\124cFFFF0000Automatic capture common/uncommon pets (0/3 owned) disabled" end
 	    print("My pet battle:", status)
 	elseif msg == "auto_forfeit" then
 		mypetbattle_auto_forfeit = not mypetbattle_auto_forfeit
