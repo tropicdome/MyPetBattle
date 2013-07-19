@@ -674,11 +674,11 @@ function SlashCmdList.MYPETBATTLE(msg, editbox)
 		if mypetbattle_wintrade_enabled then status = "\124cFF00FF00Automatic wintrade enabled" else status = "\124cFFFF0000Automatic wintrade disabled" end
 	    print("My pet battle:", status)
 	elseif msg == "debug" then
-        -- TURN OFF DEBUG MESSAGES AS REQUIRED
-        mypetbattle_debug =  not mypetbattle_debug
+		-- TURN OFF DEBUG MESSAGES AS REQUIRED
+		mypetbattle_debug =  not mypetbattle_debug
 		if mypetbattle_debug then status = "\124cFF00FF00Enabled" else status = "\124cFFFF0000Disabled" end
-        print("Debugging:",status)
-    elseif msg == "ui" then
+		print("Debugging:",status)
+	elseif msg == "ui" then
 		-- SHOW/HIDE UI
 		MPB_SHOW_UI = not MPB_SHOW_UI
 		if MPB_SHOW_UI then MyPetBattleForm:Show() else MyPetBattleForm:Hide() end
