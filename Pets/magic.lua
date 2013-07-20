@@ -79,11 +79,11 @@ elseif petName == "Jade Owl" then
 elseif petName == "Jade Tiger" then
 	magic_abilities = 
 		{
+			{"Devour", 			MyPetBattle.hp("active",2) < 0.20 },	-- Slot 3,  if we kill the enemy with Devour, we restore health
 			{"Jade Claw", 		},	-- Slot 1
 			{"Pounce", 			},	-- Slot 1
 			{"Rake", 			},	-- Slot 2
 			{"Jadeskin", 		},	-- Slot 2
-			{"Devour", 			},	-- Slot 3
 			{"Prowl", 			},	-- Slot 3
 		}
 elseif petName == "Onyx Panther" then
@@ -99,11 +99,11 @@ elseif petName == "Onyx Panther" then
 elseif petName == "Zipao Tiger" then
 	magic_abilities = 
 		{
+			{"Devour", 			MyPetBattle.hp("active",2) < 0.20 },	-- Slot 3,  if we kill the enemy with Devour, we restore health
 			{"Onyx Bite", 		},	-- Slot 1
 			{"Pounce", 			},	-- Slot 1
 			{"Rake", 			},	-- Slot 2
 			{"Stoneskin", 		},	-- Slot 2
-			{"Devour", 			},	-- Slot 3
 			{"Prowl", 			},	-- Slot 3
 		}
 ------------------------

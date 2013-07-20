@@ -244,9 +244,9 @@ elseif petName == "Fledgling Nether Ray" or petName == "Nether Ray Fry" then
 elseif petName == "Crested Owl" or petName == "Great Horned Owl" or petName == "Hawk Owl" or petName == "Snowy Owl" then
 	flying_abilities = 
 		{
+			{"Shriek", 			not MyPetBattle.debuff("Attack Reduction") },	-- Slot 2
 			{"Peck", 			},	-- Slot 1
 			{"Quills", 			},	-- Slot 1
-			{"Shriek", 			},	-- Slot 2
 			{"Cyclone", 		},	-- Slot 2
 			{"Nocturnal Strike",},	-- Slot 3
 			{"Predatory Strike",},	-- Slot 3
@@ -267,9 +267,9 @@ elseif petName == "Cockatiel" or petName == "Green Wing Macaw" or petName == "Hy
 elseif petName == "Miniwing" then
 	flying_abilities = 
 		{
+			{"Shriek", 			not MyPetBattle.debuff("Attack Reduction") },	-- Slot 2
 			{"Peck", 			},	-- Slot 1
 			{"Quills", 			},	-- Slot 1
-			{"Shriek", 			},	-- Slot 2
 			{"Cyclone", 		},	-- Slot 2
 			{"Nocturnal Strike",},	-- Slot 3
 			{"Predatory Strike",},	-- Slot 3
@@ -290,9 +290,9 @@ elseif petName == "Jade Crane Chick" then
 elseif petName == "Pterrordax Hatchling" then
 	flying_abilities = 
 		{
+			{"Ancient Blessing", not MyPetBattle.buff("Ancient Blessing") or MyPetBattle.hp() < 0.75 },	-- Slot 2
 			{"Slicing Wind", 	},	-- Slot 1
 			{"Flyby", 			},	-- Slot 1
-			{"Ancient Blessing", },	-- Slot 2
 			{"Apocalypse", 		},	-- Slot 2
 			{"Lift-Off",		},	-- Slot 3
 			{"Feign Death",		},	-- Slot 3

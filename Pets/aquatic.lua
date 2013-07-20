@@ -24,11 +24,11 @@ end
 if petName == "Chuck" or petName == "Muckbreath" or petName == "Snarly" or petName == "Toothy" then
 	aquatic_abilities = 
 		{
+			{"Devour", 			MyPetBattle.hp("active",2) < 0.20 },	-- Slot 3,  if we kill the enemy with Devour, we restore health
 			{"Rip", 			},	-- Slot 1
 			{"Consume", 		},	-- Slot 1
 			{"Surge", 			},	-- Slot 2
 			{"Water Jet", 		},	-- Slot 2
-			{"Devour", 			},	-- Slot 3
 			{"Blood in the Water",},	-- Slot 3
 		}
 -----------------
@@ -248,9 +248,9 @@ elseif petName == "Spawn of G'nathus" then
 elseif petName == "Gahz'rooki" then
 	aquatic_abilities = 
 		{
+			{"Devour", 			MyPetBattle.hp("active",2) < 0.20 },	-- Slot 2,  if we kill the enemy with Devour, we restore health
 			{"Bite",			},	-- Slot 1
 			{"Tail Slap", 		},	-- Slot 1
-			{"Devour", 			},	-- Slot 2
 			{"Swallow You Whole",},	-- Slot 2
 			{"Whirlpool", 		},	-- Slot 3
 			{"Geyser",			},	-- Slot 3
