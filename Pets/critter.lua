@@ -1,12 +1,14 @@
 ----------------
 -- CRITTER --
 ----------------
-function critter()
+function critter(petName)
 
 local critter_abilities = nil
 
 -- Get pet name
-petName = MyPetBattle.petName()
+if petName == nil then
+	petName = MyPetBattle.petName()
+end
 
 ----------------
 -- ARMADILLOS --
@@ -112,6 +114,16 @@ elseif petName == "Imperial Silkworm" then
 			{"Sticky Goo", 		},	-- Slot 2
 			{"Moth Balls", 		},	-- Slot 2
 			{"Moth Dust", 		},	-- Slot 3
+		}
+elseif petName == "Nether Roach" then
+	critter_abilities = 
+		{
+			{"Flank", 			},	-- Slot 3
+			{"Nether Blast", 	},	-- Slot 1
+			{"Hiss", 			},	-- Slot 1
+			{"Survival", 		},	-- Slot 2
+			{"Swarm", 			},	-- Slot 2
+			{"Apocalypse", 		},	-- Slot 3
 		}
 -------------
 -- MARMOTS --
@@ -302,7 +314,8 @@ elseif petName == "Porcupette" then
 		}
 -------------------
 else -- Unknown critter pet
-	print("|cFFFF0000 Unknown critter pet")
+	print("|cFFFF0000 Unknown critter pet: "..petName)
+	return "UNKNOWN"
 end
 
 	spell = MyPetBattle.parseSpellTable(critter_abilities)

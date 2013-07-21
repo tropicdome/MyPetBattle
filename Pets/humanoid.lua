@@ -1,12 +1,14 @@
 --------------
 -- HUMANOID --
 --------------
-function humanoid()
+function humanoid(petName)
 
 local humanoid_abilities = nil
 
 -- Get pet name
-petName = MyPetBattle.petName()
+if petName == nil then
+	petName = MyPetBattle.petName()
+end
 
 tf,apocalypse_cd = MyPetBattle.buff("Apocalypse")
 if apocalypse_cd and apocalypse_cd < 2 then 
@@ -295,7 +297,8 @@ elseif petName == "Lil' Bad Wolf" then
 	
 -------------------
 else -- Unknown humanoid pet
-	print("|cFFFF0000 Unknown humanoid pet")
+	print("|cFFFF0000 Unknown humanoid pet: "..petName)
+	return "UNKNOWN"
 end
 
 	spell = MyPetBattle.parseSpellTable(humanoid_abilities)

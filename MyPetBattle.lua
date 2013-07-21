@@ -56,12 +56,17 @@ MyPetBattle = {}
 -- INITIALIZATION -
 mypetbattle_enabled = false
 mypetbattle_join_pvp = false
-mypetbattle_capture_rares = false
+MPB_CAPTURE_RARES = false
+MPB_CAPTURE_COMMON_UNCOMMON = false
+mypetbattle_auto_forfeit = false
+mypetbattle_wintrade_enabled = false
 
 -- Variable used to make sure we only call the heal function 1 time after combat.
 -- It will be set to "false" on events:PET_BATTLE_OPENING_DONE
 -- and set back to "true" on events:UPDATE_SUMMONPETS_ACTION
 mypetbattle_hasHealedAfterCombat = true
+
+RegisterAddonMessagePrefix("MPB")
 
 --------------------
 ---- SETUP DONE ----
@@ -79,13 +84,12 @@ local mypetbattle_frame, events = CreateFrame("Frame"), {};
 -- LOAD A LOT OF STUFF WHEN THE ADDON HAS BEEN LOADED --
 function events:ADDON_LOADED(...)
 --	print("ADDON_LOADED")
---	local arg1, arg2 = ...
---	print(arg1, arg2)
---	if ... == "MyPetBattle" then
---		print("Loaded MPB")
+	local addonName = ...
+--	if addonName == "MyPetBattle" then
+--		print("Loaded |cffff8000MPB")
 --	end
 
-	-- Set UI elements to SavedVariables
+	-- SET UI ELEMENTS TO SAVEDVARIABLES
 	-- TEAM SETUP
 	EditBox_min_team_pet_health:SetText(tostring(MPB_CONFIG_TEAMSETUP_RANDOM_TEAM_PET_HEALTH_THRESHOLD * 100)) 
 	Slider_pet1_level:SetValue(MPB_CONFIG_TEAMSETUP_PET1_LEVEL_ADJUSTMENT)
@@ -108,12 +112,26 @@ function events:ADDON_LOADED(...)
 	-- LOAD LAST USED DESIRED_PET_LEVEL FOR THE RANDOM TEAM GENERATION
 	local loadLastUsedDesiredPetLevel = MPB_EDITBOX_DESIRED_PET_LEVEL
 	EditBox_PetLevel:SetText(loadLastUsedDesiredPetLevel) 
---	EditBox_PetLevel:SetText("25") 
 	
 	-- LOCK PETS FOR RANDOM TEAM GENERATION
 	Check_lock_pet_1:SetChecked(MPB_LOCK_PET1)
 	Check_lock_pet_2:SetChecked(MPB_LOCK_PET2)
 	Check_lock_pet_3:SetChecked(MPB_LOCK_PET3)
+
+	-- SET TEXTURE FOR CONFIG BUTTON (GEAR) MANUALLY AS THE XML FILE DO NOT WANT DO WHAT I WANT!
+	MPB_Config_Button:SetNormalTexture("Interface\\Addons\\MyPetBattle\\Images\\icon-config")
+	MPB_Config_Button:SetHighlightTexture("Interface\\Buttons\\UI-Panel-MinimizeButton-Highlight.blp")
+
+	-- SET CAPTURE RARE/UNCOMMON/COMMON CHECKBOXES
+	CheckButton3:SetChecked(MPB_CAPTURE_RARES)
+	CheckButton4:SetChecked(MPB_CAPTURE_COMMON_UNCOMMON)
+
+	-- CALL FUNCTION IN Frame.lua TO UPDATE THE POSITION OF THE MINIMAP BUTTON
+	MPB_MMButton_UpdatePosition()
+
+	-- SHOW/HIDE UI AT LOGIN ACCORDING TO CHARACTER SPECIFIC SAVEDVARIABLE
+	if MPB_SHOW_UI == nil then MPB_SHOW_UI = true end -- Set variable to true the first time
+	if MPB_SHOW_UI then MyPetBattleForm:Show() else MyPetBattleForm:Hide() end
 end
 
 function events:PLAYER_LOGIN(...)				-- 
@@ -146,6 +164,13 @@ function events:PET_BATTLE_CAPTURED(...)					--
 end
 function events:PET_BATTLE_CLOSE(...)						-- 
 --	print("PET_BATTLE_CLOSE")
+	-- Close the Stopwatch window after battle
+	if ( StopwatchFrame:IsShown() ) then
+		StopwatchFrame:Hide();
+	end
+	
+	-- Resetting variable opening is done
+	petBattleOpeningIsDone = false
 end
 
 function events:PET_BATTLE_FINAL_ROUND(...)					-- 
@@ -231,7 +256,6 @@ function events:PET_BATTLE_LOOT_RECEIVED(...)				--
 	--	MoneyWonAlertFrame_ShowAlert(quantity);
 	--end
 
-
 end
 
 function events:PET_BATTLE_MAX_HEALTH_CHANGED(...)			-- 
@@ -239,10 +263,18 @@ function events:PET_BATTLE_MAX_HEALTH_CHANGED(...)			--
 end
 
 function events:PET_BATTLE_OPENING_DONE(...)				-- Opening done and ready to battle
---	print("PET_BATTLE_OPENING_DONE")
+	-- Stopwatch for WT
+	if mypetbattle_wintrade_enabled then
+		if Stopwatch_IsPlaying() then Stopwatch_Clear() end
+		Stopwatch_StartCountdown(0, 0, 60) -- Set Stop Watch to count down from 60 sec
+		Stopwatch_Play() -- Starts the Stop Watch
+		if mypetbattle_debug then  print("Started Stopwatch") end
+	end
+		
+	--	print("PET_BATTLE_OPENING_DONE")
 	print("We have to fight " .. C_PetBattles.GetNumPets(LE_BATTLE_PET_ENEMY) .. " enemy pets")
 	-- Auto-select first available pet
-	if C_PetBattles.ShouldShowPetSelect() == true and mypetbattle_enabled then
+	if C_PetBattles.ShouldShowPetSelect() == true and (mypetbattle_enabled or mypetbattle_wintrade_enabled) then
 		for i=1,3 do
 			if MyPetBattle.hp(i) > 0 then
 				C_PetBattles.ChangePet(i)
@@ -252,6 +284,10 @@ function events:PET_BATTLE_OPENING_DONE(...)				-- Opening done and ready to bat
 
 	-- Setting global variable to false so we will heal after combat if needed
 	mypetbattle_hasHealedAfterCombat = false
+	
+	-- Setting variable that opening is done
+	petBattleOpeningIsDone = true
+	MPB_timerTotal = 0		-- Reset timer for automatic forfeit
 end
 
 function events:PET_BATTLE_OPENING_START(...)				-- 
@@ -311,7 +347,7 @@ function events:UPDATE_SUMMONPETS_ACTION(...)					--
 		-- Save desired pet level for next time we log in
 		MPB_EDITBOX_DESIRED_PET_LEVEL = desiredPetLevel
 		-- Clear focus from the editbox
-		EditBox_PetLevel:ClearFocus()       
+		EditBox_PetLevel:ClearFocus()
 	end
 
 	-- Setting global variable to false so we will heal after combat if needed
@@ -319,56 +355,14 @@ function events:UPDATE_SUMMONPETS_ACTION(...)					--
 		MyPetBattle.revive_and_heal_Pets() -- function in MyPetBattle_data.lua
 		mypetbattle_hasHealedAfterCombat = true
 	end
+end
 
-	-- Set UI textures for current pet team when the UI is loaded -- IS NOT NEEDED ANYMORE SINCE setTeam() IS CALLED ABOVE, AND THAT FUNCTION SETS THE TEXTURES
-	-- MIGHT BE NEEDED ANYWAY, IF AUTO NEW TEAM IS ACTIVE, THEN THE TEXTURE WILL NOT BE LOADED ON LOGIN
-	for i_ = 1, 3 do
-		local petGUID = C_PetJournal.GetPetLoadOutInfo(i_)
-		local speciesID, customName, level, xp, maxXp, displayID, isFavorite, name, icon, petType, creatureID, sourceText, description, isWild, canBattle, tradable, unique, obtainable = C_PetJournal.GetPetInfoByPetID(petGUID) 
-
-		-- Set pet 1 UI texture
-		if i_ == 1 then 
-			Pet1_texture:SetTexture(icon) 
-			Pet1_level_string:SetText(level)
-		end
-		-- Set pet 2 UI texture
-		if i_ == 2 then 
-			Pet2_texture:SetTexture(icon) 
-			Pet2_level_string:SetText(level)
-		end
-		-- Set pet 3 UI texture
-		if i_ == 3 then 
-			Pet3_texture:SetTexture(icon) 
-			Pet3_level_string:SetText(level)
-		end
-	end
-
+function events:COMPANION_UPDATE(...)					-- 
+--	print("COMPANION_UPDATE")
 end
 
 function events:PET_JOURNAL_LIST_UPDATE(...)
-	-- Set UI textures for current pet team when the UI is loaded -- IS NOT NEEDED ANYMORE SINCE setTeam() IS CALLED ABOVE, AND THAT FUNCTION SETS THE TEXTURES
-	-- MIGHT BE NEEDED ANYWAY, IF AUTO NEW TEAM IS ACTIVE, THEN THE TEXTURE WILL NOT BE LOADED ON LOGIN
-	for i_ = 1, 3 do
-		local petGUID = C_PetJournal.GetPetLoadOutInfo(i_)
-		local speciesID, customName, level, xp, maxXp, displayID, isFavorite, name, icon, petType, creatureID, sourceText, description, isWild, canBattle, tradable, unique, obtainable = C_PetJournal.GetPetInfoByPetID(petGUID) 
-
-		-- Set pet 1 UI texture
-		if i_ == 1 then 
-			Pet1_texture:SetTexture(icon) 
-			Pet1_level_string:SetText(level)
-		end
-		-- Set pet 2 UI texture
-		if i_ == 2 then 
-			Pet2_texture:SetTexture(icon) 
-			Pet2_level_string:SetText(level)
-		end
-		-- Set pet 3 UI texture
-		if i_ == 3 then 
-			Pet3_texture:SetTexture(icon) 
-			Pet3_level_string:SetText(level)
-		end
-	end
-
+--	print(PET_JOURNAL_LIST_UPDATE)
 end
 
 function events:PET_BATTLE_PET_CHANGED(...)					-- 
@@ -377,32 +371,55 @@ end
 
 function events:PET_BATTLE_PET_ROUND_PLAYBACK_COMPLETE(...)	-- 
 --	print("PET_BATTLE_PET_ROUND_PLAYBACK_COMPLETE")
-	-- Auto-select first available pet
-	if C_PetBattles.ShouldShowPetSelect() == true and mypetbattle_enabled then
-		for i=1,3 do
-			if MyPetBattle.hp(i) > 0 then
-				C_PetBattles.ChangePet(i)
+	local round = ...
+--	print(round)
+	
+	if mypetbattle_enabled or (mypetbattle_wintrade_enabled and round <= math.random(1,3)) then -- ATTACK A RANDOM NUMBER OF TIMES BETWEEN 2-4 IF WE ARE DOING WT (1 AND 3 SINCE ROUND 0 EXISTS)
+		-------------------------------------
+		-- AUTO-SELECT FIRST AVAILABLE PET --
+		if C_PetBattles.ShouldShowPetSelect() == true then
+			for i=1,3 do
+				if MyPetBattle.hp(i) > 0 then
+					C_PetBattles.ChangePet(i)
+				end
 			end
 		end
-	end
-
-	-- Skip turn if polymorphed, stunned etc. by enemy (maybe change pet if low on health)
-	if MyPetBattle.buff("Polymorphed") or MyPetBattle.buff("Asleep") or MyPetBattle.buff("Crystal Prison") or MyPetBattle.buff("Stunned") or MyPetBattle.buff("Drowsy") then 
-		C_PetBattles.SkipTurn()
-	end
-
-	-- Check if we should and can capture rare pets we are fighting
-	-- The function canCaptureRare() in MyPetBattle_data.lua will check if we can capture the rare we are fighting
-	if mypetbattle_capture_rares and MyPetBattle.canCaptureRare() and mypetbattle_enabled then
-		print("|cFF8A2BE2 We are trying to capture a rare!")
-		C_PetBattles.UseTrap() -- Use the trap
-	end
-
-		local spell = nil
+		-------------------------------
+		-- GET PETOWNER AND PET INFO --
 		local petOwner = LE_BATTLE_PET_ALLY
 		local petIndex = C_PetBattles.GetActivePet(petOwner)
 		local petType = C_PetBattles.GetPetType(petOwner, petIndex)
-
+		-----------------------------------------------------------------------------------------
+		-- SKIP TURN IF POLYMORPHED, STUNNED ETC. BY ENEMY (MAYBE CHANGE PET IF LOW ON HEALTH) --
+		if MyPetBattle.buff("Polymorphed") or MyPetBattle.buff("Asleep") or MyPetBattle.buff("Crystal Prison") or MyPetBattle.buff("Stunned") or MyPetBattle.buff("Drowsy") then 
+			C_PetBattles.SkipTurn()
+		end
+		--------------------------------------------------------------------------------
+		-- SWITCH PET AT HEALTH THRESHOLD BEFORE IT DIES. CAN BE SET FROM CONFIG MENU --
+		if MyPetBattle.hp(petIndex) < MPB_CONFIG_COMBAT_SWAP_PET_HEALTH_THRESHOLD then
+			for j=1,3 do
+				if MyPetBattle.hp(j) >= MPB_CONFIG_COMBAT_SWAP_PET_HEALTH_THRESHOLD then
+					C_PetBattles.ChangePet(j)
+					print("|cFFFF3300.. Changing pet due to low health! ..")
+				end
+			end
+		end
+		------------------------------------------------------------------
+		-- CHECK IF WE SHOULD AND CAN CAPTURE RARE PETS WE ARE FIGHTING --
+		-- THE FUNCTION canCaptureRare() IN MyPetBattle_data.lua WILL CHECK IF WE CAN CAPTURE THE RARE WE ARE FIGHTING
+		if MPB_CAPTURE_RARES and MyPetBattle.canCaptureRare() and mypetbattle_enabled then
+			print("|cFF8A2BE2 We are trying to capture a rare!")
+			C_PetBattles.UseTrap() -- USE THE TRAP
+		end
+		-------------------------------------------------------------------------
+		-- CHECK IF WE SHOULD CAPTURE COMMON/UNCOMMON IF WE DO NOT OWN THE PET --
+		if MPB_CAPTURE_COMMON_UNCOMMON and MyPetBattle.canCaptureCommon() and mypetbattle_enabled then
+			print("|cFF00FF00 We do not have this pet (0/3), let us capture it (common/uncommon)!")
+			C_PetBattles.UseTrap() -- USE THE TRAP
+		end
+		-----------------------------
+		-- GETTING READY TO ATTACK --
+		local spell = nil
 		if petType == 1 then 		-- HUMANOID
 			spell = humanoid()		
 		elseif petType == 2 then 	-- DRAGONKIN
@@ -424,27 +441,20 @@ function events:PET_BATTLE_PET_ROUND_PLAYBACK_COMPLETE(...)	--
 		elseif petType == 10 then 	-- MECHANICAL
 			spell = mechanical()
 		end
-
-	if mypetbattle_enabled then
-		-- Switch pet at health threshold before it dies. CAN BE SET FROM CONFIG MENU
-		if MyPetBattle.hp(petIndex) < MPB_CONFIG_COMBAT_SWAP_PET_HEALTH_THRESHOLD then
-			for j=1,3 do
-				if MyPetBattle.hp(j) >= MPB_CONFIG_COMBAT_SWAP_PET_HEALTH_THRESHOLD then
-					C_PetBattles.ChangePet(j)
-					print("|cFFFF3300.. Changing pet due to low health! ..")
-				end
-			end
-		end	
-
-		-- If we have spell we can cast, then cast!
-		if spell ~= nil then	
+		----------------------------------------------
+		-- IF WE HAVE SPELL WE CAN CAST, THEN CAST! --
+		if spell ~= nil and spell ~= "UNKNOWN" then	
 			actionIndex = MyPetBattle.getSpellSlotIndex(spell)
-			print("|cffFF4500 Casting: ", spell)
+			
+			local spellID, spellName, spellIcon, _, _, _, _, _ = C_PetBattles.GetAbilityInfo(petOwner, petIndex, actionIndex)
+				
+			print("|cffFF4500 Casting:\124r \124T"..spellIcon..":0\124t \124cff4e96f7\124HbattlePetAbil:"..spellID..":0:0:0\124h["..spell.."]\124h\124r");
 --			print("actionIndex: ", actionIndex)
-			C_PetBattles.UseAbility(actionIndex)	-- Use pet ability 
+			C_PetBattles.UseAbility(actionIndex) -- USE PET ABILITY 
 		end
     elseif mypetbattle_debug then
-        -- if we're not enabled but in debug mode then show what we would have cast
+        ------------------------------------------------------------------------------
+		-- IF WE'RE NOT ENABLED BUT IN DEBUG MODE THEN SHOW WHAT WE WOULD HAVE CAST --
 		print("|cffFF4500 Would be Casting: ", spell)
 
 	end
@@ -468,7 +478,7 @@ end
 
 function events:PET_BATTLE_QUEUE_PROPOSAL_ACCEPTED(...)		-- 
 --	print("PET_BATTLE_QUEUE_PROPOSAL_ACCEPTED")
-	print("Pet Battle PvP queue accepted")
+	if mypetbattle_debug then  print("Pet Battle PvP queue accepted") end
 end
 
 function events:PET_BATTLE_QUEUE_PROPOSAL_DECLINED(...)		-- 
@@ -478,8 +488,22 @@ end
 
 function events:PET_BATTLE_QUEUE_PROPOSE_MATCH(...)			-- 
 --	print("PET_BATTLE_QUEUE_PROPOSE_MATCH")
-	print("Auto-accepting pet PvP match!")
-	C_PetBattles.AcceptQueuedPVPMatch()
+
+	-- Sync setup for wt
+	local MPB_SyncTimeSent = GetTime()
+	SendAddonMessage("MPB", MPB_SyncTimeSent, "PARTY")
+	
+	if MPB_SyncTimeReceived == nil then MPB_SyncTimeReceived = 0 end
+	if MPB_SyncTimeReceived > 0 then
+		local delay = abs(MPB_SyncTimeSent - MPB_SyncTimeReceived)
+		print("Current delay: "..delay)
+	end
+	
+	-- Automatic accept PvP queue popup if enabled	
+	if mypetbattle_join_pvp then
+		if mypetbattle_debug then  print("Auto-accepting pet PvP match!") end
+		C_PetBattles.AcceptQueuedPVPMatch()
+	end
 end
 
 function events:PET_BATTLE_QUEUE_STATUS(...)				-- 
@@ -494,15 +518,119 @@ function events:PET_BATTLE_XP_CHANGED(...)					--
 --	print("PET_BATTLE_XP_CHANGED")
 end
 
+function events:CHAT_MSG_ADDON(...)							-- 
+--	print("PET_BATTLE_XP_CHANGED")
+	local prefix, message, channel, sender = ...
+
+	-- Check if message comes from MPB addon
+	if prefix == "MPB" and channel == "PARTY" and sender ~= UnitName("player") then
+--		print(prefix .. ". We received: " .. message)
+--		print("Local time: "..GetTime())
+				
+		local syncThreshold = 1
+		local queueState, estimatedTime, queuedTime = C_PetBattles.GetPVPMatchmakingInfo() -- Get PvP queue info
+		-- Check that we are ready to accept when receiving the message from our partner
+		if queueState == "proposal" and tonumber(message) > 0 then
+--			local my_message = abs(tonumber(queuedTime)-tonumber(message))
+			local my_message = abs(GetTime()-tonumber(message))
+			print(prefix .. " sync: " .. my_message)
+			-- If sync time is less than 'syncThreshold' then accept battle
+			if my_message < syncThreshold then
+				print("Sync is ok, accepting battle")
+				C_PetBattles.AcceptQueuedPVPMatch()
+			else
+				print("Not in sync, declining battle")
+				C_PetBattles.DeclineQueuedPVPMatch()
+			end
+		else
+			MPB_SyncTimeReceived = tonumber(message)
+		end
+
+	end
+end
+
 mypetbattle_frame:SetScript("OnEvent", function(self, event, ...)
  events[event](self, ...); -- call one of the functions above
 end);
 
--- Register all events for which handlers have been defined
+-- REGISTER ALL EVENTS FOR WHICH HANDLERS HAVE BEEN DEFINED
 for k, v in pairs(events) do
  mypetbattle_frame:RegisterEvent(k); 
 end
 
+--------------------
+--- TIMER FRAME ----
+--------------------
+MPB_timerTotal = 0 -- TIMER INIT FOR AUTOMATIC FORFEIT
+MPB_timerOneSec = 0 -- 1 SEC TIMER INIT FOR DIFFERENT MECHANICS E.G. AUTO RE-QUEUE PVP
+MPB_petguids = {0,0,0}
+
+local function MPB_onUpdate(self,elapsed)
+	-- AUTOMATIC FORFEIT TIMER
+	if petBattleOpeningIsDone then
+	    MPB_timerTotal = MPB_timerTotal + elapsed
+		if MPB_timerTotal >= 55 then -- 55
+			if mypetbattle_debug then  print("60 sec. almost up!") end
+			MPB_timerTotal = 0
+			petBattleOpeningIsDone = false
+    	    -- FORFEIT
+    	    if mypetbattle_auto_forfeit then
+    	    	if mypetbattle_debug then  print("Forfeiting!") end
+	    	    C_PetBattles.ForfeitGame()
+	    	end
+	    end
+	else
+		MPB_timerTotal = 0
+    end
+
+	-- 1 SEC TIMER CHECK
+	MPB_timerOneSec = MPB_timerOneSec + elapsed
+	if MPB_timerOneSec >= 1 then
+		-- CHECK IF WE SHOULD BE IN THE PVP MATCHMAKING QUEUE, BUT WE ARE NOT
+		if not C_PetBattles.IsInBattle() and (C_PetBattles.GetPVPMatchmakingInfo() == nil) and mypetbattle_join_pvp then
+			C_PetBattles.StartPVPMatchmaking()
+		end
+		-- DISMISS PET SO WE DO NOT HAVE IT RUNNING AROUND
+        local petGUID = C_PetJournal.GetSummonedPetGUID()
+        if petGUID and petGUID == C_PetJournal.GetPetLoadOutInfo(1) then -- Check if we have a pet summoned already, or we will get an error
+            C_PetJournal.SummonPetByGUID(petGUID) -- Dismiss pet
+        end
+		-- SET UI TEXTURES FOR CURRENT PET TEAM WHEN THE UI IS LOADED -- IS NOT NEEDED ANYMORE SINCE setTeam() IS CALLED ABOVE, AND THAT FUNCTION SETS THE TEXTURES
+		-- MIGHT BE NEEDED ANYWAY, IF AUTO NEW TEAM IS ACTIVE, THEN THE TEXTURE WILL NOT BE LOADED ON LOGIN
+		-- MOVED TEXTURE UPDATES TO THE TIMER, BECAUSE THE EVENTS USED BEFORE, WE CANNOT BE SURE THEY ARE ALWAYS CALLED WHEN WE WANT TO UPDATE
+		for i_ = 1, 3 do
+			local petGUID = C_PetJournal.GetPetLoadOutInfo(i_)
+			if not petGUID then  break end -- BREAK THE LOOP IF THERE ARE NO PETS YET OR WE WILL GET AN ERROR
+
+			local speciesID, customName, level, xp, maxXp, displayID, isFavorite, name, icon, petType, creatureID, sourceText, description, isWild, canBattle, tradable, unique, obtainable = C_PetJournal.GetPetInfoByPetID(petGUID) 
+
+			if MPB_petguids[i_] ~= petGUID then -- CHECK IF WE ALREADY HAVE THE PET, THEN NO NEED TO SET THE TEXTURE
+				MPB_petguids[i_] = petGUID
+				-- SET PET 1 UI TEXTURE
+				if i_ == 1 then 
+					Pet1_texture:SetTexture(icon) 
+					Pet1_level_string:SetText(level)
+				end
+				-- SET PET 2 UI TEXTURE
+				if i_ == 2 then 
+					Pet2_texture:SetTexture(icon) 
+					Pet2_level_string:SetText(level)
+				end
+				-- SET PET 3 UI TEXTURE
+				if i_ == 3 then 
+					Pet3_texture:SetTexture(icon) 
+					Pet3_level_string:SetText(level)
+				end
+			end
+		end
+		-- RESET THE TIMER
+		MPB_timerOneSec = 0
+	end
+
+end
+ 
+local f = CreateFrame("frame")
+f:SetScript("OnUpdate", MPB_onUpdate)
 
 --------------------
 -- SLASH COMMANDS --
@@ -529,19 +657,30 @@ function SlashCmdList.MYPETBATTLE(msg, editbox)
 		end
 	    print("My pet battle:", status)
 	elseif msg == "capture_rares" then
-		mypetbattle_capture_rares = not mypetbattle_capture_rares
-		if mypetbattle_capture_rares then status = "\124cFF00FF00Automatic capture rare pets enabled" else status = "\124cFFFF0000Automatic capture rare pets disabled" end
+		MPB_CAPTURE_RARES = not MPB_CAPTURE_RARES
+		if MPB_CAPTURE_RARES then status = "\124cFF00FF00Automatic capture rare pets enabled" else status = "\124cFFFF0000Automatic capture rare pets disabled" end
 	    print("My pet battle:", status)
-    elseif msg == "debug" then
-        -- turn off debug messages as required
-        mypetbattle_debug =  not mypetbattle_debug
+		CheckButton3:SetChecked(MPB_CAPTURE_RARES)
+	elseif msg == "capture_common_uncommon" then
+		MPB_CAPTURE_COMMON_UNCOMMON = not MPB_CAPTURE_COMMON_UNCOMMON
+		if MPB_CAPTURE_COMMON_UNCOMMON then status = "\124cFF00FF00Automatic capture common/uncommon (0/3 owned) pets enabled" else status = "\124cFFFF0000Automatic capture common/uncommon pets (0/3 owned) disabled" end
+	    print("My pet battle:", status)
+	elseif msg == "auto_forfeit" then
+		mypetbattle_auto_forfeit = not mypetbattle_auto_forfeit
+		if mypetbattle_auto_forfeit then status = "\124cFF00FF00Automatic forfeit after 60 sec enabled" else status = "\124cFFFF0000Automatic forfeit after 60 sec disabled" end
+	    print("My pet battle:", status)
+	elseif msg == "wintrade_enable" then
+		mypetbattle_wintrade_enabled = not mypetbattle_wintrade_enabled
+		if mypetbattle_wintrade_enabled then status = "\124cFF00FF00Automatic wintrade enabled" else status = "\124cFFFF0000Automatic wintrade disabled" end
+	    print("My pet battle:", status)
+	elseif msg == "debug" then
+		-- TURN OFF DEBUG MESSAGES AS REQUIRED
+		mypetbattle_debug =  not mypetbattle_debug
 		if mypetbattle_debug then status = "\124cFF00FF00Enabled" else status = "\124cFFFF0000Disabled" end
-        print("Debugging:",status)
-    elseif msg == "ui" then
-            if MyPetBattleForm:IsVisible() then
-                MyPetBattleForm:Hide()
-            else
-                MyPetBattleForm:Show()
-            end
+		print("Debugging:",status)
+	elseif msg == "ui" then
+		-- SHOW/HIDE UI
+		MPB_SHOW_UI = not MPB_SHOW_UI
+		if MPB_SHOW_UI then MyPetBattleForm:Show() else MyPetBattleForm:Hide() end
     end
 end

@@ -20,6 +20,8 @@ end
 function MyPetBattle.buff(auraName,petIndex)
 	if petIndex == nil then petIndex = C_PetBattles.GetActivePet(LE_BATTLE_PET_ALLY) end
 	local numAuras = C_PetBattles.GetNumAuras(LE_BATTLE_PET_ALLY, petIndex)
+	if numAuras == nil then return false end -- Return false if nil, e.g. when NOT in battle
+
 	-- Checking front pet buffs
 	for auraIndex = 1,numAuras do 
 		local auraID, instanceID, turnsRemaining, isBuff = C_PetBattles.GetAuraInfo(LE_BATTLE_PET_ALLY, petIndex, auraIndex)
@@ -42,6 +44,7 @@ end
 function MyPetBattle.debuff(auraName,petIndex)
 	if petIndex == nil then petIndex = C_PetBattles.GetActivePet(LE_BATTLE_PET_ENEMY) end
 	local numAuras = C_PetBattles.GetNumAuras(LE_BATTLE_PET_ENEMY, petIndex)
+	if numAuras == nil then return false end -- Return false if nil, e.g. when NOT in battle
 
 	-- Checking front pet buffs
 	for auraIndex=1,numAuras do 
@@ -78,6 +81,32 @@ function MyPetBattle.currentWeather(weather)
 		if weather == currentWeather then return true end
 	end
 	return false		
+end
+
+-- Check if a spell is strong against our current target
+function MyPetBattle.abilityIsStrong(spell)
+	local activePetSlot = C_PetBattles.GetActivePet(LE_BATTLE_PET_ALLY)
+	local enemyPetSlot = C_PetBattles.GetActivePet(LE_BATTLE_PET_ENEMY)
+	local enemyType = C_PetBattles.GetPetType(LE_BATTLE_PET_ENEMY, enemyPetSlot)
+	-- Check if the spell is on the actionbar 
+	for i_=1,3 do 
+		local abilityName, abilityType, noHints
+		_, abilityName, _, _, _, _, abilityType, noHints = C_PetBattles.GetAbilityInfo(LE_BATTLE_PET_ALLY, activePetSlot, i_)
+		if spell == abilityName then
+			local modifier = C_PetBattles.GetAttackModifier(abilityType, enemyType)
+			if(modifier < 1) then
+--				print(abilityName .. " is weak against enemy")
+				return false
+			elseif(modifier > 1) then
+--				print(abilityName .. " is strong against enemy")
+				return true
+			else
+--				print(abilityName .. " is normal strength against enemy")
+				return false
+			end
+		end
+	end
+	return false
 end
 
 -----------------------------
@@ -174,6 +203,23 @@ function MyPetBattle.canCaptureRare()
 	return false
 end
 
+-- Check if we can capture the common/uncommon we are fighting. Used to determine if we should capture or kill our enemy.
+function MyPetBattle.canCaptureCommon()
+	local petOwner = LE_BATTLE_PET_ENEMY
+	local activeEnemyPetIndex = C_PetBattles.GetActivePet(petOwner)
+	local rarity = C_PetBattles.GetBreedQuality(petOwner, activeEnemyPetIndex)
+	local trapIsUsable = C_PetBattles.IsTrapAvailable() -- Check if we can use trap e.g. pet is at low health
+
+	local speciesID = C_PetBattles.GetPetSpeciesID(petOwner, activeEnemyPetIndex)
+	local numCollected, limit = C_PetJournal.GetNumCollectedInfo(speciesID)
+
+	if numCollected == 0 and limit > 0 and trapIsUsable and (rarity == 2 or rarity == 3) then -- 2: "Common", 3: "Uncommon"
+--		print("|cFF8A2BE2 We are trying to capture a common/uncommon!")
+		return true
+	end
+	return false
+end
+
 -- New improved team setup
 function MyPetBattle.setTeam(avgLevel)
 --	print("Set team v2")
@@ -234,13 +280,15 @@ function MyPetBattle.setTeam(avgLevel)
 	for p_ = pet1_start, pet1_end, pet1_step do
 		if pet1_set or MPB_LOCK_PET1 then break end -- Also check if pet is locked
 		for n_ = 1, numPets do			
-			local petID, _, owned, _, level, _, isRevoked, speciesName, icon, petType, _, _, _, _, canBattle, _, _, obtainable = C_PetJournal.GetPetInfoByIndex(n_)
+			local petID, speciesID, owned, _, level, _, isRevoked, speciesName, icon, petType, _, _, _, _, canBattle, _, _, obtainable = C_PetJournal.GetPetInfoByIndex(n_)
 			local health, maxHealth, power, speed, rarity = C_PetJournal.GetPetStats(petID)
 			
 			local healthPercent = health / maxHealth
 
+			local petIsSummonable = C_PetJournal.PetIsSummonable(petID) -- Check if we can actually summon the pet e.g. alliance/horde only (also works for revoked)
+
 			-- Check if we own the pet, it is a battle pet, it is alive and of rare quality
-			if owned and canBattle and not isRevoked and healthPercent > healthThreshold and rarity == 4 and level == avgLevel+p_ then
+			if owned and petIsSummonable and canBattle and not isRevoked and healthPercent > healthThreshold and rarity == 4 and level == avgLevel+p_ then
 				-- Set found pet to pet 1	
 				C_PetJournal.SetPetLoadOutInfo(1, petID) -- Pet slot 1
 				-- Save pet 1 guid
@@ -276,13 +324,15 @@ function MyPetBattle.setTeam(avgLevel)
 	for p_ = pet2_start, pet2_end, pet2_step do
 		if pet2_set or MPB_LOCK_PET2 then break end -- Also check if pet is locked
 		for n_ = 1, numPets do
-			local petID, _, owned, _, level, _, isRevoked, speciesName, icon, petType, _, _, _, _, canBattle, _, _, obtainable = C_PetJournal.GetPetInfoByIndex(n_)
+			local petID, speciesID, owned, _, level, _, isRevoked, speciesName, icon, petType, _, _, _, _, canBattle, _, _, obtainable = C_PetJournal.GetPetInfoByIndex(n_)
 			local health, maxHealth, power, speed, rarity = C_PetJournal.GetPetStats(petID)
 			
 			local healthPercent = health / maxHealth
 
+			local petIsSummonable = C_PetJournal.PetIsSummonable(petID) -- Check if we can actually summon the pet e.g. alliance/horde only (also works for revoked)
+
 			-- Check if we own the pet, it is a battle pet, it is alive and of rare quality
-			if owned and canBattle and not isRevoked and healthPercent > healthThreshold and rarity == 4 and level == avgLevel+p_ and petID ~= pet1_guid then
+			if owned and petIsSummonable and canBattle and not isRevoked and healthPercent > healthThreshold and rarity == 4 and level == avgLevel+p_ and petID ~= pet1_guid then
 				-- Set found pet to pet 2	
 				C_PetJournal.SetPetLoadOutInfo(2, petID) -- Pet slot 2
 				-- Save pet 1 guid
@@ -317,13 +367,15 @@ function MyPetBattle.setTeam(avgLevel)
 	for p_ = pet3_start, pet3_end, pet3_step do
 		if pet3_set or MPB_LOCK_PET3 then break end -- Also check if pet is locked
 		for n_ = 1, numPets do
-			local petID, _, owned, _, level, _, isRevoked, speciesName, icon, petType, _, _, _, _, canBattle, _, _, obtainable = C_PetJournal.GetPetInfoByIndex(n_)
+			local petID, speciesID, owned, _, level, _, isRevoked, speciesName, icon, petType, _, _, _, _, canBattle, _, _, obtainable = C_PetJournal.GetPetInfoByIndex(n_)
 			local health, maxHealth, power, speed, rarity = C_PetJournal.GetPetStats(petID)
 			
 			local healthPercent = health / maxHealth
 
+			local petIsSummonable = C_PetJournal.PetIsSummonable(petID) -- Check if we can actually summon the pet e.g. alliance/horde only (also works for revoked)
+
 			-- Check if we own the pet, it is a battle pet, it is alive and of rare quality
-			if owned and canBattle and not isRevoked and healthPercent > healthThreshold and rarity == 4 and level == avgLevel+p_ and petID ~= pet1_guid and petID ~= pet2_guid then
+			if owned and petIsSummonable and canBattle and not isRevoked and healthPercent > healthThreshold and rarity == 4 and level == avgLevel+p_ and petID ~= pet1_guid and petID ~= pet2_guid then
 				-- Set found pet to pet 3	
 				C_PetJournal.SetPetLoadOutInfo(3, petID) -- Pet slot 3
 				-- Save pet 1 guid
@@ -351,7 +403,7 @@ function MyPetBattle.setTeam(avgLevel)
 
 	-- Update the WoW pet journal UI with our new pets
 	PetJournal_UpdatePetLoadOut() 
-
+	
 	return
 end
 
@@ -394,4 +446,58 @@ function MyPetBattle.shouldIHide()
         end
     end
     return false
+end
+
+
+-----------------------------------------------------------------
+-- CHECK IF WE HAVE ALL PETS IN THE GAME IN THE ROTATION FILES --
+-----------------------------------------------------------------
+function MyPetBattle.checkMissingPets()
+	-- Sort the pet journal so we see all pets; collected and not collected
+	C_PetJournal.SetFlagFilter(LE_PET_JOURNAL_FLAG_COLLECTED, true) -- Pets you have collected
+	C_PetJournal.SetFlagFilter(LE_PET_JOURNAL_FLAG_FAVORITES, false) -- Pets you have set as favorites
+	C_PetJournal.SetFlagFilter(LE_PET_JOURNAL_FLAG_NOT_COLLECTED, true) -- Pets you have not collected
+
+	-- Get total number of pets in the game (regardless of owned/not owned)
+	local numPets, numOwned = C_PetJournal.GetNumPets()
+	print("Total number of pets: "..numPets)
+
+	-- Loop through all available pets in the game
+	for k_ = 1, numPets do
+--		print("Iteration #"..k_)
+		-- Get pet info
+		local petID, speciesID, owned, _, level, _, isRevoked, speciesName, icon, petType, _, _, _, _, canBattle, _, _, obtainable = C_PetJournal.GetPetInfoByIndex(k_)
+
+		-- Check if it is a battle pet
+		if canBattle then
+			local spell = nil
+			if petType == 1 then 		-- HUMANOID
+				spell = humanoid(speciesName)		
+			elseif petType == 2 then 	-- DRAGONKIN
+				spell = dragonkin(speciesName)
+			elseif petType == 3 then 	-- FLYING
+				spell = flying(speciesName)
+			elseif petType == 4 then 	-- UNDEAD
+				spell = undead(speciesName)
+			elseif petType == 5 then 	-- CRITTER
+				spell = critter(speciesName)
+			elseif petType == 6 then 	-- MAGIC
+				spell = magic(speciesName)
+			elseif petType == 7 then 	-- ELEMENTAL
+				spell = elemental(speciesName)
+			elseif petType == 8 then 	-- BEAST
+				spell = beast(speciesName)
+			elseif petType == 9 then 	-- WATER / AQUATIC
+				spell = aquatic(speciesName)
+			elseif petType == 10 then 	-- MECHANICAL
+				spell = mechanical(speciesName)
+			end
+			
+			-- Print the pets we are missing rotations for
+			if spell == "UNKNOWN" then
+				print("Missing rotation for: \124T"..icon..":0\124t "..speciesName)
+			end
+		end	
+	end
+
 end

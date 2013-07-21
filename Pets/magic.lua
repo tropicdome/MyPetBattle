@@ -1,12 +1,14 @@
 -----------
 -- MAGIC --
 -----------
-function magic()
+function magic(petName)
 
 local magic_abilities = nil
 
 -- Get pet name
-petName = MyPetBattle.petName()
+if petName == nil then
+	petName = MyPetBattle.petName()
+end
 
 ------------
 -- DEMONS --
@@ -77,11 +79,11 @@ elseif petName == "Jade Owl" then
 elseif petName == "Jade Tiger" then
 	magic_abilities = 
 		{
+			{"Devour", 			MyPetBattle.hp("active",2) < 0.20 },	-- Slot 3,  if we kill the enemy with Devour, we restore health
 			{"Jade Claw", 		},	-- Slot 1
 			{"Pounce", 			},	-- Slot 1
 			{"Rake", 			},	-- Slot 2
 			{"Jadeskin", 		},	-- Slot 2
-			{"Devour", 			},	-- Slot 3
 			{"Prowl", 			},	-- Slot 3
 		}
 elseif petName == "Onyx Panther" then
@@ -97,11 +99,11 @@ elseif petName == "Onyx Panther" then
 elseif petName == "Zipao Tiger" then
 	magic_abilities = 
 		{
+			{"Devour", 			MyPetBattle.hp("active",2) < 0.20 },	-- Slot 3,  if we kill the enemy with Devour, we restore health
 			{"Onyx Bite", 		},	-- Slot 1
 			{"Pounce", 			},	-- Slot 1
 			{"Rake", 			},	-- Slot 2
 			{"Stoneskin", 		},	-- Slot 2
-			{"Devour", 			},	-- Slot 3
 			{"Prowl", 			},	-- Slot 3
 		}
 ------------------------
@@ -130,7 +132,7 @@ elseif petName == "Magic Lamp" then
 ----------------------
 -- OOZES AND SLIMES --
 ----------------------
-elseif petName == "Jade Oozeling" or petName == "Oily Slimeling" or petName == "Toxic Wasteling" then
+elseif petName == "Jade Oozeling" or petName == "Oily Slimeling" or petName == "Toxic Wasteling" or petName == "Disgusting Oozeling" then
 	magic_abilities = 
 		{
 			{"Ooze Touch", 		},	-- Slot 1
@@ -351,7 +353,8 @@ elseif petName == "Zergling" then
 		}
 -------------------
 else -- Unknown magic pet
-	print("|cFFFF0000 Unknown magic pet")
+	print("|cFFFF0000 Unknown magic pet: "..petName)
+	return "UNKNOWN"
 end
 
 	spell = MyPetBattle.parseSpellTable(magic_abilities)

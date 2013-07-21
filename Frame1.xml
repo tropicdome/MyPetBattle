@@ -347,8 +347,6 @@
 				Frame1Panel_OnLoad(self)
 
 				self:Hide()
-
-				Frame1_OnLoad()
 			</OnLoad>
 		</Scripts>
 	</Frame>

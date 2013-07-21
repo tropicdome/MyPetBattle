@@ -1,8 +1,9 @@
 <Ui xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="Frame.lua" />
+	<Animation />
 	<Frame name="MyPetBattleForm" movable="true" enableMouse="true">
 		<Size>
-			<AbsDimension x="270" y="116" />
+			<AbsDimension x="262" y="130" />
 		</Size>
 		<Anchors>
 			<Anchor point="CENTER" relativeTo="UIParent">
@@ -34,7 +35,7 @@
 					<Size x="22" y="22" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="223" y="-29" />
+							<Offset x="209" y="-29" />
 						</Anchor>
 					</Anchors>
 				</Texture>
@@ -42,7 +43,7 @@
 					<Size x="22" y="22" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="223" y="-53" />
+							<Offset x="209" y="-53" />
 						</Anchor>
 					</Anchors>
 				</Texture>
@@ -50,7 +51,7 @@
 					<Size x="22" y="22" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="223" y="-77" />
+							<Offset x="209" y="-77" />
 						</Anchor>
 					</Anchors>
 				</Texture>
@@ -60,7 +61,7 @@
 					<Size x="68" y="10" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="32" y="-39" />
+							<Offset x="32" y="-35" />
 						</Anchor>
 					</Anchors>
 					<FontHeight val="7" />
@@ -70,7 +71,16 @@
 					<Size x="41" y="20" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="32" y="-70" />
+							<Offset x="32" y="-78" />
+						</Anchor>
+					</Anchors>
+					<FontHeight val="7" />
+				</FontString>
+				<FontString inherits="GameFontNormalSmall" font="Fonts\ARIALN.TTF" text="Capture common/uncommon if 0/3 owned" justifyH="LEFT">
+					<Size x="74" y="20" />
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="32" y="-63" />
 						</Anchor>
 					</Anchors>
 					<FontHeight val="7" />
@@ -79,7 +89,7 @@
 					<Size x="74" y="20" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="32" y="-52" />
+							<Offset x="32" y="-46" />
 						</Anchor>
 					</Anchors>
 					<FontHeight val="7" />
@@ -88,7 +98,7 @@
 					<Size x="60" y="20" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="128" y="-28" />
+							<Offset x="117" y="-28" />
 						</Anchor>
 					</Anchors>
 					<FontHeight val="7" />
@@ -97,7 +107,7 @@
 					<Size x="35" y="20" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="217" y="-10" />
+							<Offset x="203" y="-10" />
 						</Anchor>
 					</Anchors>
 					<FontHeight val="8" />
@@ -106,7 +116,7 @@
 					<Size x="42" y="20" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="128" y="-11" />
+							<Offset x="117" y="-11" />
 						</Anchor>
 					</Anchors>
 					<FontHeight val="8" />
@@ -115,7 +125,7 @@
 					<Size x="35" y="15" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="6" y="-95" />
+							<Offset x="6" y="-110" />
 						</Anchor>
 					</Anchors>
 					<FontHeight val="7" />
@@ -124,7 +134,7 @@
 					<Size x="16" y="14" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="234" y="-41" />
+							<Offset x="220" y="-41" />
 						</Anchor>
 					</Anchors>
 					<FontHeight val="8" />
@@ -133,7 +143,7 @@
 					<Size x="16" y="18" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="234" y="-63" />
+							<Offset x="220" y="-63" />
 						</Anchor>
 					</Anchors>
 					<FontHeight val="8" />
@@ -142,10 +152,28 @@
 					<Size x="16" y="19" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="234" y="-86" />
+							<Offset x="220" y="-86" />
 						</Anchor>
 					</Anchors>
 					<FontHeight val="8" />
+				</FontString>
+				<FontString inherits="GameFontNormal" font="Fonts\ARIALN.TTF" text="WT" justifyH="LEFT">
+					<Size x="21" y="20" />
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="38" y="-93" />
+						</Anchor>
+					</Anchors>
+					<FontHeight val="7" />
+				</FontString>
+				<FontString inherits="GameFontNormal" font="Fonts\ARIALN.TTF" text="Auto forfeit" justifyH="LEFT">
+					<Size x="43" y="20" />
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="66" y="-93" />
+						</Anchor>
+					</Anchors>
+					<FontHeight val="7" />
 				</FontString>
 			</Layer>
 		</Layers>
@@ -154,7 +182,7 @@
 				<Size x="14" y="14" />
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset x="17" y="-37" />
+						<Offset x="17" y="-34" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
@@ -167,7 +195,7 @@
 				<Size x="14" y="14" />
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset x="17" y="-73" />
+						<Offset x="17" y="-82" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
@@ -180,7 +208,7 @@
 				<Size x="14" y="14" />
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset x="17" y="-55" />
+						<Offset x="17" y="-50" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
@@ -193,7 +221,7 @@
 				<Size x="85" y="20" />
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset x="126" y="-49" />
+						<Offset x="115" y="-49" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
@@ -209,7 +237,7 @@
 				<Size x="20" y="20" />
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset x="189" y="-28" />
+						<Offset x="178" y="-28" />
 					</Anchor>
 				</Anchors>
 				<FontString>
@@ -220,7 +248,7 @@
 				<Size x="85" y="20" />
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset x="126" y="-78" />
+						<Offset x="115" y="-78" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
@@ -232,29 +260,11 @@
 					<FontHeight val="8" />
 				</ButtonText>
 			</Button>
-			<Button name="Button_open_config_panel" inherits="UIPanelButtonTemplate" text="Config">
-				<Size>
-					<AbsDimension x="45" y="20" />
-				</Size>
-				<Anchors>
-					<Anchor point="TOPLEFT">
-						<Offset x="79" y="-78" />
-					</Anchor>
-				</Anchors>
-				<Scripts>
-					<OnClick>
-						Button_open_config_panel_OnClick()
-					</OnClick>
-				</Scripts>
-				<ButtonText name="$parentText" font="Fonts\ARIALN.TTF">
-					<FontHeight val="8" />
-				</ButtonText>
-			</Button>
 			<CheckButton name="Check_lock_pet_1" inherits="UICheckButtonTemplate" text="Lock pet 1">
 				<Size x="10" y="10" />
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset x="222" y="-42" />
+						<Offset x="208" y="-42" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
@@ -285,7 +295,7 @@
 				<Size x="10" y="10" />
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset x="222" y="-66" />
+						<Offset x="208" y="-66" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
@@ -316,7 +326,7 @@
 				<Size x="10" y="10" />
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset x="222" y="-90" />
+						<Offset x="208" y="-90" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
@@ -343,6 +353,122 @@
 				<NormalTexture file="Interface\BUTTONS\LockButton-Border" />
 				<CheckedTexture file="Interface\BUTTONS\LockButton-Locked-Up" />
 			</CheckButton>
+			<CheckButton name="CheckButton4" inherits="UICheckButtonTemplate" text="CheckButton4">
+				<Size x="14" y="14" />
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="17" y="-66" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						CheckButton4_OnClick()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<Button name="MPB_Config_Button" setAllPoints="true" text="">
+				<Size x="12" y="12" />
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="238" y="-12" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						Button_open_config_panel_OnClick()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<CheckButton name="CheckButton_auto_forfeit" inherits="UICheckButtonTemplate" text="CheckButton5">
+				<Size x="14" y="14" />
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="53" y="-96" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						CheckButton_auto_forfeit_OnClick()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="CheckButton_wintrade_enable" inherits="UICheckButtonTemplate" text="CheckButton5">
+				<Size x="14" y="14" />
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="24" y="-96" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						CheckButton_wintrade_enable_OnClick()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<Button name="MPB_MMButton" parent="Minimap" movable="true" frameStrata="MEDIUM" enableMouse="true">
+				<Size>
+					<AbsDimension x="31" y="31" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" />
+				</Anchors>
+				<Layers>
+					<Layer level="BACKGROUND">
+						<Texture name="MPB_MMButton_Icon" file="Interface\PetBattles\PetBattlesQueue">
+							<Size>
+								<AbsDimension x="20" y="20" />
+							</Size>
+							<Anchors>
+								<Anchor point="TOPLEFT">
+									<Offset>
+										<AbsDimension x="6" y="-5" />
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</Texture>
+					</Layer>
+					<Layer level="OVERLAY">
+						<Texture file="Interface\Minimap\MiniMap-TrackingBorder">
+							<Size>
+								<AbsDimension x="53" y="53" />
+							</Size>
+							<Anchors>
+								<Anchor point="TOPLEFT" />
+							</Anchors>
+						</Texture>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnLoad>
+						self:RegisterForClicks("LeftButtonUp","RightButtonUp")
+						self:RegisterForDrag("LeftButton","RightButton")
+						self.dragme = false;
+					</OnLoad>
+					<OnDragStart>
+						self:LockHighlight()
+						self.dragme = true;
+					</OnDragStart>
+					<OnDragStop>
+						self:UnlockHighlight()
+						self.dragme = false;
+					</OnDragStop>
+					<OnUpdate>
+						if(self.dragme == true) then
+						MPB_MMButton_BeingDragged();
+						end
+					</OnUpdate>
+					<OnClick>
+						MPB_MMButton_OnClick();
+					</OnClick>
+					<OnEnter>
+						MPB_MMButton_OnEnter(self);
+					</OnEnter>
+					<OnLeave>
+						GameTooltip:Hide();
+					</OnLeave>
+				</Scripts>
+				<HighlightTexture file="Interface\BUTTONS\UI-Panel-MinimizeButton-Highlight" alphaMode="ADD" />
+			</Button>
 		</Frames>
 		<Scripts>
 			<OnLoad>

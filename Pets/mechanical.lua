@@ -1,12 +1,14 @@
 ----------------
 -- MECHANICAL --
 ----------------
-function mechanical()
+function mechanical(petName)
 
 local mechanical_abilities = nil
 
 -- Get pet name
-petName = MyPetBattle.petName()
+if petName == nil then
+	petName = MyPetBattle.petName()
+end
 
 ------------------------
 -- LIFELIKE CREATIONS --
@@ -283,7 +285,8 @@ elseif petName == "Darkmoon Zeppelin" then
 		}	
 -------------------
 else -- Unknown robot pet
-	print("|cFFFF0000 Unknown mechanical pet")
+	print("|cFFFF0000 Unknown mechanical pet: "..petName)
+	return "UNKNOWN"
 end
 
 	spell = MyPetBattle.parseSpellTable(mechanical_abilities)

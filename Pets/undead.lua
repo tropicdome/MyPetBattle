@@ -1,17 +1,29 @@
 ------------
 -- UNDEAD --
 ------------
-function undead()
+function undead(petName)
 
 local undead_abilities = nil
 
 -- Get pet name
-petName = MyPetBattle.petName()
+if petName == nil then
+	petName = MyPetBattle.petName()
+end
 
 -----------------------
 -- DISEASED CRITTERS --
 -----------------------
-if petName == "Blighthawk" then
+if petName == "Blighted Squirrel" then
+	undead_abilities = 
+		{
+			{"Scratch", 		},	-- Slot 1
+			{"Woodchipper", 	},	-- Slot 1
+			{"Adrenaline Rush", },	-- Slot 2
+			{"Crouch", 			},	-- Slot 2
+			{"Rabid Strike", 	},	-- Slot 3
+			{"Stampede", 		},	-- Slot 3
+		}
+elseif petName == "Blighthawk" then
 	undead_abilities = 
 		{
 			{"Infected Claw", 	},	-- Slot 1
@@ -97,9 +109,9 @@ elseif petName == "Stitched Pup" then
 elseif petName == "Fossilized Hatchling" then
 	undead_abilities = 
 		{
+			{"Ancient Blessing", not MyPetBattle.buff("Ancient Blessing") or MyPetBattle.hp() < 0.75 },	-- Slot 2
 			{"Claw", 			},	-- Slot 1
 			{"Bone Bite", 		},	-- Slot 1
-			{"Ancient Blessing",},	-- Slot 2
 			{"Death and Decay",	},	-- Slot 2
 			{"Bone Prison", 	},	-- Slot 3
 			{"BONESTORM", 		},	-- Slot 3
@@ -107,10 +119,10 @@ elseif petName == "Fossilized Hatchling" then
 elseif petName == "Frosty" then
 	undead_abilities = 
 		{
+			{"Shriek",			not MyPetBattle.debuff("Attack Reduction") },	-- Slot 2
 			{"Diseased Bite", 	},	-- Slot 1
 			{"Frost Breath", 	},	-- Slot 1
 			{"Call Blizzard", 	},	-- Slot 2
-			{"Shriek",			},	-- Slot 2
 			{"Ice Tomb", 		},	-- Slot 3
 			{"Blistering Cold", },	-- Slot 3
 		}
@@ -196,11 +208,11 @@ elseif petName == "Crawling Claw" then
 elseif petName == "Creepy Crate" then
 	undead_abilities = 
 		{
+			{"Devour", 			MyPetBattle.hp("active",2) < 0.20 },	-- Slot 3,  if we kill the enemy with Devour, we restore health
 			{"Curse of Doom", 	not MyPetBattle.debuff("Curse of Doom") },	-- Slot 2
 			{"Creepy Chomp", 	},	-- Slot 1
 			{"Agony", 			},	-- Slot 1
 			{"Death Grip", 		},	-- Slot 2
-			{"Devour", 			},	-- Slot 3
 			{"BONESTORM", 		},	-- Slot 3
 		}
 elseif petName == "Eye of the Legion" then
@@ -245,7 +257,8 @@ elseif petName == "Unborn Val'kyr" then
 		}
 -------------------
 else -- Unknown undead
-	print("|cFFFF0000 Unknown undead")
+	print("|cFFFF0000 Unknown undead: "..petName)
+	return "UNKNOWN"
 end
 
 	spell = MyPetBattle.parseSpellTable(undead_abilities)

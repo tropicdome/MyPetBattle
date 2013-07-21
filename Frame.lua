@@ -13,6 +13,11 @@ function CheckButton3_OnClick()
 	SlashCmdList.MYPETBATTLE('capture_rares')
 end
 
+-- Enable automatic capture common/uncommon if you have room for more of that specie
+function CheckButton4_OnClick()
+	SlashCmdList.MYPETBATTLE('capture_common_uncommon')
+end
+
 -- Make random team based on desired pet level
 function Button_MakeRandomTeam_OnClick()
 	local desiredPetLevel = EditBox_PetLevel:GetText()  -- Get user input for desired pet level
@@ -74,4 +79,57 @@ function Check_lock_pet_2_OnClick()
 end
 function Check_lock_pet_3_OnClick()
 	MPB_LOCK_PET3 = Check_lock_pet_3:GetChecked()
+end
+
+function CheckButton_auto_forfeit_OnClick()
+	SlashCmdList.MYPETBATTLE('auto_forfeit')
+end
+
+function CheckButton_wintrade_enable_OnClick()
+	SlashCmdList.MYPETBATTLE('wintrade_enable')
+end
+
+------------------------------
+-- Minimap button functions --
+------------------------------
+-- Update the position of the minimap button
+function MPB_MMButton_UpdatePosition()
+	-- Initialize minimap button the first time
+	if MPB_MMBUTTONPOSITION == nil or MPB_MMBUTTONPOSITION[1] == nil or MPB_MMBUTTONPOSITION[2] == nil then 
+		MPB_MMBUTTONPOSITION = {50, 50} 
+	end
+
+	-- Set new position of the minimap button
+    MPB_MMButton:SetPoint(
+        "TOPLEFT",
+        "Minimap",
+        "TOPLEFT",
+        54 - MPB_MMBUTTONPOSITION[1],
+        MPB_MMBUTTONPOSITION[2] - 55
+    )
+end
+
+-- Show tooltip on mouseover
+function MPB_MMButton_OnEnter(self)
+	MPB_BUTTON_TOOLTIP = "Click to hide/show |cffff8000MPB|r window\nClick and hold to move this icon" 
+	GameTooltip:SetOwner(self, "ANCHOR_LEFT")
+    GameTooltip:SetText(MPB_BUTTON_TOOLTIP)
+    GameTooltipTextLeft1:SetTextColor(1, 1, 1)
+    GameTooltip:Show()
+end
+
+-- Show/hide ui
+function MPB_MMButton_OnClick(self,button)
+    SlashCmdList.MYPETBATTLE('ui')
+end
+
+-- Calculate position when button is dragged
+function MPB_MMButton_BeingDragged()
+    local w,x = GetCursorPosition() 
+    local y,z = Minimap:GetLeft(), Minimap:GetBottom() 
+    w = y-w/UIParent:GetScale()+70 
+    x = x/UIParent:GetScale()-z-100
+	-- Update position
+    MPB_MMBUTTONPOSITION = {w,x}
+    MPB_MMButton_UpdatePosition()
 end

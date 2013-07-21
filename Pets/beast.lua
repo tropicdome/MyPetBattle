@@ -1,12 +1,14 @@
 ----------------
 -- BEAST --
 ----------------
-function beast()
+function beast(petName)
 
 local beast_abilities = nil
 
 -- Get pet name
-petName = MyPetBattle.petName()
+if petName == nil then
+	petName = MyPetBattle.petName()
+end
 
 -----------
 -- BEARS --
@@ -73,21 +75,21 @@ elseif petName == "Direhorn Runt" or petName == "Pygmy Direhorn" or petName == "
 elseif petName == "Black Tabby Cat" or petName == "Bombay Cat" or petName == "Calico Cat" or petName == "Cat" or petName == "Cheetah Cub" or petName == "Cornish Rex Cat" or petName == "Darkmoon Cub" or petName == "Nightsaber Cub" or petName == "Orange Tabby Cat" or petName == "Panther Cub" or petName == "Sand Kitten" or petName == "Siamese Cat" or petName == "Silver Tabby Cat" or petName == "Snow Cub" or petName == "White Kitten" or petName == "Winterspring Cub" then
 	beast_abilities = 
 		{
+			{"Devour", 			MyPetBattle.hp("active",2) < 0.20 },	-- Slot 3,  if we kill the enemy with Devour, we restore health
 			{"Claw", 			},	-- Slot 1
 			{"Pounce", 			},	-- Slot 1
 			{"Rake", 			},	-- Slot 2
 			{"Screech", 		},	-- Slot 2
-			{"Devour", 			},	-- Slot 3
 			{"Prowl", 			},	-- Slot 3
 		}
 elseif petName == "Feline Familiar" then
 	beast_abilities = 
 		{
+			{"Devour", 			MyPetBattle.hp("active",2) < 0.20 },	-- Slot 3,  if we kill the enemy with Devour, we restore health
 			{"Onyx Bite", 		},	-- Slot 1
 			{"Pounce", 			},	-- Slot 1
 			{"Stoneskin", 		},	-- Slot 2
 			{"Call Darkness", 	},	-- Slot 2
-			{"Devour", 			},	-- Slot 3
 			{"Prowl", 			},	-- Slot 3
 		}
 -------------
@@ -106,8 +108,8 @@ elseif petName == "Devouring Maggot" or petName == "Festering Maggot" or petName
 elseif petName == "Silithid Hatchling" then
 	beast_abilities = 
 		{
+			{"Devour", 			MyPetBattle.hp("active",2) < 0.20 },	-- Slot 1,  if we kill the enemy with Devour, we restore health
 			{"Scratch", 		},	-- Slot 1
-			{"Devour", 			},	-- Slot 1
 			{"Hiss", 			},	-- Slot 2
 			{"Survival", 		},	-- Slot 2
 			{"Swarm", 			},	-- Slot 3
@@ -165,21 +167,21 @@ elseif petName == "Baby Ape" or petName == "Bananas" or petName == "Darkmoon Mon
 elseif petName == "Darting Hatchling" or petName == "Deviate Hatchling" or petName == "Gundrak Hatchling" or petName == "Lashtail Hatchling" or petName == "Leaping Hatchling" or petName == "Obsidian Hatchling" or petName == "Ravasaur Hatchling" or petName == "Razormaw Hatchling" or petName == "Razzashi Hatchling" then
 	beast_abilities = 
 		{
+			{"Devour", 			MyPetBattle.hp("active",2) < 0.20 },	-- Slot 3,  if we kill the enemy with Devour, we restore health
 			{"Leap", 			MyPetBattle.currentPetSpeed(1) < MyPetBattle.currentPetSpeed(2) and not MyPetBattle.buff("Speed Boost") },	-- Slot 2
 			{"Bite", 			},	-- Slot 1
 			{"Flank", 			},	-- Slot 1
 			{"Screech", 		},	-- Slot 2
-			{"Devour", 			},	-- Slot 3
 			{"Exposed Wounds", 	},	-- Slot 3
 		}
 elseif petName == "Zandalari Anklerender" then
 	beast_abilities = 
 		{
+			{"Devour", 			MyPetBattle.hp("active",2) < 0.20 },	-- Slot 3,  if we kill the enemy with Devour, we restore health
 			{"Leap", 			MyPetBattle.currentPetSpeed(1) < MyPetBattle.currentPetSpeed(2) and not MyPetBattle.buff("Speed Boost") },	-- Slot 2
 			{"Bite", 			},	-- Slot 1
 			{"Hunting Party", 	},	-- Slot 1
 			{"Primal Cry", 		},	-- Slot 2
-			{"Devour", 			},	-- Slot 3
 			{"Black Claw", 		},	-- Slot 3
 		}
 elseif petName == "Zandalari Footslasher" then
@@ -383,11 +385,11 @@ elseif petName == "Mountain Panda" then
 elseif petName == "Ravager Hatchling" then
 	beast_abilities = 
 		{
+			{"Devour", 			MyPetBattle.hp("active",2) < 0.20 },	-- Slot 3,  if we kill the enemy with Devour, we restore health
 			{"Bite", 			},	-- Slot 1
 			{"Rend", 			},	-- Slot 1
 			{"Screech", 		},	-- Slot 2
 			{"Sting", 			},	-- Slot 2
-			{"Devour", 			},	-- Slot 3
 			{"Rampage",			},	-- Slot 3
 		}
 elseif petName == "Red Panda" then
@@ -432,7 +434,8 @@ elseif petName == "Wind Rider Cub" then
 		}
 -------------------
 else -- Unknown beast pet
-	print("Unknown beast pet")
+	print("|cFFFF0000 Unknown beast pet: "..petName)
+	return "UNKNOWN"
 end
 
 	spell = MyPetBattle.parseSpellTable(beast_abilities)

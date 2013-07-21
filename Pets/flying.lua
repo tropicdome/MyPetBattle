@@ -1,12 +1,14 @@
 ------------
 -- FLYING --
 ------------
-function flying()
+function flying(petName)
 
 local flying_abilities = nil
 
 -- Get pet name
-petName = MyPetBattle.petName()
+if petName == nil then
+	petName = MyPetBattle.petName()
+end
 
 ------------------------
 -- BALLOONS AND KITES --
@@ -93,12 +95,12 @@ elseif petName == "Darkmoon Glowfly" then
 elseif petName == "Effervescent Glowfly" or petName == "Firefly" or petName == "Mei Li Sparkler" or petName == "Shrine Fly" then
 	flying_abilities = 
 		{
-			{"Scratch", 		},	-- Slot 1
-			{"Slicing Wind", 	},	-- Slot 1
 			{"Confusing Sting", not MyPetBattle.debuff("Confusing Sting") },  -- Slot 2
-			{"Cocoon Strike", 	},	-- Slot 2
 			{"Swarm",			not MyPetBattle.debuff("Shattered Defenses")},  -- Slot 3
 			{"Glowing Toxin",	not MyPetBattle.debuff("Glowing Toxin")},  -- Slot 3
+			{"Scratch", 		},	-- Slot 1
+			{"Slicing Wind", 	},	-- Slot 1
+			{"Cocoon Strike", 	},	-- Slot 2
 		}
 elseif petName == "Tiny Flamefly" then
 	flying_abilities = 
@@ -242,9 +244,9 @@ elseif petName == "Fledgling Nether Ray" or petName == "Nether Ray Fry" then
 elseif petName == "Crested Owl" or petName == "Great Horned Owl" or petName == "Hawk Owl" or petName == "Snowy Owl" then
 	flying_abilities = 
 		{
+			{"Shriek", 			not MyPetBattle.debuff("Attack Reduction") },	-- Slot 2
 			{"Peck", 			},	-- Slot 1
 			{"Quills", 			},	-- Slot 1
-			{"Shriek", 			},	-- Slot 2
 			{"Cyclone", 		},	-- Slot 2
 			{"Nocturnal Strike",},	-- Slot 3
 			{"Predatory Strike",},	-- Slot 3
@@ -265,9 +267,9 @@ elseif petName == "Cockatiel" or petName == "Green Wing Macaw" or petName == "Hy
 elseif petName == "Miniwing" then
 	flying_abilities = 
 		{
+			{"Shriek", 			not MyPetBattle.debuff("Attack Reduction") },	-- Slot 2
 			{"Peck", 			},	-- Slot 1
 			{"Quills", 			},	-- Slot 1
-			{"Shriek", 			},	-- Slot 2
 			{"Cyclone", 		},	-- Slot 2
 			{"Nocturnal Strike",},	-- Slot 3
 			{"Predatory Strike",},	-- Slot 3
@@ -275,6 +277,26 @@ elseif petName == "Miniwing" then
 -------------------
 -- MISCELLANEOUS --
 -------------------
+elseif petName == "Jade Crane Chick" then
+	flying_abilities = 
+		{
+			{"Slicing Wind", 	},	-- Slot 1
+			{"Thrash", 			},	-- Slot 1
+			{"Hawk Eye",		},	-- Slot 2
+			{"Jadeskin", 		},	-- Slot 2
+			{"Cyclone",			},	-- Slot 3
+			{"Cyclone",			},	-- Slot 3
+		}
+elseif petName == "Pterrordax Hatchling" then
+	flying_abilities = 
+		{
+			{"Ancient Blessing", not MyPetBattle.buff("Ancient Blessing") or MyPetBattle.hp() < 0.75 },	-- Slot 2
+			{"Slicing Wind", 	},	-- Slot 1
+			{"Flyby", 			},	-- Slot 1
+			{"Apocalypse", 		},	-- Slot 2
+			{"Lift-Off",		},	-- Slot 3
+			{"Feign Death",		},	-- Slot 3
+		}
 elseif petName == "Tiny Sporebat" then
 	flying_abilities = 
 		{
@@ -287,7 +309,8 @@ elseif petName == "Tiny Sporebat" then
 		}
 -------------------
 else -- Unknown flying pet
-	print("|cFFFF0000 Unknown flying pet")
+	print("|cFFFF0000 Unknown flying pet: "..petName)
+	return "UNKNOWN"
 end
 
 	spell = MyPetBattle.parseSpellTable(flying_abilities)

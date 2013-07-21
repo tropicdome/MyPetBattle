@@ -1,12 +1,14 @@
 ---------------
 -- ELEMENTAL --
 ---------------
-function elemental()
+function elemental(petName)
 
 local elemental_abilities = nil
 
 -- Get pet name
-petName = MyPetBattle.petName()
+if petName == nil then
+	petName = MyPetBattle.petName()
+end
 
 ----------------
 -- ELEMENTALS --
@@ -147,9 +149,9 @@ elseif petName == "Tainted Waveling" then
 elseif petName == "Ashstone Core" then
 	elemental_abilities = 
 		{
+			{"Crystal Overload", not MyPetBattle.buff("Crystal Overload") and MyPetBattle.hp() > 0.50 },	-- Slot 2
 			{"Feedback", 		},	-- Slot 1
 			{"Burn", 			},	-- Slot 1
-			{"Crystal Overload",},	-- Slot 2
 			{"Stoneskin", 		},	-- Slot 2
 			{"Crystal Prison", 	},	-- Slot 3
 			{"Instability", 	},	-- Slot 3
@@ -157,9 +159,9 @@ elseif petName == "Ashstone Core" then
 elseif petName == "Crimson Geode" or petName == "Elementium Geode" then
 	elemental_abilities = 
 		{
+			{"Crystal Overload", not MyPetBattle.buff("Crystal Overload") and MyPetBattle.hp() > 0.50 },	-- Slot 2
 			{"Feedback", 		},	-- Slot 1
 			{"Spark", 			},	-- Slot 1
-			{"Crystal Overload",},	-- Slot 2
 			{"Amplify Magic", 	},	-- Slot 2
 			{"Stone Rush", 		},	-- Slot 3
 			{"Elementium Bolt", },	-- Slot 3
@@ -339,11 +341,11 @@ elseif petName == "Cinder Kitten" then
 elseif petName == "Electrified Razortooth" then
 	elemental_abilities = 
 		{
+			{"Devour", 			MyPetBattle.hp("active",2) < 0.20 },	-- Slot 3,  if we kill the enemy with Devour, we restore health
 			{"Rip", 			},	-- Slot 1
 			{"Jolt", 			},	-- Slot 1
 			{"Paralyzing Shock",},	-- Slot 2
 			{"Lightning Shield",},	-- Slot 2
-			{"Devour", 			},	-- Slot 3
 			{"Blood in the Water",},	-- Slot 3
 		}
 elseif petName == "Jade Tentacle" then
@@ -398,7 +400,8 @@ elseif petName == "Tiny Snowman" then
 		}
 -------------------
 else -- Unknown elemental pet
-	print("|cFFFF0000 Unknown elemental pet")
+	print("|cFFFF0000 Unknown elemental pet: "..petName)
+	return "UNKNOWN"
 end
 
 	spell = MyPetBattle.parseSpellTable(elemental_abilities)
