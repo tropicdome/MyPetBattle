@@ -49,11 +49,11 @@ elseif petName == "Alpine Foxling" or petName == "Alpine Foxling Kit" or petName
 elseif petName == "Tito" then
 	beast_abilities = 
 		{
+			{"Cyclone",			not MyPetBattle.debuff("Cyclone") },	-- Slot 3
 			{"Bite", 			},	-- Slot 1
 			{"Triple Snap", 	},	-- Slot 1
 			{"Impale",			},	-- Slot 2
 			{"Howl", 			},	-- Slot 2
-			{"Cyclone", 		},	-- Slot 3
 			{"Buried Treasure", },	-- Slot 3
 		}
 ---------------
@@ -99,9 +99,9 @@ elseif petName == "Devouring Maggot" or petName == "Festering Maggot" or petName
 	beast_abilities = 
 		{
 			{"Leap", 			not MyPetBattle.buff("Speed Boost") and (MyPetBattle.currentPetSpeed(LE_BATTLE_PET_ALLY) < MyPetBattle.currentPetSpeed(LE_BATTLE_PET_ENEMY)) },	-- Slot 3
+			{"Acidic Goo", 		not MyPetBattle.debuff("Acidic Goo") },	-- Slot 2
 			{"Chomp", 			},	-- Slot 1
 			{"Consume", 		},	-- Slot 1
-			{"Acidic Goo", 		},	-- Slot 2
 			{"Sticky Goo", 		},	-- Slot 2
 			{"Burrow", 			},	-- Slot 3
 		}
@@ -342,21 +342,21 @@ elseif petName == "Clefthoof Runt" then
 elseif petName == "Giraffe Calf" then
 	beast_abilities = 
 		{
+			{"Headbutt", 		},	-- Slot 3
 			{"Hoof", 			},	-- Slot 1
 			{"Stampede", 		},	-- Slot 1
 			{"Tranquility", 	},	-- Slot 2
 			{"Survival", 		},	-- Slot 2
-			{"Headbutt", 		},	-- Slot 3
 			{"Bleat",			},	-- Slot 3
 		}
 elseif petName == "Little Black Ram" or petName == "Summit Kid" then 
 	beast_abilities = 
 		{
+			{"Headbutt", 		},	-- Slot 3
 			{"Hoof", 			},	-- Slot 1
 			{"Chew", 			},	-- Slot 1
 			{"Comeback", 		},	-- Slot 2
 			{"Soothe", 			},	-- Slot 2
-			{"Headbutt", 		},	-- Slot 3
 			{"Stampede",		},	-- Slot 3
 		}
 elseif petName == "Stunted Shardhorn" then
@@ -425,12 +425,12 @@ elseif petName == "Sunfur Panda" then
 elseif petName == "Wind Rider Cub" then
 	beast_abilities = 
 		{
+			{"Lift-Off",		},	-- Slot 3
 			{"Bite", 			},	-- Slot 1
 			{"Squawk", 			},	-- Slot 1
 			{"Slicing Wind", 	},	-- Slot 2
 			{"Adrenaline Rush", },	-- Slot 2
 			{"Flock", 			},	-- Slot 3
-			{"Lift-Off",		},	-- Slot 3
 		}
 -------------------
 else -- Unknown beast pet

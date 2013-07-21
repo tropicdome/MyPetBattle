@@ -26,10 +26,10 @@ if petName == "Dragon Kite" then
 elseif petName == "Tuskarr Kite" then
 	flying_abilities = 
 		{
+			{"Cyclone",			not MyPetBattle.debuff("Cyclone") },	-- Slot 2
 			{"Slicing Wind", 	},	-- Slot 1
 			{"Frost Shock", 	},	-- Slot 1
 			{"Wild Winds", 		},	-- Slot 2
-			{"Cyclone", 		},	-- Slot 2
 			{"Flyby", 			},	-- Slot 3
 			{"Reckless Strike", },	-- Slot 3
 		}
@@ -39,10 +39,10 @@ elseif petName == "Tuskarr Kite" then
 elseif petName == "Bat" or petName == "Tirisfal Batling" then
 	flying_abilities = 
 		{
+			{"Hawk Eye",		not MyPetBattle.buff("Hawk Eye") },	-- Slot 2
 			{"Bite", 			},	-- Slot 1
 			{"Leech Life", 		},	-- Slot 1
 			{"Screech", 		},	-- Slot 2
-			{"Hawk Eye", 		},	-- Slot 2
 			{"Reckless Strike", },	-- Slot 3
 			{"Nocturnal Strike",},	-- Slot 3
 		}
@@ -52,19 +52,19 @@ elseif petName == "Bat" or petName == "Tirisfal Batling" then
 elseif petName == "Blue Mini Jouster" or petName == "Dragonbone Hatchling" or petName == "Fledgling Buzzard" or petName == "Gold Mini Jouster" or petName == "Imperial Eagle Chick" or petName == "Tickbird Hatchling" or petName == "White Tickbird Hatchling" then
 	flying_abilities = 
 		{
+			{"Cyclone",			not MyPetBattle.debuff("Cyclone") },	-- Slot 3
+			{"Hawk Eye",		not MyPetBattle.buff("Hawk Eye") },	-- Slot 2
 			{"Lift-Off", 		},	-- Slot 3
 			{"Slicing Wind", 	},	-- Slot 1
 			{"Thrash", 			},	-- Slot 1
-			{"Hawk Eye", 		},	-- Slot 2
 			{"Adrenaline Rush", },	-- Slot 2
-			{"Cyclone", 		},	-- Slot 3
 		}
 elseif petName == "Brilliant Kaliri" then
 	flying_abilities = 
 		{
 			{"Predatory Strike", MyPetBattle.hp("active", LE_BATTLE_PET_ENEMY) < 0.25 },	-- Slot 3
+			{"Cyclone",			not MyPetBattle.debuff("Cyclone") },	-- Slot 2
 			{"Shriek", 			not MyPetBattle.debuff("Attack Reduction") },	-- Slot 2
-			{"Cyclone", 		},	-- Slot 2
 			{"Nocturnal Strike",},	-- Slot 3
 			{"Peck", 			},	-- Slot 1
 			{"Quills", 			},	-- Slot 1
@@ -72,10 +72,10 @@ elseif petName == "Brilliant Kaliri" then
 elseif petName == "Ji-Kun Hatchling" then
 	flying_abilities = 
 		{
+			{"Acidic Goo", 		not MyPetBattle.debuff("Acidic Goo") },	-- Slot 2
 			{"Slicing Wind", 	not MyPetBattle.debuff("Wild Winds") },	-- Slot 1
 			{"Peck", 			},	-- Slot 1
 			{"Wild Winds", 		},	-- Slot 2
-			{"Acidic Goo", 		},	-- Slot 2
 			{"Flock", 			},	-- Slot 3
 			{"Caw", 			},	-- Slot 3
 		}
@@ -85,12 +85,12 @@ elseif petName == "Ji-Kun Hatchling" then
 elseif petName == "Darkmoon Glowfly" then
 	flying_abilities = 
 		{
+			{"Dazzling Dance", 	MyPetBattle.currentPetSpeed(1) < MyPetBattle.currentPetSpeed(2) and not MyPetBattle.buff("Dazzling Dance") },	-- Slot 3
 			{"Scratch", 		},	-- Slot 1
 			{"Slicing Wind", 	},	-- Slot 1
 			{"Glowing Toxin", 	},	-- Slot 2
 			{"Sting", 			},	-- Slot 2
 			{"Confusing Sting", },	-- Slot 3
-			{"Dazzling Dance", 	MyPetBattle.currentPetSpeed(1) < MyPetBattle.currentPetSpeed(2) and not MyPetBattle.buff("Dazzling Dance") },	-- Slot 3
 		}
 elseif petName == "Effervescent Glowfly" or petName == "Firefly" or petName == "Mei Li Sparkler" or petName == "Shrine Fly" then
 	flying_abilities = 
@@ -161,12 +161,12 @@ elseif petName == "Gilnean Raven" then
 elseif petName == "Rustberg Gull" or petName == "Sandy Petrel" or petName == "Sea Gull" then
 	flying_abilities = 
 		{
+			{"Cyclone",			not MyPetBattle.debuff("Cyclone") },  -- Slot 3
+			{"Hawk Eye",		not MyPetBattle.buff("Hawk Eye") },  -- Slot 2
+			{"Adrenaline Rush",	not MyPetBattle.buff("Adrenaline") },  -- Slot 2
 			{"Lift-Off", 		},	-- Slot 3
 			{"Slicing Wind", 	},	-- Slot 1
 			{"Thrash", 			},	-- Slot 1
-			{"Hawk Eye",		not MyPetBattle.buff("Hawk Eye") },  -- Slot 2
-			{"Adrenaline Rush",	not MyPetBattle.buff("Adrenaline") },  -- Slot 2
-			{"Cyclone",			not MyPetBattle.debuff("Cyclone") },  -- Slot 3
 		}
 -----------
 -- MOTHS --
@@ -184,12 +184,12 @@ elseif petName == "Amber Moth" or petName == "Blue Moth" or petName == "Crimson 
 elseif petName == "Imperial Moth" then
 	flying_abilities = 
 		{
+			{"Cyclone",			not MyPetBattle.debuff("Cyclone") },	-- Slot 3
 			{"Slicing Wind", 	},	-- Slot 1
 			{"Wild Winds", 		},	-- Slot 1
 			{"Cocoon Strike", 	},	-- Slot 2
 			{"Moth Balls", 		},	-- Slot 2
 			{"Moth Dust", 		},	-- Slot 3
-			{"Cyclone", 		},	-- Slot 3
 		}
 
 --------------
@@ -218,12 +218,12 @@ elseif petName == "Gryphon Hatchling" or petName == "Wildhammer Gryphon Hatchlin
 elseif petName == "Guardian Cub" then
 	flying_abilities = 
 		{
+			{"Cyclone",			not MyPetBattle.debuff("Cyclone") },	-- Slot 3
 			{"Slicing Wind", 	},	-- Slot 1
 			{"Onyx Bite",		},	-- Slot 1
 			{"Roar", 			},	-- Slot 2
 			{"Wild Winds", 		},	-- Slot 2
 			{"Reckless Strike", },	-- Slot 3
-			{"Cyclone", 		},	-- Slot 3
 		}
 -----------------
 -- NETHER RAYS --
@@ -257,20 +257,20 @@ elseif petName == "Crested Owl" or petName == "Great Horned Owl" or petName == "
 elseif petName == "Cockatiel" or petName == "Green Wing Macaw" or petName == "Hyacinth Macaw" or petName == "Parrot" or petName == "Polly" or petName == "Senegal" then
 	flying_abilities = 
 		{
+			{"Cyclone",			not MyPetBattle.debuff("Cyclone") },	-- Slot 3
 			{"Lift-Off", 		},	-- Slot 3
 			{"Slicing Wind", 	},	-- Slot 1
 			{"Thrash", 			},	-- Slot 1
 			{"Hawk Eye", 		},	-- Slot 2
 			{"Adrenaline Rush", },	-- Slot 2
-			{"Cyclone", 		},	-- Slot 3
 		}
 elseif petName == "Miniwing" then
 	flying_abilities = 
 		{
+			{"Cyclone",			not MyPetBattle.debuff("Cyclone") },	-- Slot 2
 			{"Shriek", 			not MyPetBattle.debuff("Attack Reduction") },	-- Slot 2
 			{"Peck", 			},	-- Slot 1
 			{"Quills", 			},	-- Slot 1
-			{"Cyclone", 		},	-- Slot 2
 			{"Nocturnal Strike",},	-- Slot 3
 			{"Predatory Strike",},	-- Slot 3
 		}
@@ -280,21 +280,21 @@ elseif petName == "Miniwing" then
 elseif petName == "Jade Crane Chick" then
 	flying_abilities = 
 		{
+			{"Cyclone",			not MyPetBattle.debuff("Cyclone") },	-- Slot 3
+			{"Hawk Eye",		not MyPetBattle.buff("Hawk Eye") },	-- Slot 2
 			{"Slicing Wind", 	},	-- Slot 1
 			{"Thrash", 			},	-- Slot 1
-			{"Hawk Eye",		},	-- Slot 2
 			{"Jadeskin", 		},	-- Slot 2
-			{"Cyclone",			},	-- Slot 3
-			{"Cyclone",			},	-- Slot 3
+			{"Flock",			},	-- Slot 3
 		}
 elseif petName == "Pterrordax Hatchling" then
 	flying_abilities = 
 		{
 			{"Ancient Blessing", not MyPetBattle.buff("Ancient Blessing") or MyPetBattle.hp() < 0.75 },	-- Slot 2
+			{"Lift-Off",		},	-- Slot 3
 			{"Slicing Wind", 	},	-- Slot 1
 			{"Flyby", 			},	-- Slot 1
 			{"Apocalypse", 		},	-- Slot 2
-			{"Lift-Off",		},	-- Slot 3
 			{"Feign Death",		},	-- Slot 3
 		}
 elseif petName == "Tiny Sporebat" then

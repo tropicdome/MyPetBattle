@@ -111,7 +111,7 @@ end
 
 -- Show tooltip on mouseover
 function MPB_MMButton_OnEnter(self)
-	MPB_BUTTON_TOOLTIP = "Click to hide/show |cffff8000MPB|r window\nClick and hold to move this icon" 
+	MPB_BUTTON_TOOLTIP = "Click to hide/show |cffff8000MPB|r window\n\nClick and hold to move this icon" 
 	GameTooltip:SetOwner(self, "ANCHOR_LEFT")
     GameTooltip:SetText(MPB_BUTTON_TOOLTIP)
     GameTooltipTextLeft1:SetTextColor(1, 1, 1)

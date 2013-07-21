@@ -16,9 +16,9 @@ end
 if petName == "Armadillo Pup" or petName == "Stone Armadillo" then
 	critter_abilities = 
 		{
+			{"Shell Shield", 	not MyPetBattle.buff("Shell Shield") },	-- Slot 2
 			{"Scratch", 		},	-- Slot 1
 			{"Thrash", 			},	-- Slot 1
-			{"Shell Shield", 	},	-- Slot 2
 			{"Roar", 			},	-- Slot 2
 			{"Infected Claw", 	},	-- Slot 3
 			{"Powerball", 		},	-- Slot 3
@@ -29,10 +29,10 @@ if petName == "Armadillo Pup" or petName == "Stone Armadillo" then
 elseif petName == "Darkmoon Hatchling" then
 	critter_abilities = 
 		{
+			{"Hawk Eye",		not MyPetBattle.buff("Hawk Eye") },	-- Slot 2
 			{"Peck", 			},	-- Slot 1
 			{"Trample", 		},	-- Slot 1
 			{"Screech", 		},	-- Slot 2
-			{"Hawk Eye", 		},	-- Slot 2
 			{"Flock", 			},	-- Slot 3
 			{"Predatory Strike",},	-- Slot 3
 		}
@@ -40,9 +40,9 @@ elseif petName == "Egbert" or petName == "Mulgore Hatchling" then
 	critter_abilities = 
 		{
 			{"Adrenaline Rush", MyPetBattle.currentPetSpeed(1) < MyPetBattle.currentPetSpeed(2) and not MyPetBattle.buff("Adrenaline") },	-- Slot 2
+			{"Shell Shield", 	not MyPetBattle.buff("Shell Shield") },	-- Slot 2
 			{"Bite", 			},	-- Slot 1
 			{"Peck", 			},	-- Slot 1
-			{"Shell Shield", 	},	-- Slot 2
 			{"Trample", 		},	-- Slot 3
 			{"Feign Death", 	},	-- Slot 3
 		}
@@ -54,10 +54,10 @@ elseif petName == "Fawn" or petName == "Gazelle Fawn" or petName == "Little Fawn
 		{
 			{"Tranquility", 	MyPetBattle.hp() < 0.7 and not MyPetBattle.buff("Tranquility") },	-- Slot 2
 			{"Bleat", 			MyPetBattle.hp() < 0.7 },	-- Slot 3
+			{"Headbutt", 		},	-- Slot 3
 			{"Hoof", 			},	-- Slot 1
 			{"Stampede", 		},	-- Slot 1
 			{"Nature's Ward", 	},	-- Slot 2
-			{"Headbutt", 		},	-- Slot 3
 		}
 ------------
 -- ELEKKS --
@@ -65,11 +65,11 @@ elseif petName == "Fawn" or petName == "Gazelle Fawn" or petName == "Little Fawn
 elseif petName == "Peanut" or petName == "Pint-Sized Pink Pachyderm" then
 	critter_abilities = 
 		{
+			{"Headbutt", 		},	-- Slot 3
 			{"Smash", 			},	-- Slot 1
 			{"Trample", 		},	-- Slot 1
 			{"Trumpet Strike", 	},	-- Slot 2
 			{"Survival", 		},	-- Slot 2
-			{"Headbutt", 		},	-- Slot 3
 			{"Stampede", 		},	-- Slot 3
 		}
 -------------
@@ -144,12 +144,12 @@ elseif petName == "Borean Marmot" or petName == "Brown Marmot" or petName == "Br
 elseif petName == "Golden Pig" or petName == "Lucky" or petName == "Mr. Wiggles" or petName == "Silver Pig" then 
 	critter_abilities = 
 		{
+			{"Headbutt", 		},	-- Slot 3
 			{"Hoof", 			},	-- Slot 1
 			{"Diseased Bite", 	},	-- Slot 1
 			{"Crouch", 			},	-- Slot 2
 			{"Buried Treasure", },	-- Slot 2
 			{"Uncanny Luck", 	},	-- Slot 3
-			{"Headbutt", 		},	-- Slot 3
 		}
 -------------
 -- RABBITS --
@@ -177,11 +177,11 @@ elseif petName == "Darkmoon Rabbit" then
 elseif petName == "Wolpertinger" then
 	critter_abilities = 
 		{
+			{"Headbutt", 		},	-- Slot 3
 			{"Scratch", 		},	-- Slot 1
 			{"Horn Attack", 	},	-- Slot 1
 			{"Flyby", 			},	-- Slot 2
 			{"Sleeping Gas", 	},	-- Slot 2
-			{"Headbutt", 		},	-- Slot 3
 			{"Rampage",			},	-- Slot 3
 		}
 -------------------
@@ -223,11 +223,11 @@ elseif petName == "Malayan Quillrat" or petName == "Malayan Quillrat Pup" or pet
 elseif petName == "Black Lamb" or petName == "Elwynn Lamb" then
 	critter_abilities = 
 		{
+			{"Headbutt", 		},	-- Slot 3
 			{"Hoof", 			},	-- Slot 1
 			{"Chew", 			},	-- Slot 1
 			{"Comeback", 		},	-- Slot 2
 			{"Sooth", 			},	-- Slot 2
-			{"Headbutt", 		},	-- Slot 3
 			{"Rampage",			},	-- Slot 3
 		}
 ----------------------
@@ -259,12 +259,12 @@ elseif petName == "Highlands Skunk" or petName == "Mountain Skunk" or petName ==
 elseif petName == "Rapana Whelk" or petName == "Rusty Snail" or petName == "Scooter the Snail" or petName == "Shimmershell Snail" or petName == "Silkbead Snail" then
 	critter_abilities = 
 		{
+			{"Acidic Goo", 		not MyPetBattle.debuff("Acidic Goo") },	-- Slot 2
+			{"Shell Shield", 	not MyPetBattle.buff("Shell Shield") },	-- Slot 2
+			{"Headbutt",		},	-- Slot 3
+			{"Dive", 			},	-- Slot 3
 			{"Ooze Touch", 		},	-- Slot 1
 			{"Absorb", 			},	-- Slot 1
-			{"Acidic Goo", 		},	-- Slot 2
-			{"Shell Shield", 	},	-- Slot 2
-			{"Dive", 			},	-- Slot 3
-			{"Headbutt",		},	-- Slot 3
 		}
 ---------------
 -- SQUIRRELS --

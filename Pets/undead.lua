@@ -26,12 +26,12 @@ if petName == "Blighted Squirrel" then
 elseif petName == "Blighthawk" then
 	undead_abilities = 
 		{
+			{"Cyclone",			not MyPetBattle.debuff("Cyclone") },	-- Slot 3
+			{"Lift-Off", 		},	-- Slot 3
 			{"Infected Claw", 	},	-- Slot 1
 			{"Slicing Wind", 	},	-- Slot 1
 			{"Consume Corpse", 	},	-- Slot 2
 			{"Ghostly Bite", 	},	-- Slot 2
-			{"Lift-Off", 		},	-- Slot 3
-			{"Cyclone", 		},	-- Slot 3
 		}
 elseif petName == "Giant Bone Spider" then
 	undead_abilities = 
@@ -172,11 +172,11 @@ elseif petName == "Restless Shadeling" then
 elseif petName == "Spirit Crab" then
 	undead_abilities = 
 		{
+			{"Shell Shield", 	not MyPetBattle.buff("Shell Shield") },	-- Slot 3
 			{"Snap", 			},	-- Slot 1
 			{"Amplify Magic", 	},	-- Slot 1
 			{"Surge", 			},	-- Slot 2
 			{"Whirlpool", 		},	-- Slot 2
-			{"Shell Shield", 	},	-- Slot 3
 			{"Dark Simulacrum", },	-- Slot 3
 		}
 -----------------------
@@ -238,10 +238,10 @@ elseif petName == "Fungal Abomination" then
 elseif petName == "Vampiric Batling" then
 	undead_abilities = 
 		{
+			{"Hawk Eye",		not MyPetBattle.buff("Hawk Eye") },	-- Slot 2
 			{"Bite", 			},	-- Slot 1
 			{"Screech", 		},	-- Slot 1
 			{"Leech Life", 		},	-- Slot 2
-			{"Hawk Eye", 		},	-- Slot 2
 			{"Reckless Strike", },	-- Slot 3
 			{"Nocturnal Strike", },	-- Slot 3
 		}

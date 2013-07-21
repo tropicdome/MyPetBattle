@@ -61,6 +61,8 @@ MPB_CAPTURE_COMMON_UNCOMMON = false
 mypetbattle_auto_forfeit = false
 mypetbattle_wintrade_enabled = false
 
+MPB_STATS_TABLE = {}
+
 -- Variable used to make sure we only call the heal function 1 time after combat.
 -- It will be set to "false" on events:PET_BATTLE_OPENING_DONE
 -- and set back to "true" on events:UPDATE_SUMMONPETS_ACTION
@@ -161,6 +163,19 @@ function events:PET_BATTLE_AURA_CHANGED(...)				-- Aura changed e.g. Adrenaline 
 end
 function events:PET_BATTLE_CAPTURED(...)					-- 
 --	print("PET_BATTLE_CAPTURED")
+--	print(...)
+	local petOwner, petIndex = ...
+	if (petOwner == LE_BATTLE_PET_ENEMY) then
+		local name, speciesName = C_PetBattles.GetName(petOwner, petIndex)
+--		local speciesId, petGUID = C_PetJournal.FindPetIDByName(speciesName)
+--		local link = C_PetJournal.GetBattlePetLink(petGUID)
+
+--		local petName = C_PetBattles.GetName(petOwner, petIndex);
+--		local petIcon = C_PetBattles.GetIcon(petOwner, petIndex);
+--		local quality = C_PetBattles.GetBreedQuality(petOwner, petIndex);
+		-- ADD STATS TO STATS TABLE
+		MyPetBattle.addStats(speciesName,1)
+	end
 end
 function events:PET_BATTLE_CLOSE(...)						-- 
 --	print("PET_BATTLE_CLOSE")
@@ -175,6 +190,16 @@ end
 
 function events:PET_BATTLE_FINAL_ROUND(...)					-- 
 --	print("PET_BATTLE_FINAL_ROUND")
+--	print(...)
+	if ... == LE_BATTLE_PET_ALLY then
+		print("We won!")
+		-- ADD STATS TO STATS TABLE
+		MyPetBattle.addStats("Wins",1)
+	else
+		print("We lost!")
+		-- ADD STATS TO STATS TABLE
+		MyPetBattle.addStats("Losses",1)
+	end
 end
 
 function events:PET_BATTLE_HEALTH_CHANGED(...)				-- 
@@ -241,7 +266,7 @@ function events:PET_BATTLE_LEVEL_CHANGED(...)				--
 	local pet_level = C_PetBattles.GetLevel(petOwner, petIndex)
 	print("|cFF0066FF\124T"..pet_icon..":16\124t [" .. pet_name .. "]\124r is now level: " .. pet_level .."!") 
 
-	--	print("|cffffff00 Your pet is now level: " .. C_PetBattles.GetLevel(LE_BATTLE_PET_ALLY,1) .. "!")	
+	--	print("|cffffff00 Your pet is now level: " .. C_PetBattles.GetLevel(LE_BATTLE_PET_ALLY,1) .. "!")
 end
 
 function events:PET_BATTLE_LOOT_RECEIVED(...)				-- 
@@ -249,13 +274,51 @@ function events:PET_BATTLE_LOOT_RECEIVED(...)				--
 
 	local typeIdentifier, itemLink, quantity = ...;
 	print("\124cFF00FF00Item won:\124r " .. quantity .. " x " .. itemLink)
-
+	
 	--if ( typeIdentifier == "item" ) then
 	--	LootWonAlertFrame_ShowAlert(itemLink, quantity);
 	--elseif ( typeIdentifier == "money" ) then
 	--	MoneyWonAlertFrame_ShowAlert(quantity);
 	--end
 
+--	local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount,
+--		itemEquipLoc, itemTexture, itemSellPrice = GetItemInfo(itemLink) 
+--	local name, currentAmount, texture, earnedThisWeek, weeklyMax, totalMax, isDiscovered = GetCurrencyInfo(id)
+
+
+	if ( typeIdentifier == "item" ) then
+		local itemName, itemLink, _, _, _, _, _, _, _, itemIcon, _ = GetItemInfo(itemLink);
+--		local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, itemSellPrice = GetItemInfo(itemLink);
+	elseif ( typeIdentifier == "currency" ) then
+		local itemName, _, itemIcon, _, _, _, _, _ = GetCurrencyInfo(itemLink);
+--		local currencyName, currencyQuantity, currencyIcon, earnedThisWeek, weeklyMax, maxQuantity, discovered, rarity = GetCurrencyInfo(itemLink);
+	end
+
+	-- ADD STATS TO STATS TABLE
+	MyPetBattle.addStats(itemLink,quantity)
+end
+
+function MyPetBattle.addStats(key,value)
+	-- Loot received
+		-- items
+		-- currency
+	-- Pets caught: common, uncommon, rare, type etc.
+	-- Pets fought
+	-- PvP win/loose, streak
+	-- XP from WT and other
+	if MPB_STATS_TABLE[key] ~= nil then 
+		MPB_STATS_TABLE[key] = MPB_STATS_TABLE[key] + value
+	else
+		MPB_STATS_TABLE[key] = value
+	end	
+end
+
+function MyPetBattle.printStats()
+	-- PRINT STATISTICS OF OUR BATTLES
+	print("|cffff8000MPB stats for current session:|r")
+	for key,value in pairs(MPB_STATS_TABLE) do 
+		print(value.."x",key) 
+	end
 end
 
 function events:PET_BATTLE_MAX_HEALTH_CHANGED(...)			-- 
@@ -640,7 +703,7 @@ function SlashCmdList.MYPETBATTLE(msg, editbox)
 	if msg == "" then
 		mypetbattle_enabled = not mypetbattle_enabled
 		if mypetbattle_enabled then status = "\124cFF00FF00Enabled" else status = "\124cFFFF0000Disabled" end
-	    print("My pet battle:", status)
+		print("My pet battle:", status)
 		CheckButton1:SetChecked(mypetbattle_enabled)
 	elseif msg == "join_pvp" then
 		mypetbattle_join_pvp = not mypetbattle_join_pvp
@@ -655,24 +718,24 @@ function SlashCmdList.MYPETBATTLE(msg, editbox)
 				C_PetBattles.StopPVPMatchmaking()
 			-- end
 		end
-	    print("My pet battle:", status)
+		print("My pet battle:", status)
 	elseif msg == "capture_rares" then
 		MPB_CAPTURE_RARES = not MPB_CAPTURE_RARES
 		if MPB_CAPTURE_RARES then status = "\124cFF00FF00Automatic capture rare pets enabled" else status = "\124cFFFF0000Automatic capture rare pets disabled" end
-	    print("My pet battle:", status)
+		print("My pet battle:", status)
 		CheckButton3:SetChecked(MPB_CAPTURE_RARES)
 	elseif msg == "capture_common_uncommon" then
 		MPB_CAPTURE_COMMON_UNCOMMON = not MPB_CAPTURE_COMMON_UNCOMMON
 		if MPB_CAPTURE_COMMON_UNCOMMON then status = "\124cFF00FF00Automatic capture common/uncommon (0/3 owned) pets enabled" else status = "\124cFFFF0000Automatic capture common/uncommon pets (0/3 owned) disabled" end
-	    print("My pet battle:", status)
+		print("My pet battle:", status)
 	elseif msg == "auto_forfeit" then
 		mypetbattle_auto_forfeit = not mypetbattle_auto_forfeit
 		if mypetbattle_auto_forfeit then status = "\124cFF00FF00Automatic forfeit after 60 sec enabled" else status = "\124cFFFF0000Automatic forfeit after 60 sec disabled" end
-	    print("My pet battle:", status)
+		print("My pet battle:", status)
 	elseif msg == "wintrade_enable" then
 		mypetbattle_wintrade_enabled = not mypetbattle_wintrade_enabled
 		if mypetbattle_wintrade_enabled then status = "\124cFF00FF00Automatic wintrade enabled" else status = "\124cFFFF0000Automatic wintrade disabled" end
-	    print("My pet battle:", status)
+		print("My pet battle:", status)
 	elseif msg == "debug" then
 		-- TURN OFF DEBUG MESSAGES AS REQUIRED
 		mypetbattle_debug =  not mypetbattle_debug
@@ -682,5 +745,20 @@ function SlashCmdList.MYPETBATTLE(msg, editbox)
 		-- SHOW/HIDE UI
 		MPB_SHOW_UI = not MPB_SHOW_UI
 		if MPB_SHOW_UI then MyPetBattleForm:Show() else MyPetBattleForm:Hide() end
+	elseif msg == "help" then
+		-- SHOW HELP
+		print("|==================================|")
+		print("MPB command list:")
+		print("  /MyPetBattle")
+		print("  /MyPetBattle join_pvp")
+		print("  /MyPetBattle capture_rares")
+		print("  /MyPetBattle capture_common_uncommon")
+		print("  /MyPetBattle wintrade_enable")
+		print("  /MyPetBattle debug")
+		print("  /MyPetBattle ui")
+		print("  /MyPetBattle help")
+	else
+		-- UNKNOWN COMMAND
+		print("My pet battle: Unknown command ("..msg..")")
     end
 end

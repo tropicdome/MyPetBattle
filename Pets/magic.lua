@@ -69,12 +69,12 @@ elseif petName == "Netherspace Abyssal" then
 elseif petName == "Jade Owl" then
 	magic_abilities = 
 		{
+			{"Cyclone",			not MyPetBattle.debuff("Cyclone") },	-- Slot 3
+			{"Hawk Eye",		not MyPetBattle.buff("Hawk Eye") },	-- Slot 2
+			{"Lift-Off", 		},	-- Slot 3
 			{"Slicing Wind", 	},	-- Slot 1
 			{"Thrash", 			},	-- Slot 1
 			{"Adrenaline Rush", },	-- Slot 2
-			{"Hawk Eye", 		},	-- Slot 2
-			{"Lift-Off", 		},	-- Slot 3
-			{"Cyclone", 		},	-- Slot 3
 		}
 elseif petName == "Jade Tiger" then
 	magic_abilities = 
@@ -135,12 +135,12 @@ elseif petName == "Magic Lamp" then
 elseif petName == "Jade Oozeling" or petName == "Oily Slimeling" or petName == "Toxic Wasteling" or petName == "Disgusting Oozeling" then
 	magic_abilities = 
 		{
+			{"Acidic Goo", 		not MyPetBattle.debuff("Acidic Goo") },	-- Slot 3
 			{"Ooze Touch", 		},	-- Slot 1
 			{"Absorb", 			},	-- Slot 1
 			{"Corrosion", 		},	-- Slot 2
 			{"Creeping Ooze", 	},	-- Slot 2
 			{"Expunge", 		},	-- Slot 3
-			{"Acidic Goo", 		},	-- Slot 3
 		}
 elseif petName == "Viscidus Globule" then
 	magic_abilities = 
@@ -165,10 +165,10 @@ elseif petName == "Filthling" then
 elseif petName == "Living Fluid" then
 	magic_abilities = 
 		{
+			{"Acidic Goo", 		not MyPetBattle.debuff("Acidic Goo") },	-- Slot 2
 			{"Ooze Touch", 		},	-- Slot 1
 			{"Absorb", 			},	-- Slot 1
 			{"Corrosion", 		},	-- Slot 2
-			{"Acidic Goo", 		},	-- Slot 2
 			{"Expunge", 		},	-- Slot 3
 			{"Evolution",		},	-- Slot 3
 		}
