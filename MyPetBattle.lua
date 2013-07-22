@@ -261,11 +261,12 @@ end
 function events:PET_BATTLE_LEVEL_CHANGED(...)				-- 
 --	print("PET_BATTLE_LEVEL_CHANGED")
 	local petOwner, petIndex = ...;
-	local pet_name, pet_speciesName = C_PetBattles.GetName(petOwner, petIndex)
-	local pet_icon = C_PetBattles.GetIcon(petOwner, petIndex)
-	local pet_level = C_PetBattles.GetLevel(petOwner, petIndex)
-	print("|cFF0066FF\124T"..pet_icon..":16\124t [" .. pet_name .. "]\124r is now level: " .. pet_level .."!") 
-
+	if petOwner == LE_BATTLE_PET_ALLY then
+		local pet_name, pet_speciesName = C_PetBattles.GetName(petOwner, petIndex)
+		local pet_icon = C_PetBattles.GetIcon(petOwner, petIndex)
+		local pet_level = C_PetBattles.GetLevel(petOwner, petIndex)
+		print("|cFF0066FF\124T"..pet_icon..":16\124t [" .. pet_name .. "]\124r is now level: " .. pet_level .."!") 
+	end
 	--	print("|cffffff00 Your pet is now level: " .. C_PetBattles.GetLevel(LE_BATTLE_PET_ALLY,1) .. "!")
 end
 
@@ -317,7 +318,7 @@ function MyPetBattle.printStats()
 	-- PRINT STATISTICS OF OUR BATTLES
 	print("|cffff8000MPB stats for current session:|r")
 	for key,value in pairs(MPB_STATS_TABLE) do 
-		print(value.."x",key) 
+		print(" "..value.."x",key) 
 	end
 end
 
