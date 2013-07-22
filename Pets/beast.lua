@@ -108,10 +108,10 @@ elseif petName == "Devouring Maggot" or petName == "Festering Maggot" or petName
 elseif petName == "Silithid Hatchling" then
 	beast_abilities = 
 		{
+			{"Survival", 		MyPetBattle.hp() < 0.3 },	-- Slot 2
 			{"Devour", 			MyPetBattle.hp("active",2) < 0.20 },	-- Slot 1,  if we kill the enemy with Devour, we restore health
 			{"Scratch", 		},	-- Slot 1
 			{"Hiss", 			},	-- Slot 2
-			{"Survival", 		},	-- Slot 2
 			{"Swarm", 			},	-- Slot 3
 			{"Sandstorm", 		},	-- Slot 3
 		}
@@ -220,41 +220,41 @@ elseif petName == "Zandalari Toenibbler" then
 elseif petName == "Bucktooth Flapper" then
 	beast_abilities = 
 		{
+			{"Survival", 		MyPetBattle.hp() < 0.3 },	-- Slot 2
 			{"Tail Slap", 		},	-- Slot 1
 			{"Gnaw", 			},	-- Slot 1
 			{"Screech", 		},	-- Slot 2
-			{"Survival", 		},	-- Slot 2
 			{"Woodchipper", 	},	-- Slot 3
 			{"Chew", 			},	-- Slot 3
 		}
 elseif petName == "Clouded Hedgehog" then
 	beast_abilities = 
 		{
+			{"Survival", 		MyPetBattle.hp() < 0.3 },	-- Slot 2
+			{"Counterstrike", 	MyPetBattle.currentPetSpeed(1) < MyPetBattle.currentPetSpeed(2) },	-- Slot 3
 			{"Bite", 			},	-- Slot 1
 			{"Poison Fang", 	},	-- Slot 1
-			{"Survival", 		},	-- Slot 2
 			{"Spiked Skin", 	},	-- Slot 2
-			{"Counterstrike", 	},	-- Slot 3
 			{"Powerball", 		},	-- Slot 3
 		}
 elseif petName == "Silent Hedgehog" then
 	beast_abilities = 
 		{
+			{"Survival", 		MyPetBattle.hp() < 0.3 },	-- Slot 3
 			{"Bite", 			},	-- Slot 1
 			{"Poison Fang", 	},	-- Slot 1
 			{"Spiked Skin", 	},	-- Slot 2
 			{"Counterstrike", 	},	-- Slot 2
-			{"Survival", 		},	-- Slot 3
 			{"Powerball", 		},	-- Slot 3
 		}
 elseif petName == "Sumprush Rodent" then
 	beast_abilities = 
 		{
+			{"Survival", 		MyPetBattle.hp() < 0.3 },	-- Slot 3
 			{"Gnaw", 			},	-- Slot 1
 			{"Tail Slap", 		},	-- Slot 1
 			{"Mudslide", 		},	-- Slot 2
 			{"Poison Fang", 	},	-- Slot 2
-			{"Survival", 		},	-- Slot 3
 			{"Stench", 			},	-- Slot 3
 		}
 ---------------
@@ -332,9 +332,9 @@ elseif petName == "Molten Hatchling" then
 elseif petName == "Clefthoof Runt" then
 	beast_abilities = 
 		{
+			{"Survival", 		MyPetBattle.hp() < 0.3 },	-- Slot 2
 			{"Smash", 			},	-- Slot 1
 			{"Trample", 		},	-- Slot 1
-			{"Survival", 		},	-- Slot 2
 			{"Trumpet Strike", 	},	-- Slot 2
 			{"Horn Attack", 	},	-- Slot 3
 			{"Stampede",		},	-- Slot 3
@@ -342,11 +342,11 @@ elseif petName == "Clefthoof Runt" then
 elseif petName == "Giraffe Calf" then
 	beast_abilities = 
 		{
+			{"Survival", 		MyPetBattle.hp() < 0.3 },	-- Slot 2
 			{"Headbutt", 		},	-- Slot 3
 			{"Hoof", 			},	-- Slot 1
 			{"Stampede", 		},	-- Slot 1
 			{"Tranquility", 	},	-- Slot 2
-			{"Survival", 		},	-- Slot 2
 			{"Bleat",			},	-- Slot 3
 		}
 elseif petName == "Little Black Ram" or petName == "Summit Kid" then 
@@ -362,8 +362,8 @@ elseif petName == "Little Black Ram" or petName == "Summit Kid" then
 elseif petName == "Stunted Shardhorn" then
 	beast_abilities = 
 		{
+			{"Survival", 		MyPetBattle.hp() < 0.3 },	-- Slot 1
 			{"Smash", 			},	-- Slot 1
-			{"Survival", 		},	-- Slot 1
 			{"Trample", 		},	-- Slot 2
 			{"Horn Attack", 	},	-- Slot 2
 			{"Trumpet Strike", 	},	-- Slot 3

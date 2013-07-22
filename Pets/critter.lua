@@ -65,11 +65,11 @@ elseif petName == "Fawn" or petName == "Gazelle Fawn" or petName == "Little Fawn
 elseif petName == "Peanut" or petName == "Pint-Sized Pink Pachyderm" then
 	critter_abilities = 
 		{
+			{"Survival", 		MyPetBattle.hp() < 0.3 },	-- Slot 2
 			{"Headbutt", 		},	-- Slot 3
 			{"Smash", 			},	-- Slot 1
 			{"Trample", 		},	-- Slot 1
 			{"Trumpet Strike", 	},	-- Slot 2
-			{"Survival", 		},	-- Slot 2
 			{"Stampede", 		},	-- Slot 3
 		}
 -------------
@@ -78,10 +78,10 @@ elseif petName == "Peanut" or petName == "Pint-Sized Pink Pachyderm" then
 elseif petName == "Beetle" or petName == "Cockroach" or petName == "Creepy Crawly" or petName == "Crystal Beetle" or petName == "Death's Head Cockroach" or petName == "Deepholm Cockroach" or petName == "Dung Beetle" or petName == "Fire-Proof Roach" or petName == "Gold Beetle" or petName == "Irradiated Roach" or petName == "Locust" or petName == "Resilient Roach" or petName == "Roach" or petName == "Sand Scarab" or petName == "Savory Beetle" or petName == "Scarab Hatchling" or petName == "Stinkbug" or petName == "Tainted Cockroach" or petName == "Tol'vir Scarab" or petName == "Twilight Beetle" or petName == "Undercity Cockroach" then
 	critter_abilities = 
 		{
+			{"Survival", 		MyPetBattle.hp() < 0.3 },	-- Slot 2
 			{"Scratch", 		},	-- Slot 1
 			{"Flank", 			},	-- Slot 1
 			{"Hiss", 			},	-- Slot 2
-			{"Survival", 		},	-- Slot 2
 			{"Swarm", 			},	-- Slot 3
 			{"Apocalypse", 		},	-- Slot 3
 		}
@@ -118,10 +118,10 @@ elseif petName == "Imperial Silkworm" then
 elseif petName == "Nether Roach" then
 	critter_abilities = 
 		{
+			{"Survival", 		MyPetBattle.hp() < 0.3 },	-- Slot 2
 			{"Flank", 			},	-- Slot 3
 			{"Nether Blast", 	},	-- Slot 1
 			{"Hiss", 			},	-- Slot 1
-			{"Survival", 		},	-- Slot 2
 			{"Swarm", 			},	-- Slot 2
 			{"Apocalypse", 		},	-- Slot 3
 		}
@@ -190,31 +190,31 @@ elseif petName == "Wolpertinger" then
 elseif petName == "Black Rat" or petName == "Carrion Rat" or petName == "Fjord Rat" or petName == "Giant Sewer Rat" or petName == "Highlands Mouse" or petName == "Long-tailed Mole" or petName == "Mouse" or petName == "Rat" or petName == "Redridge Rat" or petName == "Stormwind Rat" or petName == "Stowaway Rat" or petName == "Tainted Rat" or petName == "Undercity Rat" or petName == "Wharf Rat" or petName == "Yakrat"  or petName == "Prairie Mouse" then
 	critter_abilities = 
 		{
+			{"Survival",		MyPetBattle.hp() < 0.3 },	-- Slot 3
 			{"Scratch", 		},	-- Slot 1
 			{"Comeback", 		},	-- Slot 1
 			{"Flurry", 			},	-- Slot 2
 			{"Poison Fang", 	},	-- Slot 2
 			{"Stampede", 		},	-- Slot 3
-			{"Survival",		},	-- Slot 3
 		}
 elseif petName == "Grotto Vole" or petName == "Whiskers the Rat" then
 	critter_abilities = 
 		{
+			{"Survival", 		MyPetBattle.hp() < 0.3 },	-- Slot 2
 			{"Scratch", 		},	-- Slot 1
 			{"Flurry", 			},	-- Slot 1
 			{"Sting", 			},	-- Slot 2
-			{"Survival", 		},	-- Slot 2
 			{"Stampede", 		},	-- Slot 3
 			{"Comeback",		},	-- Slot 3
 		}
 elseif petName == "Malayan Quillrat" or petName == "Malayan Quillrat Pup" or petName == "Porcupette" or petName == "Silent Hedgehog" then
 	critter_abilities = 
 		{
+			{"Survival", 		MyPetBattle.hp() < 0.3 },	-- Slot 3
 			{"Spiked Skin", 	not MyPetBattle.buff("Spiked Skin") },	-- Slot 2
 			{"Bite", 			},	-- Slot 1
 			{"Poison Fang", 	},	-- Slot 1
 			{"Counterstrike", 	},	-- Slot 2
-			{"Survival", 		},	-- Slot 3
 			{"Powerball",		},	-- Slot 3
 		}
 -----------
@@ -305,11 +305,11 @@ elseif petName == "Lucky Quilen Cub" or petName == "Perky Pug" then
 elseif petName == "Porcupette" then
 	critter_abilities = 
 		{
+			{"Survival", 		MyPetBattle.hp() < 0.3 },	-- Slot 3
 			{"Spiked Skin", 	not MyPetBattle.buff("Spiked Skin") },	-- Slot 2
 			{"Bite", 			},	-- Slot 1
 			{"Poison Fang", 	},	-- Slot 1
 			{"Counterstrike", 	},	-- Slot 2
-			{"Survival", 		},	-- Slot 3
 			{"Powerball", 		},	-- Slot 3
 		}
 -------------------

@@ -361,11 +361,11 @@ elseif petName == "Jade Tentacle" then
 elseif petName == "Lava Crab" then
 	elemental_abilities = 
 		{
+			{"Survival", 		MyPetBattle.hp() < 0.3 },	-- Slot 1
 			{"Cauterize", 		MyPetBattle.hp() < 0.7 },	-- Slot 2
 			{"Shell Shield", 	not MyPetBattle.buff("Shell Shield") },	-- Slot 2
 			{"Conflagrate", 	},	-- Slot 3
 			{"Burn", 			},	-- Slot 1
-			{"Survival", 		},	-- Slot 1
 			{"Magma Wave", 		},	-- Slot 3
 		}
 elseif petName == "Sapphire Cub" then

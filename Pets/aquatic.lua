@@ -159,11 +159,11 @@ elseif petName == "Aqua Strider" or petName == "Dancing Water Skimmer" or petNam
 elseif petName == "Golden Civet" or petName == "Golden Civet Kitten" or petName == "Kuitan Mongoose" or petName == "Mongoose" or petName == "Mongoose Pup" or petName == "Sifang Otter" or petName == "Sifang Otter Pup" then
 	aquatic_abilities = 
 		{
+			{"Survival", 		MyPetBattle.hp() < 0.3 },	-- Slot 2
 			{"Dive", 			},	-- Slot 3
 			{"Bite", 			},	-- Slot 1
 			{"Gnaw", 			},	-- Slot 1
 			{"Screech", 		},	-- Slot 2
-			{"Survival", 		},	-- Slot 2
 			{"Surge", 			},	-- Slot 3
 		}
 --------------
