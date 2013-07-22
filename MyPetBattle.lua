@@ -5,59 +5,10 @@ MyPetBattle = {}
 ---------------
 ---- SETUP ----
 ---------------
-	-- Set SavedVariables to default values if they do not exist
-
-		-- TEAM SETUP
---		if (not MPB_CONFIG_TEAMSETUP_RANDOM_TEAM_PET_HEALTH_THRESHOLD) then
---			MPB_CONFIG_TEAMSETUP_RANDOM_TEAM_PET_HEALTH_THRESHOLD = 0.60
---		end
---		
---		if (not MPB_CONFIG_TEAMSETUP_PET1_LEVEL_ADJUSTMENT) then
---			MPB_CONFIG_TEAMSETUP_PET1_LEVEL_ADJUSTMENT = -2
---		end
---		
---		if (not MPB_CONFIG_TEAMSETUP_PET2_LEVEL_ADJUSTMENT) then
---			MPB_CONFIG_TEAMSETUP_PET2_LEVEL_ADJUSTMENT = -2
---		end
---		
---		if (not MPB_CONFIG_TEAMSETUP_PET3_LEVEL_ADJUSTMENT) then
---			MPB_CONFIG_TEAMSETUP_PET3_LEVEL_ADJUSTMENT = 2
---		end
---		
---		-- PRE-COMBAT
---		if (not MPB_CONFIG_PRE_COMBAT_ATTEMPT_STRONGEST_RANDOM_TEAM) then
---			MPB_CONFIG_PRE_COMBAT_ATTEMPT_STRONGEST_RANDOM_TEAM = false
---		end
---		
---		-- COMBAT
---		if (not MPB_CONFIG_COMBAT_SWAP_PET_HEALTH_THRESHOLD) then
---			MPB_CONFIG_COMBAT_SWAP_PET_HEALTH_THRESHOLD = 0.35
---		end
---		
---		-- POST-COMBAT
---		if (not MPB_CONFIG_POST_COMBAT_USE_REVIVE_BATTLE_PETS_AFTER_COMBAT) then
---			MPB_CONFIG_POST_COMBAT_USE_REVIVE_BATTLE_PETS_AFTER_COMBAT = true
---		end
---
---		if (not MPB_CONFIG_POST_COMBAT_USE_BATTLE_PET_BANDAGE_AFTER_COMBAT) then
---			MPB_CONFIG_POST_COMBAT_USE_BATTLE_PET_BANDAGE_AFTER_COMBAT = false
---		end
---
---		if (not MPB_CONFIG_POST_COMBAT_AUTOMATIC_NEW_RANDOM_TEAM_AFTER_COMBAT) then
---			MPB_CONFIG_POST_COMBAT_AUTOMATIC_NEW_RANDOM_TEAM_AFTER_COMBAT = true
---		end
---
---		-- MISC
---		if (not MPB_CONFIG_MISC_AUTOMATIC_RELEASE_NON_RARES) then
---			MPB_CONFIG_MISC_AUTOMATIC_RELEASE_NON_RARES = false
---		end		
-
 
 -- INITIALIZATION -
 mypetbattle_enabled = false
 mypetbattle_join_pvp = false
-MPB_CAPTURE_RARES = false
-MPB_CAPTURE_COMMON_UNCOMMON = false
 mypetbattle_auto_forfeit = false
 mypetbattle_wintrade_enabled = false
 
@@ -87,53 +38,117 @@ local mypetbattle_frame, events = CreateFrame("Frame"), {};
 function events:ADDON_LOADED(...)
 --	print("ADDON_LOADED")
 	local addonName = ...
---	if addonName == "MyPetBattle" then
---		print("Loaded |cffff8000MPB")
---	end
+	if addonName == "MyPetBattle" then
+		---------------------------------------------------------------
+		-- SET SAVEDVARIABLES TO DEFAULT VALUES IF THEY DO NOT EXIST --
+		-- TEAM SETUP OPTIONS
+		if MPB_CONFIG_TEAMSETUP_RANDOM_TEAM_PET_HEALTH_THRESHOLD == nil then
+			MPB_CONFIG_TEAMSETUP_RANDOM_TEAM_PET_HEALTH_THRESHOLD = 0.60
+		end
+		
+		if MPB_CONFIG_TEAMSETUP_PET1_LEVEL_ADJUSTMENT == nil then
+			MPB_CONFIG_TEAMSETUP_PET1_LEVEL_ADJUSTMENT = -2
+		end
+		
+		if MPB_CONFIG_TEAMSETUP_PET2_LEVEL_ADJUSTMENT == nil then
+			MPB_CONFIG_TEAMSETUP_PET2_LEVEL_ADJUSTMENT = -2
+		end
+		
+		if MPB_CONFIG_TEAMSETUP_PET3_LEVEL_ADJUSTMENT == nil then
+			MPB_CONFIG_TEAMSETUP_PET3_LEVEL_ADJUSTMENT = 2
+		end
+		
+		-- PRE-COMBAT OPTIONS
+		if MPB_CONFIG_PRE_COMBAT_ATTEMPT_STRONGEST_RANDOM_TEAM == nil then
+			MPB_CONFIG_PRE_COMBAT_ATTEMPT_STRONGEST_RANDOM_TEAM = false
+		end
+		
+		-- COMBAT OPTIONS
+		if MPB_CONFIG_COMBAT_SWAP_PET_HEALTH_THRESHOLD == nil then
+			MPB_CONFIG_COMBAT_SWAP_PET_HEALTH_THRESHOLD = 0.35
+		end
+		
+		-- POST-COMBAT OPTIONS
+		if MPB_CONFIG_POST_COMBAT_USE_REVIVE_BATTLE_PETS_AFTER_COMBAT == nil then
+			MPB_CONFIG_POST_COMBAT_USE_REVIVE_BATTLE_PETS_AFTER_COMBAT = false
+		end
 
-	-- SET UI ELEMENTS TO SAVEDVARIABLES
-	-- TEAM SETUP
-	EditBox_min_team_pet_health:SetText(tostring(MPB_CONFIG_TEAMSETUP_RANDOM_TEAM_PET_HEALTH_THRESHOLD * 100)) 
-	Slider_pet1_level:SetValue(MPB_CONFIG_TEAMSETUP_PET1_LEVEL_ADJUSTMENT)
-	Slider_pet2_level:SetValue(MPB_CONFIG_TEAMSETUP_PET2_LEVEL_ADJUSTMENT)
-	Slider_pet3_level:SetValue(MPB_CONFIG_TEAMSETUP_PET3_LEVEL_ADJUSTMENT)
+		if not MPB_CONFIG_POST_COMBAT_USE_BATTLE_PET_BANDAGE_AFTER_COMBAT == nil then
+			MPB_CONFIG_POST_COMBAT_USE_BATTLE_PET_BANDAGE_AFTER_COMBAT = false
+		end
+
+		if not MPB_CONFIG_POST_COMBAT_AUTOMATIC_NEW_RANDOM_TEAM_AFTER_COMBAT == nil then
+			MPB_CONFIG_POST_COMBAT_AUTOMATIC_NEW_RANDOM_TEAM_AFTER_COMBAT = false
+		end
+
+		-- MISC OPTIONS
+		if MPB_CONFIG_MISC_AUTOMATIC_RELEASE_NON_RARES == nil then
+			MPB_CONFIG_MISC_AUTOMATIC_RELEASE_NON_RARES = false
+		end		
+
+		-- CAPTURE PETS OPTIONS
+		if MPB_CAPTURE_RARES == nil then
+			MPB_CAPTURE_RARES = false
+		end
+
+		if MPB_CAPTURE_COMMON_UNCOMMON == nil then
+			MPB_CAPTURE_COMMON_UNCOMMON = false
+		end
+		-- TEAM PET LEVEL
+		if MPB_EDITBOX_DESIRED_PET_LEVEL == nil then
+			MPB_EDITBOX_DESIRED_PET_LEVEL = 1
+		end
+
+		---------------------------------------
+		-- SET UI ELEMENTS TO SAVEDVARIABLES --
+		-- TEAM SETUP
+		EditBox_min_team_pet_health:SetText(tostring(MPB_CONFIG_TEAMSETUP_RANDOM_TEAM_PET_HEALTH_THRESHOLD * 100)) 
+		Slider_pet1_level:SetValue(MPB_CONFIG_TEAMSETUP_PET1_LEVEL_ADJUSTMENT)
+		Slider_pet2_level:SetValue(MPB_CONFIG_TEAMSETUP_PET2_LEVEL_ADJUSTMENT)
+		Slider_pet3_level:SetValue(MPB_CONFIG_TEAMSETUP_PET3_LEVEL_ADJUSTMENT)
 	
-	-- PRE-COMBAT
-	CheckButton15:SetChecked(MPB_CONFIG_PRE_COMBAT_ATTEMPT_STRONGEST_RANDOM_TEAM)
-	-- COMBAT
-	EditBox_swap_pet_health_threshold:SetText(tostring(MPB_CONFIG_COMBAT_SWAP_PET_HEALTH_THRESHOLD * 100)) 
+		-- PRE-COMBAT
+		CheckButton15:SetChecked(MPB_CONFIG_PRE_COMBAT_ATTEMPT_STRONGEST_RANDOM_TEAM)
+		-- COMBAT
+		EditBox_swap_pet_health_threshold:SetText(tostring(MPB_CONFIG_COMBAT_SWAP_PET_HEALTH_THRESHOLD * 100)) 
 
-	-- POST-COMBAT
-	CheckButton12:SetChecked(MPB_CONFIG_POST_COMBAT_USE_REVIVE_BATTLE_PETS_AFTER_COMBAT)
-	CheckButton14:SetChecked(MPB_CONFIG_POST_COMBAT_USE_BATTLE_PET_BANDAGE_AFTER_COMBAT)
-	CheckButton11:SetChecked(MPB_CONFIG_POST_COMBAT_AUTOMATIC_NEW_RANDOM_TEAM_AFTER_COMBAT)
+		-- POST-COMBAT
+		CheckButton12:SetChecked(MPB_CONFIG_POST_COMBAT_USE_REVIVE_BATTLE_PETS_AFTER_COMBAT)
+		CheckButton14:SetChecked(MPB_CONFIG_POST_COMBAT_USE_BATTLE_PET_BANDAGE_AFTER_COMBAT)
+		CheckButton11:SetChecked(MPB_CONFIG_POST_COMBAT_AUTOMATIC_NEW_RANDOM_TEAM_AFTER_COMBAT)
 
-	-- MISC	
-	CheckButton13:SetChecked(MPB_CONFIG_MISC_AUTOMATIC_RELEASE_NON_RARES)
+		-- MISC	
+		CheckButton13:SetChecked(MPB_CONFIG_MISC_AUTOMATIC_RELEASE_NON_RARES)
 
-	-- LOAD LAST USED DESIRED_PET_LEVEL FOR THE RANDOM TEAM GENERATION
-	local loadLastUsedDesiredPetLevel = MPB_EDITBOX_DESIRED_PET_LEVEL
-	EditBox_PetLevel:SetText(loadLastUsedDesiredPetLevel) 
+		-- LOAD LAST USED DESIRED_PET_LEVEL FOR THE RANDOM TEAM GENERATION
+		local loadLastUsedDesiredPetLevel = MPB_EDITBOX_DESIRED_PET_LEVEL
+		EditBox_PetLevel:SetText(loadLastUsedDesiredPetLevel) 
 	
-	-- LOCK PETS FOR RANDOM TEAM GENERATION
-	Check_lock_pet_1:SetChecked(MPB_LOCK_PET1)
-	Check_lock_pet_2:SetChecked(MPB_LOCK_PET2)
-	Check_lock_pet_3:SetChecked(MPB_LOCK_PET3)
+		-- LOCK PETS FOR RANDOM TEAM GENERATION
+		Check_lock_pet_1:SetChecked(MPB_LOCK_PET1)
+		Check_lock_pet_2:SetChecked(MPB_LOCK_PET2)
+		Check_lock_pet_3:SetChecked(MPB_LOCK_PET3)
 
-	-- SET TEXTURE FOR CONFIG BUTTON (GEAR) MANUALLY AS THE XML FILE DO NOT WANT DO WHAT I WANT!
-	MPB_Config_Button:SetNormalTexture("Interface\\Addons\\MyPetBattle\\Images\\icon-config")
-	MPB_Config_Button:SetHighlightTexture("Interface\\Buttons\\UI-Panel-MinimizeButton-Highlight.blp")
+		-- SET TEXTURE FOR CONFIG BUTTON (GEAR) MANUALLY AS THE XML FILE DO NOT WANT DO WHAT I WANT!
+		MPB_Config_Button:SetNormalTexture("Interface\\Addons\\MyPetBattle\\Images\\icon-config")
+		MPB_Config_Button:SetHighlightTexture("Interface\\Buttons\\UI-Panel-MinimizeButton-Highlight.blp")
 
-	-- SET CAPTURE RARE/UNCOMMON/COMMON CHECKBOXES
-	CheckButton3:SetChecked(MPB_CAPTURE_RARES)
-	CheckButton4:SetChecked(MPB_CAPTURE_COMMON_UNCOMMON)
+		-- SET CAPTURE RARE/UNCOMMON/COMMON CHECKBOXES
+		CheckButton3:SetChecked(MPB_CAPTURE_RARES)
+		CheckButton4:SetChecked(MPB_CAPTURE_COMMON_UNCOMMON)
 
-	-- CALL FUNCTION IN Frame.lua TO UPDATE THE POSITION OF THE MINIMAP BUTTON
-	MPB_MMButton_UpdatePosition()
+		-- CALL FUNCTION IN Frame.lua TO UPDATE THE POSITION OF THE MINIMAP BUTTON
+		MPB_MMButton_UpdatePosition()
 
-	-- SHOW/HIDE UI AT LOGIN ACCORDING TO CHARACTER SPECIFIC SAVEDVARIABLE
-	if MPB_SHOW_UI == nil then MPB_SHOW_UI = true end -- Set variable to true the first time
-	if MPB_SHOW_UI then MyPetBattleForm:Show() else MyPetBattleForm:Hide() end
+		-- SHOW/HIDE UI AT LOGIN ACCORDING TO CHARACTER SPECIFIC SAVEDVARIABLE
+		if MPB_SHOW_UI == nil then MPB_SHOW_UI = true end -- Set variable to true the first time
+		if MPB_SHOW_UI then MyPetBattleForm:Show() else MyPetBattleForm:Hide() end
+
+		-- PRINT THAT WE ARE DONE LOADING
+		print("Loaded |cffff8000MPB")
+	end
+
+
 end
 
 function events:PLAYER_LOGIN(...)				-- 
