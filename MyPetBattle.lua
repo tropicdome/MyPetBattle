@@ -98,6 +98,10 @@ function events:ADDON_LOADED(...)
 		if MPB_EDITBOX_DESIRED_PET_LEVEL == nil then
 			MPB_EDITBOX_DESIRED_PET_LEVEL = 1
 		end
+		-- FORFEIT TIMER
+		if MPB_FORFEIT_TIMER == nil then
+			MPB_FORFEIT_TIMER = 55
+		end
 
 		---------------------------------------
 		-- SET UI ELEMENTS TO SAVEDVARIABLES --
@@ -123,7 +127,7 @@ function events:ADDON_LOADED(...)
 		-- LOAD LAST USED DESIRED_PET_LEVEL FOR THE RANDOM TEAM GENERATION
 		local loadLastUsedDesiredPetLevel = MPB_EDITBOX_DESIRED_PET_LEVEL
 		EditBox_PetLevel:SetText(loadLastUsedDesiredPetLevel) 
-	
+
 		-- LOCK PETS FOR RANDOM TEAM GENERATION
 		Check_lock_pet_1:SetChecked(MPB_LOCK_PET1)
 		Check_lock_pet_2:SetChecked(MPB_LOCK_PET2)
@@ -137,6 +141,9 @@ function events:ADDON_LOADED(...)
 		CheckButton3:SetChecked(MPB_CAPTURE_RARES)
 		CheckButton4:SetChecked(MPB_CAPTURE_COMMON_UNCOMMON)
 
+		-- SET FORFEIT TIMER
+		EditBox_ForfeitTimer:SetText(MPB_FORFEIT_TIMER)
+		
 		-- CALL FUNCTION IN Frame.lua TO UPDATE THE POSITION OF THE MINIMAP BUTTON
 		MPB_MMButton_UpdatePosition()
 
@@ -206,14 +213,19 @@ end
 function events:PET_BATTLE_FINAL_ROUND(...)					-- 
 --	print("PET_BATTLE_FINAL_ROUND")
 --	print(...)
-	if ... == LE_BATTLE_PET_ALLY then
-		print("We won!")
-		-- ADD STATS TO STATS TABLE
-		MyPetBattle.addStats("Wins",1)
-	else
-		print("We lost!")
-		-- ADD STATS TO STATS TABLE
-		MyPetBattle.addStats("Losses",1)
+	if mypetbattle_debug then
+		-- SHOWS THE SAME RESULT ALL THE TIME FOR PVP BATTLES REGARDLESS OF WHO WINS?!?!
+		if ... == LE_BATTLE_PET_ALLY then
+			print("We won!")
+			-- ADD STATS TO STATS TABLE
+			MyPetBattle.addStats("Wins",1)
+		elseif ... == LE_BATTLE_PET_ENEMY then
+			print("We lost!")
+			-- ADD STATS TO STATS TABLE
+			MyPetBattle.addStats("Losses",1)
+		else
+			print("Not LE_BATTLE_PET_ALLY or LE_BATTLE_PET_ENEMY won?!")
+		end
 	end
 end
 
@@ -289,19 +301,8 @@ function events:PET_BATTLE_LOOT_RECEIVED(...)				--
 --	print("PET_BATTLE_LOOT_RECEIVED")
 
 	local typeIdentifier, itemLink, quantity = ...;
-	print("\124cFF00FF00Item won:\124r " .. quantity .. " x " .. itemLink)
+	print("|cffff8000MPB|r: \124cFF00FF00Item won:\124r " .. quantity .. " x " .. itemLink)
 	
-	--if ( typeIdentifier == "item" ) then
-	--	LootWonAlertFrame_ShowAlert(itemLink, quantity);
-	--elseif ( typeIdentifier == "money" ) then
-	--	MoneyWonAlertFrame_ShowAlert(quantity);
-	--end
-
---	local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount,
---		itemEquipLoc, itemTexture, itemSellPrice = GetItemInfo(itemLink) 
---	local name, currentAmount, texture, earnedThisWeek, weeklyMax, totalMax, isDiscovered = GetCurrencyInfo(id)
-
-
 	if ( typeIdentifier == "item" ) then
 		local itemName, itemLink, _, _, _, _, _, _, _, itemIcon, _ = GetItemInfo(itemLink);
 --		local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, itemSellPrice = GetItemInfo(itemLink);
@@ -333,7 +334,7 @@ function MyPetBattle.printStats()
 	-- PRINT STATISTICS OF OUR BATTLES
 	print("|cffff8000MPB stats for current session:|r")
 	for key,value in pairs(MPB_STATS_TABLE) do 
-		print(" "..value.."x",key) 
+		print(" - "..value.."x",key) 
 	end
 end
 
@@ -351,7 +352,7 @@ function events:PET_BATTLE_OPENING_DONE(...)				-- Opening done and ready to bat
 	end
 		
 	--	print("PET_BATTLE_OPENING_DONE")
-	print("We have to fight " .. C_PetBattles.GetNumPets(LE_BATTLE_PET_ENEMY) .. " enemy pets")
+	print("|cffff8000MPB|r: We have to fight " .. C_PetBattles.GetNumPets(LE_BATTLE_PET_ENEMY) .. " enemy pets")
 	-- Auto-select first available pet
 	if C_PetBattles.ShouldShowPetSelect() == true and (mypetbattle_enabled or mypetbattle_wintrade_enabled) then
 		for i=1,3 do
@@ -530,6 +531,10 @@ function events:PET_BATTLE_PET_ROUND_PLAYBACK_COMPLETE(...)	--
 			print("|cffFF4500 Casting:\124r \124T"..spellIcon..":0\124t \124cff4e96f7\124HbattlePetAbil:"..spellID..":0:0:0\124h["..spell.."]\124h\124r");
 --			print("actionIndex: ", actionIndex)
 			C_PetBattles.UseAbility(actionIndex) -- USE PET ABILITY 
+		-- IF THE PET IS UNKNOWN, THEN CAST THE FIRST AVAILABLE SPELL SO WE WILL AT LEAST ATTACK
+		elseif spell == "UNKNOWN" then
+			print("Pet is unknown, casting first spell available")
+			C_PetBattles.UseAbility(1) -- USE PET ABILITY 1
 		end
     elseif mypetbattle_debug then
         ------------------------------------------------------------------------------
@@ -562,25 +567,22 @@ end
 
 function events:PET_BATTLE_QUEUE_PROPOSAL_DECLINED(...)		-- 
 --	print("PET_BATTLE_QUEUE_PROPOSAL_DECLINED")
-	print("Removed from pet battle PvP queue")
+	print("|cffff8000MPB|r: Removed from pet battle PvP queue")
 end
 
 function events:PET_BATTLE_QUEUE_PROPOSE_MATCH(...)			-- 
 --	print("PET_BATTLE_QUEUE_PROPOSE_MATCH")
 
 	-- Sync setup for wt
-	local MPB_SyncTimeSent = GetTime()
-	SendAddonMessage("MPB", MPB_SyncTimeSent, "PARTY")
-	
-	if MPB_SyncTimeReceived == nil then MPB_SyncTimeReceived = 0 end
-	if MPB_SyncTimeReceived > 0 then
-		local delay = abs(MPB_SyncTimeSent - MPB_SyncTimeReceived)
-		print("Current delay: "..delay)
+	if mypetbattle_wintrade_enabled then
+		MPB_SyncTimeSent = GetTime()
+		if mypetbattle_debug then print("Queue popped, sending sync message: "..MPB_SyncTimeSent) end
+		SendAddonMessage("MPB", MPB_SyncTimeSent, "PARTY")
 	end
 	
 	-- Automatic accept PvP queue popup if enabled	
-	if mypetbattle_join_pvp then
-		if mypetbattle_debug then  print("Auto-accepting pet PvP match!") end
+	if (mypetbattle_join_pvp and not mypetbattle_wintrade_enabled) then
+		if mypetbattle_debug then print("Auto-accepting pet PvP match!") end
 		C_PetBattles.AcceptQueuedPVPMatch()
 	end
 end
@@ -598,33 +600,12 @@ function events:PET_BATTLE_XP_CHANGED(...)					--
 end
 
 function events:CHAT_MSG_ADDON(...)							-- 
---	print("PET_BATTLE_XP_CHANGED")
+--	print("CHAT_MSG_ADDON")
 	local prefix, message, channel, sender = ...
-
-	-- Check if message comes from MPB addon
+	-- CHECK IF MESSAGE COMES FROM MPB ADDON
 	if prefix == "MPB" and channel == "PARTY" and sender ~= UnitName("player") then
---		print(prefix .. ". We received: " .. message)
---		print("Local time: "..GetTime())
-				
-		local syncThreshold = 1
-		local queueState, estimatedTime, queuedTime = C_PetBattles.GetPVPMatchmakingInfo() -- Get PvP queue info
-		-- Check that we are ready to accept when receiving the message from our partner
-		if queueState == "proposal" and tonumber(message) > 0 then
---			local my_message = abs(tonumber(queuedTime)-tonumber(message))
-			local my_message = abs(GetTime()-tonumber(message))
-			print(prefix .. " sync: " .. my_message)
-			-- If sync time is less than 'syncThreshold' then accept battle
-			if my_message < syncThreshold then
-				print("Sync is ok, accepting battle")
-				C_PetBattles.AcceptQueuedPVPMatch()
-			else
-				print("Not in sync, declining battle")
-				C_PetBattles.DeclineQueuedPVPMatch()
-			end
-		else
-			MPB_SyncTimeReceived = tonumber(message)
-		end
-
+		MPB_SyncTimeReceived = tonumber(message)
+		if mypetbattle_debug then print("We received sync message: "..MPB_SyncTimeReceived.." from "..prefix) end
 	end
 end
 
@@ -642,13 +623,18 @@ end
 --------------------
 MPB_timerTotal = 0 -- TIMER INIT FOR AUTOMATIC FORFEIT
 MPB_timerOneSec = 0 -- 1 SEC TIMER INIT FOR DIFFERENT MECHANICS E.G. AUTO RE-QUEUE PVP
+
+if MPB_SyncTimeReceived == nil then MPB_SyncTimeReceived = 0 end
+if MPB_SyncTimeSent == nil then MPB_SyncTimeSent = 0 end
+MPB_syncCounter = 0
+
 MPB_petguids = {0,0,0}
 
 local function MPB_onUpdate(self,elapsed)
 	-- AUTOMATIC FORFEIT TIMER
 	if petBattleOpeningIsDone then
 	    MPB_timerTotal = MPB_timerTotal + elapsed
-		if MPB_timerTotal >= 55 then -- 55
+		if MPB_timerTotal >= MPB_FORFEIT_TIMER then -- default: 55 seconds
 			if mypetbattle_debug then  print("60 sec. almost up!") end
 			MPB_timerTotal = 0
 			petBattleOpeningIsDone = false
@@ -702,6 +688,37 @@ local function MPB_onUpdate(self,elapsed)
 				end
 			end
 		end
+
+		-- WT SYNC CHECK AND PVP ACCEPT
+		local syncThreshold = 3 -- Seconds
+		local syncDifference = abs(MPB_SyncTimeSent - MPB_SyncTimeReceived)
+		-- GET PVP QUEUE INFORMATION
+		local queueState, estimatedTime, queuedTime = C_PetBattles.GetPVPMatchmakingInfo()
+		-- CHECK THAT WE ARE READY TO ACCEPT WHEN RECEIVING THE MESSAGE FROM OUR PARTNER
+		if mypetbattle_wintrade_enabled and not C_PetBattles.IsInBattle() and mypetbattle_debug then print("|cffff8000MPB|r sync: " .. syncDifference) end
+		-- WHEN QUEUE POPS CHECK FOR SYNC
+		if queueState == "proposal" then
+			MPB_syncCounter = MPB_syncCounter + 1
+			if mypetbattle_debug then print(MPB_syncCounter) end							-- FOR DEBUGGING
+			if mypetbattle_debug then print("Sync difference is: "..syncDifference) end		-- FOR DEBUGGING
+
+			-- IF SYNC RECEIVED AND WITHING THRESHOLD, THEN ACCEPT
+			if syncDifference < syncThreshold then 
+				if mypetbattle_debug then print("Sync is ok, accepting battle")	end			-- FOR DEBUGGING
+				C_PetBattles.AcceptQueuedPVPMatch()
+				-- RESET COUNTER AFTER ACCEPTING QUEUE
+				MPB_syncCounter = 0
+			-- COUNT syncThreshold SECONDS BEFORE DECLINING
+			elseif MPB_syncCounter >= syncThreshold then 
+				if mypetbattle_debug then print("Not in sync, declining battle") end 		-- FOR DEBUGGING
+				if mypetbattle_debug then print("Current count: "..MPB_syncCounter) end		-- FOR DEBUGGING
+				C_PetBattles.DeclineQueuedPVPMatch()
+			end
+		else
+			-- IF NO QUEUE HAS POPPED YET MAKE SURE THE COUNTER IS 0
+			MPB_syncCounter = 0
+		end
+
 		-- RESET THE TIMER
 		MPB_timerOneSec = 0
 	end
@@ -719,7 +736,7 @@ function SlashCmdList.MYPETBATTLE(msg, editbox)
 	if msg == "" then
 		mypetbattle_enabled = not mypetbattle_enabled
 		if mypetbattle_enabled then status = "\124cFF00FF00Enabled" else status = "\124cFFFF0000Disabled" end
-		print("My pet battle:", status)
+		print("|cffff8000MPB|r:", status)
 		CheckButton1:SetChecked(mypetbattle_enabled)
 	elseif msg == "join_pvp" then
 		mypetbattle_join_pvp = not mypetbattle_join_pvp
@@ -734,24 +751,30 @@ function SlashCmdList.MYPETBATTLE(msg, editbox)
 				C_PetBattles.StopPVPMatchmaking()
 			-- end
 		end
-		print("My pet battle:", status)
+		print("|cffff8000MPB|r:", status)
 	elseif msg == "capture_rares" then
 		MPB_CAPTURE_RARES = not MPB_CAPTURE_RARES
 		if MPB_CAPTURE_RARES then status = "\124cFF00FF00Automatic capture rare pets enabled" else status = "\124cFFFF0000Automatic capture rare pets disabled" end
-		print("My pet battle:", status)
+		print("|cffff8000MPB|r:", status)
 		CheckButton3:SetChecked(MPB_CAPTURE_RARES)
 	elseif msg == "capture_common_uncommon" then
 		MPB_CAPTURE_COMMON_UNCOMMON = not MPB_CAPTURE_COMMON_UNCOMMON
 		if MPB_CAPTURE_COMMON_UNCOMMON then status = "\124cFF00FF00Automatic capture common/uncommon (0/3 owned) pets enabled" else status = "\124cFFFF0000Automatic capture common/uncommon pets (0/3 owned) disabled" end
-		print("My pet battle:", status)
+		print("|cffff8000MPB|r:", status)
 	elseif msg == "auto_forfeit" then
 		mypetbattle_auto_forfeit = not mypetbattle_auto_forfeit
-		if mypetbattle_auto_forfeit then status = "\124cFF00FF00Automatic forfeit after 60 sec enabled" else status = "\124cFFFF0000Automatic forfeit after 60 sec disabled" end
-		print("My pet battle:", status)
+		if mypetbattle_auto_forfeit then status = "\124cFF00FF00Automatic forfeit after "..MPB_FORFEIT_TIMER.." sec enabled" else status = "\124cFFFF0000Automatic forfeit disabled" end
+		print("|cffff8000MPB|r:", status)
 	elseif msg == "wintrade_enable" then
-		mypetbattle_wintrade_enabled = not mypetbattle_wintrade_enabled
-		if mypetbattle_wintrade_enabled then status = "\124cFF00FF00Automatic wintrade enabled" else status = "\124cFFFF0000Automatic wintrade disabled" end
-		print("My pet battle:", status)
+		if GetNumGroupMembers() == 0 then -- MAKE SURE WE ARE IN A GROUP TO WT
+			print("|cffff8000MPB|r: \124cFFFF0000You need to be in a party to use wt")
+			mypetbattle_wintrade_enabled = false
+			CheckButton_wintrade_enable:SetChecked(mypetbattle_wintrade_enabled)
+		else
+			mypetbattle_wintrade_enabled = not mypetbattle_wintrade_enabled
+			if mypetbattle_wintrade_enabled then status = "\124cFF00FF00Automatic wintrade enabled" else status = "\124cFFFF0000Automatic wintrade disabled" end
+			print("|cffff8000MPB|r:", status)
+		end
 	elseif msg == "debug" then
 		-- TURN OFF DEBUG MESSAGES AS REQUIRED
 		mypetbattle_debug =  not mypetbattle_debug
@@ -775,6 +798,6 @@ function SlashCmdList.MYPETBATTLE(msg, editbox)
 		print("  /MyPetBattle help")
 	else
 		-- UNKNOWN COMMAND
-		print("My pet battle: Unknown command ("..msg..")")
+		print("|cffff8000MPB|r: Unknown command ("..msg..")")
     end
 end

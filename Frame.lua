@@ -43,8 +43,9 @@ function Button_PetJournalSummary_OnClick()
 		for n_=1, numOwned do
 			local petID, _, owned, _, level, _, isRevoked, speciesName, icon, petType, _, _, _, _, canBattle, _, _, obtainable = C_PetJournal.GetPetInfoByIndex(n_)
 			local health, maxHealth, power, speed, rarity = C_PetJournal.GetPetStats(petID)
-			
-			if petLevel == level and owned and canBattle and not isRevoked and rarity == 4 then
+			local petIsSummonable = C_PetJournal.PetIsSummonable(petID)
+
+			if petLevel == level and owned and canBattle and not isRevoked and rarity == 4 and petIsSummonable then
 				petCount = petCount + 1
 				rareCount = rareCount + 1
 			end
@@ -133,3 +134,4 @@ function MPB_MMButton_BeingDragged()
     MPB_MMBUTTONPOSITION = {w,x}
     MPB_MMButton_UpdatePosition()
 end
+
