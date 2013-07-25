@@ -342,12 +342,12 @@ function events:PET_BATTLE_MAX_HEALTH_CHANGED(...)			--
 --	print("PET_BATTLE_MAX_HEALTH_CHANGED")
 end
 
-function events:PET_BATTLE_OPENING_DONE(...)				-- Opening done and ready to battle
-	-- Stopwatch for WT
+function events:PET_BATTLE_OPENING_DONE(...)				-- OPENING DONE AND READY TO BATTLE
+	-- STOPWATCH FOR WT
 	if mypetbattle_wintrade_enabled then
 		if Stopwatch_IsPlaying() then Stopwatch_Clear() end
-		Stopwatch_StartCountdown(0, 0, 60) -- Set Stop Watch to count down from 60 sec
-		Stopwatch_Play() -- Starts the Stop Watch
+		Stopwatch_StartCountdown(0, 0, MPB_FORFEIT_TIMER+5) -- SET STOP WATCH TO COUNT DOWN FROM MPB_FORFEIT_TIMER + 5 SEC. +5 FOR MINOR ADJUSTMENT BECAUSE FORFEIT ANIMATION TAKES ABOUT 5 SEC
+		Stopwatch_Play() -- STARTS THE STOP WATCH
 		if mypetbattle_debug then  print("Started Stopwatch") end
 	end
 		
@@ -372,7 +372,7 @@ end
 
 function events:PET_BATTLE_OPENING_START(...)				-- 
 --	print("PET_BATTLE_OPENING_START")
-	print("|cFF00FFFF Game Starting!")
+	print("|cffff8000MPB|r: |cFF00FFFFGame Starting!")
 
 	-- Get pets level
 	pet1_level_start = C_PetBattles.GetLevel(LE_BATTLE_PET_ALLY,1)
@@ -414,7 +414,7 @@ function events:PET_BATTLE_OVER(...)						-- Pet battle over (someone won)
 	if pet2_xp_gained > 0 then print("|cFF0066FF\124T"..pet2_icon..":0\124t [" .. pet2_name .. "] |cFFFFFFFFgained " .. pet2_xp_gained .. " xp") end
 	if pet3_xp_gained > 0 then print("|cFF0066FF\124T"..pet3_icon..":0\124t [" .. pet3_name .. "] |cFFFFFFFFgained " .. pet3_xp_gained .. " xp") end
 	
-	print("|cFF00FFFF Game Over!")
+	print("|cffff8000MPB|r: |cFF00FFFFGame Over!")
 end
 
 function events:UPDATE_SUMMONPETS_ACTION(...)					-- 
@@ -454,7 +454,7 @@ function events:PET_BATTLE_PET_ROUND_PLAYBACK_COMPLETE(...)	--
 	local round = ...
 --	print(round)
 	
-	if mypetbattle_enabled or (mypetbattle_wintrade_enabled and round <= math.random(1,3)) then -- ATTACK A RANDOM NUMBER OF TIMES BETWEEN 2-4 IF WE ARE DOING WT (1 AND 3 SINCE ROUND 0 EXISTS)
+	if mypetbattle_enabled or (mypetbattle_wintrade_enabled and round <= math.random(0,2)) then -- ATTACK A RANDOM NUMBER OF TIMES BETWEEN 1-3 IF WE ARE DOING WT (0 AND 2 SINCE ROUND 0 EXISTS)
 		-------------------------------------
 		-- AUTO-SELECT FIRST AVAILABLE PET --
 		if C_PetBattles.ShouldShowPetSelect() == true then
@@ -528,7 +528,7 @@ function events:PET_BATTLE_PET_ROUND_PLAYBACK_COMPLETE(...)	--
 			
 			local spellID, spellName, spellIcon, _, _, _, _, _ = C_PetBattles.GetAbilityInfo(petOwner, petIndex, actionIndex)
 				
-			print("|cffFF4500 Casting:\124r \124T"..spellIcon..":0\124t \124cff4e96f7\124HbattlePetAbil:"..spellID..":0:0:0\124h["..spell.."]\124h\124r");
+			print("|cffff8000MPB|r: |cffFF4500Casting\124r \124T"..spellIcon..":0\124t \124cff4e96f7\124HbattlePetAbil:"..spellID..":0:0:0\124h["..spell.."]\124h\124r");
 --			print("actionIndex: ", actionIndex)
 			C_PetBattles.UseAbility(actionIndex) -- USE PET ABILITY 
 		-- IF THE PET IS UNKNOWN, THEN CAST THE FIRST AVAILABLE SPELL SO WE WILL AT LEAST ATTACK
@@ -562,7 +562,7 @@ end
 
 function events:PET_BATTLE_QUEUE_PROPOSAL_ACCEPTED(...)		-- 
 --	print("PET_BATTLE_QUEUE_PROPOSAL_ACCEPTED")
-	if mypetbattle_debug then  print("Pet Battle PvP queue accepted") end
+	print("|cffff8000MPB|r: Pet Battle PvP queue accepted")
 end
 
 function events:PET_BATTLE_QUEUE_PROPOSAL_DECLINED(...)		-- 
@@ -634,8 +634,8 @@ local function MPB_onUpdate(self,elapsed)
 	-- AUTOMATIC FORFEIT TIMER
 	if petBattleOpeningIsDone then
 	    MPB_timerTotal = MPB_timerTotal + elapsed
-		if MPB_timerTotal >= MPB_FORFEIT_TIMER then -- default: 55 seconds
-			if mypetbattle_debug then  print("60 sec. almost up!") end
+		if MPB_timerTotal >= MPB_FORFEIT_TIMER then -- DEFAULT: 55 SECONDS
+			if mypetbattle_debug then  print(MPB_FORFEIT_TIMER+5.." sec. almost up!") end -- +5 ADJUSTMENT
 			MPB_timerTotal = 0
 			petBattleOpeningIsDone = false
     	    -- FORFEIT
@@ -699,7 +699,7 @@ local function MPB_onUpdate(self,elapsed)
 		-- WHEN QUEUE POPS CHECK FOR SYNC
 		if queueState == "proposal" then
 			MPB_syncCounter = MPB_syncCounter + 1
-			if mypetbattle_debug then print(MPB_syncCounter) end							-- FOR DEBUGGING
+			if mypetbattle_debug then print("Sync count"..MPB_syncCounter) end				-- FOR DEBUGGING
 			if mypetbattle_debug then print("Sync difference is: "..syncDifference) end		-- FOR DEBUGGING
 
 			-- IF SYNC RECEIVED AND WITHING THRESHOLD, THEN ACCEPT
@@ -711,7 +711,6 @@ local function MPB_onUpdate(self,elapsed)
 			-- COUNT syncThreshold SECONDS BEFORE DECLINING
 			elseif MPB_syncCounter >= syncThreshold then 
 				if mypetbattle_debug then print("Not in sync, declining battle") end 		-- FOR DEBUGGING
-				if mypetbattle_debug then print("Current count: "..MPB_syncCounter) end		-- FOR DEBUGGING
 				C_PetBattles.DeclineQueuedPVPMatch()
 			end
 		else

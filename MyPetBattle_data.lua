@@ -225,14 +225,14 @@ function MyPetBattle.setTeam(avgLevel)
 --	print("Set team v2")
 	-- /run MyPetBattle.setTeam(14)
 
-	print("|cFF4169E1 Setting team...!")
+	print("|cffff8000MPB|r: |cFF4169E1Setting team...!")
 
 	-- Check if string and convert to number
 	if type(avgLevel) == "string" then avgLevel = tonumber(avgLevel) end
 
 	-- Check if user has set a level for the team
 	if avgLevel == "" or avgLevel == nil then 
-		print("Please set a desired level for the team!") 
+		print("|cffff8000MPB|r: Please set a desired level for the team!") 
 		return
 	end
 
@@ -393,9 +393,9 @@ function MyPetBattle.setTeam(avgLevel)
 		
 	-- Print to chat
 	if (pet1_set or MPB_LOCK_PET1) and (pet2_set or MPB_LOCK_PET2) and (pet3_set or MPB_LOCK_PET3) then
-		print("|cFFADFF2F Done setting team!")
+		print("|cffff8000MPB|r: |cFFADFF2FDone setting team!")
 	else
-		print("|cFFFF0033 Could not set a team, please check health, levels or set the team manually!")
+		print("|cffff8000MPB|r: |cFFFF0033 Could not set a team, please check health, levels or set the team manually!")
 		if not pet1_set and not MPB_LOCK_PET1 then print("- Failed to set pet 1") end
 		if not pet2_set and not MPB_LOCK_PET2 then print("- Failed to set pet 2") end
 		if not pet3_set and not MPB_LOCK_PET3 then print("- Failed to set pet 3") end
@@ -421,11 +421,11 @@ function MyPetBattle.revive_and_heal_Pets()
 	if MPB_CONFIG_POST_COMBAT_USE_REVIVE_BATTLE_PETS_AFTER_COMBAT and Revive_start == 0 then
 		-- Cast "Revive Battle Pets"
 		CastSpellByName("Revive Battle Pets")
-		print("Casting: ".. Revive_spell_link)
+		print("|cffff8000MPB|r: Casting ".. Revive_spell_link)
 	elseif MPB_CONFIG_POST_COMBAT_USE_BATTLE_PET_BANDAGE_AFTER_COMBAT and Bandage_count > 0 and ReviveCooldown_Remaining > 210 and ReviveCooldown_Remaining < 270 then	-- Of revive cooldown is between 3.5 and 4.5 min
 		-- Use "Battle Pet Bandage"
 		UseItemByName("Battle Pet Bandage")
-		print("Using: \124T"..Bandage_itemTexture..":0\124t "..Bandage_itemLink )
+		print("|cffff8000MPB|r: Using \124T"..Bandage_itemTexture..":0\124t "..Bandage_itemLink )
 	end
 end
 
