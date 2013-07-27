@@ -635,7 +635,7 @@ local function MPB_onUpdate(self,elapsed)
 	if petBattleOpeningIsDone then
 	    MPB_timerTotal = MPB_timerTotal + elapsed
 		if MPB_timerTotal >= MPB_FORFEIT_TIMER then -- DEFAULT: 55 SECONDS
-			if mypetbattle_debug then  print(MPB_FORFEIT_TIMER+5.." sec. almost up!") end -- +5 ADJUSTMENT
+			if mypetbattle_debug then  print((MPB_FORFEIT_TIMER+5).." sec. almost up!") end -- +5 ADJUSTMENT
 			MPB_timerTotal = 0
 			petBattleOpeningIsDone = false
     	    -- FORFEIT
