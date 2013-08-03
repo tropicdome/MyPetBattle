@@ -1,9 +1,9 @@
 <Ui xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="Frame.lua" />
 	<Animation />
-	<Frame name="MyPetBattleForm" movable="true" enableMouse="true">
+	<Frame name="MyPetBattleForm" toplevel="true" movable="true" enableMouse="true" enableKeyboard="true">
 		<Size>
-			<AbsDimension x="262" y="130" />
+			<AbsDimension x="262" y="134" />
 		</Size>
 		<Anchors>
 			<Anchor point="CENTER" relativeTo="UIParent">
@@ -35,7 +35,7 @@
 					<Size x="22" y="22" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="209" y="-29" />
+							<Offset x="211" y="-29" />
 						</Anchor>
 					</Anchors>
 				</Texture>
@@ -43,7 +43,7 @@
 					<Size x="22" y="22" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="209" y="-53" />
+							<Offset x="211" y="-53" />
 						</Anchor>
 					</Anchors>
 				</Texture>
@@ -51,7 +51,7 @@
 					<Size x="22" y="22" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="209" y="-77" />
+							<Offset x="211" y="-77" />
 						</Anchor>
 					</Anchors>
 				</Texture>
@@ -76,7 +76,7 @@
 					</Anchors>
 					<FontHeight val="7" />
 				</FontString>
-				<FontString inherits="GameFontNormalSmall" font="Fonts\ARIALN.TTF" text="Capture common/uncommon if 0/3 owned" justifyH="LEFT">
+				<FontString inherits="GameFontNormalSmall" font="Fonts\ARIALN.TTF" text="Capture common/uncommon if 0/3 owned">
 					<Size x="74" y="20" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
@@ -98,7 +98,7 @@
 					<Size x="60" y="20" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="117" y="-28" />
+							<Offset x="122" y="-28" />
 						</Anchor>
 					</Anchors>
 					<FontHeight val="7" />
@@ -107,7 +107,7 @@
 					<Size x="35" y="20" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="203" y="-10" />
+							<Offset x="205" y="-10" />
 						</Anchor>
 					</Anchors>
 					<FontHeight val="8" />
@@ -116,7 +116,7 @@
 					<Size x="42" y="20" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="117" y="-11" />
+							<Offset x="122" y="-11" />
 						</Anchor>
 					</Anchors>
 					<FontHeight val="8" />
@@ -125,7 +125,7 @@
 					<Size x="35" y="15" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="6" y="-110" />
+							<Offset x="6" y="-113" />
 						</Anchor>
 					</Anchors>
 					<FontHeight val="7" />
@@ -134,7 +134,7 @@
 					<Size x="16" y="14" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="220" y="-41" />
+							<Offset x="222" y="-41" />
 						</Anchor>
 					</Anchors>
 					<FontHeight val="8" />
@@ -143,7 +143,7 @@
 					<Size x="16" y="18" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="220" y="-63" />
+							<Offset x="222" y="-63" />
 						</Anchor>
 					</Anchors>
 					<FontHeight val="8" />
@@ -152,7 +152,7 @@
 					<Size x="16" y="19" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="220" y="-86" />
+							<Offset x="222" y="-86" />
 						</Anchor>
 					</Anchors>
 					<FontHeight val="8" />
@@ -161,7 +161,7 @@
 					<Size x="21" y="20" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="38" y="-93" />
+							<Offset x="38" y="-92" />
 						</Anchor>
 					</Anchors>
 					<FontHeight val="7" />
@@ -170,7 +170,16 @@
 					<Size x="43" y="20" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="66" y="-93" />
+							<Offset x="64" y="-92" />
+						</Anchor>
+					</Anchors>
+					<FontHeight val="7" />
+				</FontString>
+				<FontString inherits="GameFontNormal" font="Fonts\ARIALN.TTF" text="Forfeit timer (default; 55 sec)" justifyH="LEFT">
+					<Size x="88" y="20" />
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="64" y="-107" />
 						</Anchor>
 					</Anchors>
 					<FontHeight val="7" />
@@ -221,7 +230,7 @@
 				<Size x="85" y="20" />
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset x="115" y="-49" />
+						<Offset x="120" y="-49" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
@@ -233,22 +242,58 @@
 					<FontHeight val="8" />
 				</ButtonText>
 			</Button>
-			<EditBox name="EditBox_PetLevel" inherits="InputBoxTemplate" enableKeyboard="true" letters="2" numeric="true" autoFocus="false">
-				<Size x="20" y="20" />
+			<EditBox name="EditBox_PetLevel" enableMouse="true" enableKeyboard="true" letters="2" numeric="true" autoFocus="false">
+				<Size x="16" y="18" />
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset x="178" y="-28" />
+						<Offset x="174" y="-29" />
 					</Anchor>
 				</Anchors>
-				<FontString>
-					<FontHeight val="8" />
+				<Layers>
+					<Layer level="BACKGROUND">
+						<Texture file="Interface\ChatFrame\UI-ChatInputBorder-Left">
+							<Size x="10" y="18" />
+							<Anchors>
+								<Anchor point="LEFT">
+									<Offset x="-4" />
+								</Anchor>
+							</Anchors>
+							<TexCoords left="0" right="0.2" top="0" bottom="1" />
+						</Texture>
+						<Texture file="Interface\ChatFrame\UI-ChatInputBorder-Right">
+							<Size x="10" y="18" />
+							<Anchors>
+								<Anchor point="RIGHT">
+									<Offset x="-6" />
+								</Anchor>
+							</Anchors>
+							<TexCoords left="0.7" right="1" top="0" bottom="1" />
+						</Texture>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnEscapePressed>
+						self:ClearFocus()
+					</OnEscapePressed>
+					<OnEditFocusGained>
+						self:HighlightText()
+					</OnEditFocusGained>
+					<OnEditFocusLost>
+						self:HighlightText(0,0);
+						if tonumber(self:GetText())&gt;25 then self:SetText("25") elseif tonumber(self:GetText())&lt;1 then self:SetText("1") end;
+						MPB_EDITBOX_DESIRED_PET_LEVEL = tonumber(self:GetText());
+					</OnEditFocusLost>
+				</Scripts>
+				<FontString inherits="GameFontNormalSmall" font="Fonts\ARIALN.TTF" maxLines="1">
+					<FontHeight val="7" />
+					<Color r="1" g="1" b="1" />
 				</FontString>
 			</EditBox>
 			<Button name="Button_PetJournalSummary" inherits="UIPanelButtonTemplate" text="Pet Journal Summary">
 				<Size x="85" y="20" />
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset x="115" y="-78" />
+						<Offset x="120" y="-78" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
@@ -264,7 +309,7 @@
 				<Size x="10" y="10" />
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset x="208" y="-42" />
+						<Offset x="210" y="-42" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
@@ -295,7 +340,7 @@
 				<Size x="10" y="10" />
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset x="208" y="-66" />
+						<Offset x="210" y="-66" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
@@ -326,7 +371,7 @@
 				<Size x="10" y="10" />
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset x="208" y="-90" />
+						<Offset x="210" y="-90" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
@@ -383,7 +428,7 @@
 				<Size x="14" y="14" />
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset x="53" y="-96" />
+						<Offset x="50" y="-96" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
@@ -469,6 +514,53 @@
 				</Scripts>
 				<HighlightTexture file="Interface\BUTTONS\UI-Panel-MinimizeButton-Highlight" alphaMode="ADD" />
 			</Button>
+			<EditBox name="EditBox_ForfeitTimer" enableMouse="true" enableKeyboard="true" letters="2" numeric="true" autoFocus="false">
+				<Size x="16" y="18" />
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="53" y="-108" />
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer level="BACKGROUND">
+						<Texture file="Interface\ChatFrame\UI-ChatInputBorder-Left">
+							<Size x="10" y="18" />
+							<Anchors>
+								<Anchor point="LEFT">
+									<Offset x="-4" />
+								</Anchor>
+							</Anchors>
+							<TexCoords left="0" right="0.2" top="0" bottom="1" />
+						</Texture>
+						<Texture file="Interface\ChatFrame\UI-ChatInputBorder-Right">
+							<Size x="10" y="18" />
+							<Anchors>
+								<Anchor point="RIGHT">
+									<Offset x="-6" />
+								</Anchor>
+							</Anchors>
+							<TexCoords left="0.7" right="1" top="0" bottom="1" />
+						</Texture>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnEscapePressed>
+						self:ClearFocus()
+					</OnEscapePressed>
+					<OnEditFocusGained>
+						self:HighlightText()
+					</OnEditFocusGained>
+					<OnEditFocusLost>
+						self:HighlightText(0,0);
+						if tonumber(self:GetText())&lt;0 then self:SetText("0") end;
+						MPB_FORFEIT_TIMER = tonumber(self:GetText());
+					</OnEditFocusLost>
+				</Scripts>
+				<FontString inherits="GameFontNormalSmall" font="Fonts\ARIALN.TTF" maxLines="1">
+					<FontHeight val="7" />
+					<Color r="1" g="1" b="1" />
+				</FontString>
+			</EditBox>
 		</Frames>
 		<Scripts>
 			<OnLoad>

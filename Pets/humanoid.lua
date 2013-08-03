@@ -86,11 +86,11 @@ elseif petName == "Gregarious Grell" then
 elseif petName == "Moonkin Hatchling" then
 	humanoid_abilities = 
 		{
+			{"Cyclone",			not MyPetBattle.debuff("Cyclone") },	-- Slot 3
 			{"Punch", 			},	-- Slot 1
 			{"Solar Beam", 		},	-- Slot 1
 			{"Entangling Roots",},	-- Slot 2
 			{"Clobber", 		},	-- Slot 2
-			{"Cyclone", 		},	-- Slot 3
 			{"Moonfire", 		},	-- Slot 3
 		}
 -------------
@@ -207,12 +207,12 @@ elseif petName == "Harbinger of Flame" then
 elseif petName == "Harpy Youngling" then
 	humanoid_abilities = 
 		{
+			{"Lift-Off", 		},	-- Slot 3
 			{"Quills", 			},	-- Slot 1
 			{"Slicing Wind", 	},	-- Slot 1
 			{"Flyby", 			},	-- Slot 2
 			{"Counterstrike", 	},	-- Slot 2
 			{"Squawk", 			},	-- Slot 3
-			{"Lift-Off", 		},	-- Slot 3
 		}
 elseif petName == "Kun-Lai Runt" then
 	humanoid_abilities = 
@@ -257,9 +257,9 @@ elseif petName == "Peddlefeet" then
 elseif petName == "Qiraji Guardling" then
 	humanoid_abilities = 
 		{
+			{"Hawk Eye",		not MyPetBattle.buff("Hawk Eye") },	-- Slot 2
 			{"Crush", 			},	-- Slot 1
 			{"Whirlwind", 		},	-- Slot 1
-			{"Hawk Eye", 		},	-- Slot 2
 			{"Sandstorm", 		},	-- Slot 2
 			{"Reckless Strike", },	-- Slot 3
 			{"Blackout Kick", 	},	-- Slot 3

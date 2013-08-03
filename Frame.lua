@@ -43,8 +43,9 @@ function Button_PetJournalSummary_OnClick()
 		for n_=1, numOwned do
 			local petID, _, owned, _, level, _, isRevoked, speciesName, icon, petType, _, _, _, _, canBattle, _, _, obtainable = C_PetJournal.GetPetInfoByIndex(n_)
 			local health, maxHealth, power, speed, rarity = C_PetJournal.GetPetStats(petID)
-			
-			if petLevel == level and owned and canBattle and not isRevoked and rarity == 4 then
+			local petIsSummonable = C_PetJournal.PetIsSummonable(petID)
+
+			if petLevel == level and owned and canBattle and not isRevoked and rarity == 4 and petIsSummonable then
 				petCount = petCount + 1
 				rareCount = rareCount + 1
 			end
@@ -111,7 +112,7 @@ end
 
 -- Show tooltip on mouseover
 function MPB_MMButton_OnEnter(self)
-	MPB_BUTTON_TOOLTIP = "Click to hide/show |cffff8000MPB|r window\nClick and hold to move this icon" 
+	MPB_BUTTON_TOOLTIP = "Click to hide/show |cffff8000MPB|r window\n\nClick and hold to move this icon" 
 	GameTooltip:SetOwner(self, "ANCHOR_LEFT")
     GameTooltip:SetText(MPB_BUTTON_TOOLTIP)
     GameTooltipTextLeft1:SetTextColor(1, 1, 1)
@@ -133,3 +134,4 @@ function MPB_MMButton_BeingDragged()
     MPB_MMBUTTONPOSITION = {w,x}
     MPB_MMButton_UpdatePosition()
 end
+

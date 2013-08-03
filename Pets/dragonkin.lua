@@ -97,11 +97,11 @@ elseif petName == "Nether Faerie Dragon" then
 	dragonkin_abilities = 
 		{
 			{"Moonfire", 		not MyPetBattle.currentWeather("Moonlight") },	-- Slot 3
+			{"Cyclone",			not MyPetBattle.debuff("Cyclone") },	-- Slot 3
 			{"Slicing Wind", 	},	-- Slot 1
 			{"Arcane Blast", 	},	-- Slot 1
 			{"Evanescence", 	},	-- Slot 2
 			{"Life Exchange", 	},	-- Slot 2
-			{"Cyclone", 		},	-- Slot 3
 		}
 elseif petName == "Netherwhelp" then
 	dragonkin_abilities = 
@@ -149,12 +149,12 @@ elseif petName == "Blue Dragonhawk Hatchling" or petName == "Golden Dragonhawk H
 elseif petName == "Phoenix Hawk Hatchling" then
 	dragonkin_abilities = 
 		{
+			{"Lift-Off", 		},	-- Slot 3
 			{"Claw", 			},	-- Slot 1
 			{"Quills", 			},	-- Slot 1
 			{"Rake", 			},	-- Slot 2
 			{"Flyby", 			},	-- Slot 2
 			{"Flame Breath", 	},	-- Slot 3
-			{"Lift-Off", 		},	-- Slot 3
 		}
 --------------
 -- SERPENTS --
@@ -192,12 +192,12 @@ elseif petName == "Soul of the Aspects" or petName == "Spirit of Competition" th
 elseif petName == "Thundering Serpent Hatchling" or petName == "Tiny Green Dragon" or petName == "Tiny Red Dragon" or petName == "Wild Golden Hatchling" or petName == "Wild Jade Hatchling" then
 	dragonkin_abilities = 
 		{
+			{"Cyclone",			not MyPetBattle.debuff("Cyclone") },	-- Slot 3
 			{"Roar", 			not MyPetBattle.buff("Attack Boost") },	-- Slot 2
 			{"Lift-Off", 		},	-- Slot 3
 			{"Breath", 			},	-- Slot 1
 			{"Tail Sweep", 		},	-- Slot 1
 			{"Call Lightning", 	},	-- Slot 2
-			{"Cyclone", 		},	-- Slot 3
 		}
 elseif petName == "Wild Crimson Hatchling" then
 	dragonkin_abilities = 
@@ -236,11 +236,11 @@ elseif petName == "Sprite Darter Hatchling" then
 	dragonkin_abilities = 
 		{
 			{"Moonfire", 		not MyPetBattle.currentWeather("Moonlight") },	-- Slot 3
+			{"Cyclone",			not MyPetBattle.debuff("Cyclone") },	-- Slot 3
 			{"Slicing Wind", 	},	-- Slot 1
 			{"Arcane Blast", 	},	-- Slot 1
 			{"Evanescence", 	},	-- Slot 2
 			{"Life Exchange", 	},	-- Slot 2
-			{"Cyclone", 		},	-- Slot 3
 		}
 elseif petName == "Untamed Hatchling" then
 	dragonkin_abilities = 

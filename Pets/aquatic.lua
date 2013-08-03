@@ -47,10 +47,10 @@ elseif petName == "Emperor Crab" or petName == "Shore Crab" or petName == "Shore
 elseif petName == "Magical Crawdad" then
 	aquatic_abilities = 
 		{
+			{"Shell Shield", 	not MyPetBattle.buff("Shell Shield") },	-- Slot 2
 			{"Snap", 			},	-- Slot 1
 			{"Surge", 			},	-- Slot 1
 			{"Renewing Mists", 	},	-- Slot 2
-			{"Shell Shield", 	},	-- Slot 2
 			{"Whirlpool", 		},	-- Slot 3
 			{"Wish", 			},	-- Slot 3
 		}
@@ -111,10 +111,10 @@ elseif petName == "Tiny White Carp" then
 	aquatic_abilities = 
 		{
 			{"Healing Wave", 	MyPetBattle.hp() < 0.7 },	-- Slot 2
+			{"Dive", 			},	-- Slot 3
 			{"Water Jet", 		},	-- Slot 1
 			{"Surge", 			},	-- Slot 1
 			{"Cleansing Rain", 	},	-- Slot 2
-			{"Dive", 			},	-- Slot 3
 			{"Healing Stream", 	},	-- Slot 3
 		}
 ---------------------
@@ -159,12 +159,12 @@ elseif petName == "Aqua Strider" or petName == "Dancing Water Skimmer" or petNam
 elseif petName == "Golden Civet" or petName == "Golden Civet Kitten" or petName == "Kuitan Mongoose" or petName == "Mongoose" or petName == "Mongoose Pup" or petName == "Sifang Otter" or petName == "Sifang Otter Pup" then
 	aquatic_abilities = 
 		{
+			{"Survival", 		MyPetBattle.hp() < 0.3 },	-- Slot 2
+			{"Dive", 			},	-- Slot 3
 			{"Bite", 			},	-- Slot 1
 			{"Gnaw", 			},	-- Slot 1
 			{"Screech", 		},	-- Slot 2
-			{"Survival", 		},	-- Slot 2
 			{"Surge", 			},	-- Slot 3
-			{"Dive", 			},	-- Slot 3
 		}
 --------------
 -- PENGUINS --
@@ -186,28 +186,28 @@ elseif petName == "Darkmoon Turtle" or petName == "Softshell Snapling" or petNam
 	aquatic_abilities = 
 		{
 			{"Healing Wave", 	MyPetBattle.hp() < 0.7 },	-- Slot 2
+			{"Headbutt", 		},	-- Slot 3
+			{"Shell Shield", 	not MyPetBattle.buff("Shell Shield") },	-- Slot 2
 			{"Bite", 			},	-- Slot 1
 			{"Grasp", 			},	-- Slot 1
-			{"Shell Shield", 	},	-- Slot 2
-			{"Headbutt", 		},	-- Slot 3
 			{"Powerball", 		},	-- Slot 3
 		}
 elseif petName == "Emerald Turtle" then
 	aquatic_abilities = 
 		{
 			{"Healing Wave", 	MyPetBattle.hp() < 0.7 },	-- Slot 2
+			{"Shell Shield", 	not MyPetBattle.buff("Shell Shield") },	-- Slot 2
+			{"Headbutt", 		},	-- Slot 3
 			{"Emerald Bite", 	},	-- Slot 1
 			{"Grasp", 			},	-- Slot 1
-			{"Shell Shield", 	},	-- Slot 2
-			{"Headbutt", 		},	-- Slot 3
 			{"Powerball", 		},	-- Slot 3
 		}
 elseif petName == "Wanderer's Festival Hatchling" then
 	aquatic_abilities = 
 		{
+			{"Shell Shield", 	not MyPetBattle.buff("Shell Shield") },	-- Slot 2
 			{"Bite", 			},	-- Slot 1
 			{"Grasp", 			},	-- Slot 1
-			{"Shell Shield", 	},	-- Slot 2
 			{"Perk Up", 		},	-- Slot 2
 			{"Pump", 			},	-- Slot 3
 			{"Cleansing Rain", 	},	-- Slot 3
@@ -238,9 +238,9 @@ elseif petName == "Sea Pony" then
 elseif petName == "Spawn of G'nathus" then
 	aquatic_abilities = 
 		{
+			{"Dive", 			},	-- Slot 2
 			{"Swallow You Whole",},	-- Slot 1
 			{"Jolt", 			},	-- Slot 1
-			{"Dive", 			},	-- Slot 2
 			{"Lightning Shield",},	-- Slot 2
 			{"Thunderbolt", 	},	-- Slot 3
 			{"Paralyzing Shock",},	-- Slot 3

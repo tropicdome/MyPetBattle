@@ -66,11 +66,11 @@ elseif petName == "Living Sandling" then
 elseif petName == "Pandaren Air Spirit" then
 	elemental_abilities = 
 		{
+			{"Cyclone",			not MyPetBattle.debuff("Cyclone") },	-- Slot 3
 			{"Slicing Wind", 	},	-- Slot 1
 			{"Wild Winds", 		},	-- Slot 1
 			{"Whirlwind", 		},	-- Slot 2
 			{"Soothing Mists", 	},	-- Slot 2
-			{"Cyclone", 		},	-- Slot 3
 			{"Arcane Storm", 	},	-- Slot 3
 		}
 elseif petName == "Pandaren Earth Spirit" then
@@ -96,11 +96,11 @@ elseif petName == "Pandaren Fire Spirit" then
 elseif petName == "Pandaren Water Spirit" then
 	elemental_abilities = 
 		{
+			{"Dive", 			},	-- Slot 3
 			{"Water Jet", 		},	-- Slot 1
 			{"Tidal Wave", 		},	-- Slot 1
 			{"Healing Wave", 	},	-- Slot 2
 			{"Whirlpool", 		},	-- Slot 2
-			{"Dive", 			},	-- Slot 3
 			{"Geyser",	 		},	-- Slot 3
 		}
 elseif petName == "Thundertail Flapper" then
@@ -116,11 +116,11 @@ elseif petName == "Thundertail Flapper" then
 elseif petName == "Tiny Twister" then
 	elemental_abilities = 
 		{
+			{"Cyclone",			not MyPetBattle.debuff("Cyclone") },	-- Slot 3
 			{"Slicing Wind", 	},	-- Slot 1
 			{"Wild Winds", 		},	-- Slot 1
 			{"Flyby", 			},	-- Slot 2
 			{"Bash", 			},	-- Slot 2
-			{"Cyclone", 		},	-- Slot 3
 			{"Sandstorm",		},	-- Slot 3
 		}
 elseif petName == "Water Waveling" then
@@ -136,9 +136,9 @@ elseif petName == "Water Waveling" then
 elseif petName == "Tainted Waveling" then
 	elemental_abilities = 
 		{
+			{"Acidic Goo", 		not MyPetBattle.debuff("Acidic Goo") },	-- Slot 2
 			{"Ooze Touch", 		},	-- Slot 1
 			{"Poison Spit", 	},	-- Slot 1
-			{"Acidic Goo", 		},	-- Slot 2
 			{"Corrosion",		},	-- Slot 2
 			{"Healing Wave", 	},	-- Slot 3
 			{"Creeping Ooze",	},	-- Slot 3
@@ -226,10 +226,10 @@ elseif petName == "Ruby Sapling" then
 	elemental_abilities = 
 		{
 			{"Photosynthesis", 	not MyPetBattle.buff("Photosynthesis") and MyPetBattle.hp() < 0.8 },	-- Slot 3
+			{"Shell Shield", 	not MyPetBattle.buff("Shell Shield") },	-- Slot 2
 			{"Scratch", 		},	-- Slot 1
 			{"Poisoned Branch", },	-- Slot 1
 			{"Thorns", 			},	-- Slot 2
-			{"Shell Shield", 	},	-- Slot 2
 			{"Entangling Roots",},	-- Slot 3
 		}
 elseif petName == "Singing Sunflower" then
@@ -256,8 +256,8 @@ elseif petName == "Teldrassil Sproutling" then
 	elemental_abilities = 
 		{
 			{"Photosynthesis", 	not MyPetBattle.buff("Photosynthesis") and MyPetBattle.hp() < 0.8 },	-- Slot 2
+			{"Shell Shield", 	not MyPetBattle.buff("Shell Shield") },	-- Slot 1
 			{"Scratch", 		},	-- Slot 1
-			{"Shell Shield", 	},	-- Slot 1
 			{"Poisoned Branch", },	-- Slot 2
 			{"Thorns", 			},	-- Slot 3
 			{"Entangling Roots",},	-- Slot 3
@@ -296,8 +296,8 @@ elseif petName == "Withers" then
 	elemental_abilities = 
 		{
 			{"Photosynthesis", 	not MyPetBattle.buff("Photosynthesis") and MyPetBattle.hp() < 0.8 },	-- Slot 2
+			{"Shell Shield", 	not MyPetBattle.buff("Shell Shield") },	-- Slot 1
 			{"Scratch", 		},	-- Slot 1
-			{"Shell Shield", 	},	-- Slot 1
 			{"Poisoned Branch", },	-- Slot 2
 			{"Thorns", 			},	-- Slot 3
 			{"Entangling Roots",},	-- Slot 3
@@ -352,20 +352,20 @@ elseif petName == "Jade Tentacle" then
 	elemental_abilities = 
 		{
 			{"Photosynthesis", 	not MyPetBattle.buff("Photosynthesis") and MyPetBattle.hp() < 0.8 },	-- Slot 2
+			{"Shell Shield", 	not MyPetBattle.buff("Shell Shield") },	-- Slot 2
 			{"Scratch", 		},	-- Slot 1
 			{"Poisoned Branch", },	-- Slot 1
-			{"Shell Shield", 	},	-- Slot 2
 			{"Entangling Roots",},	-- Slot 3
 			{"Thorns", 			},	-- Slot 3
 		}
 elseif petName == "Lava Crab" then
 	elemental_abilities = 
 		{
+			{"Survival", 		MyPetBattle.hp() < 0.3 },	-- Slot 1
 			{"Cauterize", 		MyPetBattle.hp() < 0.7 },	-- Slot 2
+			{"Shell Shield", 	not MyPetBattle.buff("Shell Shield") },	-- Slot 2
 			{"Conflagrate", 	},	-- Slot 3
 			{"Burn", 			},	-- Slot 1
-			{"Survival", 		},	-- Slot 1
-			{"Shell Shield", 	},	-- Slot 2
 			{"Magma Wave", 		},	-- Slot 3
 		}
 elseif petName == "Sapphire Cub" then
