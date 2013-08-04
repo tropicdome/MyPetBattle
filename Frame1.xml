@@ -26,7 +26,7 @@
 					<Size x="140" y="20" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="20" y="-428" />
+							<Offset x="20" y="-456" />
 						</Anchor>
 					</Anchors>
 				</FontString>
@@ -184,6 +184,19 @@
 					</OnLoad>
 				</Scripts>
 			</CheckButton>
+			<CheckButton name="CheckButton25" inherits="InterfaceOptionsSmallCheckButtonTemplate" text="Swap a lvl25 pet after combat.">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="31" y="-419" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						Frame1_Checkbutton_OnLoad(self)
+						self.tooltipText = 'Swap an unlocked pet to desired level when a pet hits 25'
+					</OnLoad>
+				</Scripts>
+			</CheckButton>
 			<CheckButton name="CheckButton14" inherits="InterfaceOptionsSmallCheckButtonTemplate" text="Use &quot;Battle Pet Bandage&quot; to heal/revive pets.">
 				<Anchors>
 					<Anchor point="TOPLEFT">
@@ -200,7 +213,7 @@
 			<CheckButton name="CheckButton13" inherits="InterfaceOptionsSmallCheckButtonTemplate" text="Automatic release poor, common, and uncommon pets if more than one.">
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset x="31" y="-447" />
+						<Offset x="31" y="-475" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
