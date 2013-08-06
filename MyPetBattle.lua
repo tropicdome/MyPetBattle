@@ -11,6 +11,7 @@ mypetbattle_enabled = false
 mypetbattle_join_pvp = false
 mypetbattle_auto_forfeit = false
 mypetbattle_wintrade_enabled = false
+mypetbattle_pausequeue = false
 MPB_TeamWanted=nil
 MPB_NewPetLevel=nil
 MPB_STATS_TABLE = {}
@@ -446,6 +447,8 @@ function events:UPDATE_SUMMONPETS_ACTION(...)					--
 	end
     -- ianw if we have 'swap at 25' set then if our pet level is currently 25, swap for a new one
     if MPB_NewPetLevel == 25 and MPB_CONFIG_POST_COMBAT_AUTO_REPLACE_25 then
+        -- add another 25 levelled to the stats
+		MyPetBattle.addStats("LVL25'd",1)
         MPB_NewPetLevel = nil
 	    print("|cffff8000MPB|r: \124cFF00FF00Replacing our level 25 pet with a new one")
         local desiredPetLevel = EditBox_PetLevel:GetText()  -- Get user input for desired pet level
@@ -610,8 +613,8 @@ function events:PET_BATTLE_QUEUE_PROPOSAL_DECLINED(...)		--
             MyPetBattle.setTeam(MPB_TeamWanted)
             MPB_TeamWanted = nil
             -- restart PVP Queue
-	        print("|cffff8000MPB|r: |cFF00FFFFRejoining PVP Queue")
-	        SlashCmdList.MYPETBATTLE('join_pvp')
+	        print("|cffff8000MPB|r: |cFF00FFFFSetting flag to rejoin PVP Queue")
+	        mypetbattle_pausequeue = false
     end
 end
 
@@ -637,7 +640,7 @@ function events:PET_BATTLE_QUEUE_STATUS(...)				--
 end
 
 function events:PET_BATTLE_TURN_STARTED(...)				-- 
-	print("PET_BATTLE_TURN_STARTED")
+	--print("PET_BATTLE_TURN_STARTED")
 end
 
 function events:PET_BATTLE_XP_CHANGED(...)					-- 
@@ -681,12 +684,15 @@ function events:CHAT_MSG_ADDON(...)							--
             wanted = (diff+level)
             MPB_TeamWanted=wanted
             -- stop pvp Q for a second
-		    if mypetbattle_join_pvp then
+		    r = C_PetBattles.GetPVPMatchmakingInfo() 
+            if r ~= nil then
 	            print("|cffff8000MPB|r: |cFF00FFFFLeaving PVP Queue to swap pets")
-	            SlashCmdList.MYPETBATTLE('join_pvp')
+                mypetbattle_pausequeue = true
+		        C_PetBattles.StopPVPMatchmaking()
             else
                 MyPetBattle.setTeam(MPB_TeamWanted)
                 MPB_TeamWanted = nil
+                mypetbattle_pausequeue = false
             end
         else
 	    print("|cffff8000MPB|r: |cFF00FFFFOur level difference is 1 so we're ok")
@@ -741,16 +747,17 @@ local function MPB_onUpdate(self,elapsed)
             if mypetbattle_debug then print("in battle reset 5min check") end
         end
         MPB_5minCheck = 0
+	    MPB_timerOneSec = 0 
     end
-    if MPB_5minCheck > 360 then
-        if mypetbattle_debug then print("waited more than 3 minutes in Q -leaving Queue" ) end
+    if mypetbattle_join_pvp and MPB_5minCheck > 120 then
+        if mypetbattle_debug then print("waited more than 5 minutes in Q -leaving Queue" ) end
 		C_PetBattles.StopPVPMatchmaking()
         MPB_5minCheck =0
+	    MPB_timerOneSec = 0 
     end
-    if MPB_5minCheck > 355 then
+    if mypetbattle_join_pvp and MPB_5minCheck > 110 then
         if mypetbattle_debug then print("5min check rolling.."..MPB_5minCheck) end
     end
-        
 
 	-- 1 SEC TIMER CHECK
 	MPB_timerOneSec = MPB_timerOneSec + elapsed
@@ -758,8 +765,12 @@ local function MPB_onUpdate(self,elapsed)
 	if MPB_timerOneSec >= 5 then
 		-- CHECK IF WE SHOULD BE IN THE PVP MATCHMAKING QUEUE, BUT WE ARE NOT
 		if not C_PetBattles.IsInBattle() and (C_PetBattles.GetPVPMatchmakingInfo() == nil) and mypetbattle_join_pvp then
-			C_PetBattles.StartPVPMatchmaking()
-            MPB_5minCheck = 0
+            --print( "Should be in battle so start pvp")
+            if mypetbattle_pausequeue == false then
+			    C_PetBattles.StartPVPMatchmaking()
+            else
+                if mypetbattle_debug then print('not joining queue yet - swapping pets') end
+            end
 		end
 		-- DISMISS PET SO WE DO NOT HAVE IT RUNNING AROUND
         local petGUID = C_PetJournal.GetSummonedPetGUID()
@@ -801,7 +812,7 @@ local function MPB_onUpdate(self,elapsed)
 		-- GET PVP QUEUE INFORMATION
 		local queueState, estimatedTime, queuedTime = C_PetBattles.GetPVPMatchmakingInfo()
 		-- CHECK THAT WE ARE READY TO ACCEPT WHEN RECEIVING THE MESSAGE FROM OUR PARTNER
-		if mypetbattle_wintrade_enabled and not C_PetBattles.IsInBattle() and mypetbattle_debug then print("|cffff8000MPB|r sync: " .. syncDifference) end
+		--if mypetbattle_wintrade_enabled and not C_PetBattles.IsInBattle() and mypetbattle_debug then print("|cffff8000MPB|r sync: " .. syncDifference) end
 		-- WHEN QUEUE POPS CHECK FOR SYNC
 		if queueState == "proposal" then
 			MPB_syncCounter = MPB_syncCounter + 1
@@ -914,7 +925,9 @@ function SlashCmdList.MYPETBATTLE(msg, editbox)
 			local speciesID, customName, level, xp, maxXp, displayID, isFavorite, name, icon, petType, creatureID, sourceText, description, isWild, canBattle, tradable, unique, obtainable = C_PetJournal.GetPetInfoByPetID(petGUID) 
             sendLevel = level
 		    SendAddonMessage("MPB_PL", sendLevel, "PARTY")
-	else
+	elseif msg == "stats" then
+        MyPetBattle.printStats()
+    else
 		-- UNKNOWN COMMAND
 		print("|cffff8000MPB|r: Unknown command ("..msg..")")
     end
