@@ -20,12 +20,7 @@ end
 
 -- Make random team based on desired pet level
 function Button_MakeRandomTeam_OnClick()
-	local desiredPetLevel = EditBox_PetLevel:GetText()  -- Get user input for desired pet level
-	MyPetBattle.setTeam(desiredPetLevel)                -- Setup our team
-	-- Save desired pet level for next time we log in
-	MPB_EDITBOX_DESIRED_PET_LEVEL = desiredPetLevel
-	-- Clear focus from the editbox
-	EditBox_PetLevel:ClearFocus()                       
+	MyPetBattle.setState(MyPetBattleState.SET_TEAM_START, true)
 end
 
 -- Print summary of your per journal rares
@@ -42,6 +37,7 @@ function Button_PetJournalSummary_OnClick()
 		local petCount = 0
 		for n_=1, numOwned do
 			local petID, _, owned, _, level, _, isRevoked, speciesName, icon, petType, _, _, _, _, canBattle, _, _, obtainable = C_PetJournal.GetPetInfoByIndex(n_)
+			level = MyPetBattle.getPetLevel("Button_PetJournalSummary_OnClick", petID, level)
 			local health, maxHealth, power, speed, rarity = C_PetJournal.GetPetStats(petID)
 			local petIsSummonable = C_PetJournal.PetIsSummonable(petID)
 
@@ -88,6 +84,10 @@ end
 
 function CheckButton_wintrade_enable_OnClick()
 	SlashCmdList.MYPETBATTLE('wintrade_enable')
+end
+
+function CheckButton_wt_match_levels_OnClick()
+	SlashCmdList.MYPETBATTLE('wintrade_match_levels')
 end
 
 ------------------------------
