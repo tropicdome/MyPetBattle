@@ -76,7 +76,7 @@
 					</Anchors>
 					<FontHeight val="7" />
 				</FontString>
-				<FontString inherits="GameFontNormalSmall" font="Fonts\ARIALN.TTF" text="Capture common/uncommon if 0/3 owned">
+				<FontString inherits="GameFontNormalSmall" font="Fonts\ARIALN.TTF" text="Capture common/uncommon if 0/3 owned" justifyH="LEFT">
 					<Size x="74" y="20" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
@@ -166,6 +166,15 @@
 					</Anchors>
 					<FontHeight val="7" />
 				</FontString>
+				<FontString inherits="GameFontNormal" font="Fonts\ARIALN.TTF" text="WT match levels" justifyH="LEFT">
+					<Size x="85" y="20" />
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="134" y="-92" />
+						</Anchor>
+					</Anchors>
+					<FontHeight val="7" />
+				</FontString>
 				<FontString inherits="GameFontNormal" font="Fonts\ARIALN.TTF" text="Auto forfeit" justifyH="LEFT">
 					<Size x="43" y="20" />
 					<Anchors>
@@ -175,11 +184,29 @@
 					</Anchors>
 					<FontHeight val="7" />
 				</FontString>
-				<FontString inherits="GameFontNormal" font="Fonts\ARIALN.TTF" text="Forfeit timer (default; 55 sec)" justifyH="LEFT">
+				<FontString inherits="GameFontNormal" font="Fonts\ARIALN.TTF" text="Forfeit timer&#xA;(default 55 sec)" justifyH="LEFT">
 					<Size x="88" y="20" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
 							<Offset x="64" y="-107" />
+						</Anchor>
+					</Anchors>
+					<FontHeight val="7" />
+				</FontString>
+				<FontString inherits="GameFontNormal" font="Fonts\ARIALN.TTF" text="Start&#xA;level" justifyH="LEFT">
+					<Size x="30" y="20" />
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="141" y="-107" />
+						</Anchor>
+					</Anchors>
+					<FontHeight val="7" />
+				</FontString>
+				<FontString inherits="GameFontNormal" font="Fonts\ARIALN.TTF" text="Direction" justifyH="LEFT">
+					<Size x="30" y="20" />
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="176" y="-107" />
 						</Anchor>
 					</Anchors>
 					<FontHeight val="7" />
@@ -280,6 +307,7 @@
 					</OnEditFocusGained>
 					<OnEditFocusLost>
 						self:HighlightText(0,0);
+						if not tonumber(self:GetText()) then self:SetText("1") end
 						if tonumber(self:GetText())&gt;25 then self:SetText("25") elseif tonumber(self:GetText())&lt;1 then self:SetText("1") end;
 						MPB_EDITBOX_DESIRED_PET_LEVEL = tonumber(self:GetText());
 					</OnEditFocusLost>
@@ -293,7 +321,7 @@
 				<Size x="85" y="20" />
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset x="120" y="-78" />
+						<Offset x="120" y="-73" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
@@ -450,6 +478,19 @@
 					</OnClick>
 				</Scripts>
 			</CheckButton>
+			<CheckButton name="CheckButton_wt_match_levels" inherits="UICheckButtonTemplate">
+				<Size x="14" y="14" />
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="120" y="-96" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						CheckButton_wt_match_levels_OnClick()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
 			<Button name="MPB_MMButton" parent="Minimap" movable="true" frameStrata="MEDIUM" enableMouse="true">
 				<Size>
 					<AbsDimension x="31" y="31" />
@@ -552,8 +593,105 @@
 					</OnEditFocusGained>
 					<OnEditFocusLost>
 						self:HighlightText(0,0);
+						if not tonumber(self:GetText()) then self:SetText("5") end
 						if tonumber(self:GetText())&lt;0 then self:SetText("0") end;
 						MPB_FORFEIT_TIMER = tonumber(self:GetText());
+					</OnEditFocusLost>
+				</Scripts>
+				<FontString inherits="GameFontNormalSmall" font="Fonts\ARIALN.TTF" maxLines="1">
+					<FontHeight val="7" />
+					<Color r="1" g="1" b="1" />
+				</FontString>
+			</EditBox>
+			<EditBox name="EditBox_MatchLevel" enableMouse="true" enableKeyboard="true" letters="2" numeric="true" autoFocus="false">
+				<Size x="16" y="18" />
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="130" y="-108" />
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer level="BACKGROUND">
+						<Texture file="Interface\ChatFrame\UI-ChatInputBorder-Left">
+							<Size x="10" y="18" />
+							<Anchors>
+								<Anchor point="LEFT">
+									<Offset x="-4" />
+								</Anchor>
+							</Anchors>
+							<TexCoords left="0" right="0.2" top="0" bottom="1" />
+						</Texture>
+						<Texture file="Interface\ChatFrame\UI-ChatInputBorder-Right">
+							<Size x="10" y="18" />
+							<Anchors>
+								<Anchor point="RIGHT">
+									<Offset x="-6" />
+								</Anchor>
+							</Anchors>
+							<TexCoords left="0.7" right="1" top="0" bottom="1" />
+						</Texture>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnEscapePressed>
+						self:ClearFocus()
+					</OnEscapePressed>
+					<OnEditFocusGained>
+						self:HighlightText()
+					</OnEditFocusGained>
+					<OnEditFocusLost>
+						self:HighlightText(0,0);
+						if not tonumber(self:GetText()) then self:SetText("1") end
+						if tonumber(self:GetText())&gt;25 then self:SetText("25") elseif tonumber(self:GetText())&lt;1 then self:SetText("1") end;
+						MPB.MATCH_PET_LEVELS_START_LEVEL = tonumber(self:GetText());
+					</OnEditFocusLost>
+				</Scripts>
+				<FontString inherits="GameFontNormalSmall" font="Fonts\ARIALN.TTF" maxLines="1">
+					<FontHeight val="7" />
+					<Color r="1" g="1" b="1" />
+				</FontString>
+			</EditBox>
+			<EditBox name="EditBox_Direction" enableMouse="true" enableKeyboard="true" letters="2" numeric="false" autoFocus="false">
+				<Size x="16" y="18" />
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="165" y="-108" />
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer level="BACKGROUND">
+						<Texture file="Interface\ChatFrame\UI-ChatInputBorder-Left">
+							<Size x="10" y="18" />
+							<Anchors>
+								<Anchor point="LEFT">
+									<Offset x="-4" />
+								</Anchor>
+							</Anchors>
+							<TexCoords left="0" right="0.2" top="0" bottom="1" />
+						</Texture>
+						<Texture file="Interface\ChatFrame\UI-ChatInputBorder-Right">
+							<Size x="10" y="18" />
+							<Anchors>
+								<Anchor point="RIGHT">
+									<Offset x="-6" />
+								</Anchor>
+							</Anchors>
+							<TexCoords left="0.7" right="1" top="0" bottom="1" />
+						</Texture>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnEscapePressed>
+						self:ClearFocus()
+					</OnEscapePressed>
+					<OnEditFocusGained>
+						self:HighlightText()
+					</OnEditFocusGained>
+					<OnEditFocusLost>
+						self:HighlightText(0,0);
+						if not tonumber(self:GetText()) then self:SetText("-1") end
+						if tonumber(self:GetText())&gt;0 then self:SetText("+1") else self:SetText("-1") end;
+						MPB.MATCH_PET_LEVELS_LEVEL_STEP = tonumber(self:GetText());
 					</OnEditFocusLost>
 				</Scripts>
 				<FontString inherits="GameFontNormalSmall" font="Fonts\ARIALN.TTF" maxLines="1">

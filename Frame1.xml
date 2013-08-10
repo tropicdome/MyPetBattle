@@ -18,7 +18,7 @@
 					<Size x="140" y="20" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="20" y="-266" />
+							<Offset x="20" y="-292" />
 						</Anchor>
 					</Anchors>
 				</FontString>
@@ -26,7 +26,7 @@
 					<Size x="140" y="20" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="20" y="-428" />
+							<Offset x="20" y="-454" />
 						</Anchor>
 					</Anchors>
 				</FontString>
@@ -50,7 +50,7 @@
 					<Size x="29" y="20" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="126" y="-289" />
+							<Offset x="137" y="-315" />
 						</Anchor>
 					</Anchors>
 				</FontString>
@@ -60,7 +60,7 @@
 					</Size>
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="35" y="-289" />
+							<Offset x="35" y="-315" />
 						</Anchor>
 					</Anchors>
 					<FontHeight val="12" />
@@ -76,11 +76,22 @@
 					</Anchors>
 					<FontHeight val="10" />
 				</FontString>
+				<FontString inherits="GameFontHighlight" text="Minimum number of pets of each level to keep:" justifyH="LEFT">
+					<Size>
+						<AbsDimension x="300" y="20" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="204" y="-201" />
+						</Anchor>
+					</Anchors>
+					<FontHeight val="12" />
+				</FontString>
 				<FontString name="post_combat_options" inherits="GameFontNormal" text="Post-combat options" justifyH="LEFT">
 					<Size x="140" y="20" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="20" y="-317" />
+							<Offset x="20" y="-343" />
 						</Anchor>
 					</Anchors>
 				</FontString>
@@ -102,7 +113,7 @@
 				</FontString>
 				<FontString name="FontString1" inherits="GameFontHighlight" text="Minimum pet health % for random team pets:" justifyH="LEFT">
 					<Size>
-						<AbsDimension x="224" y="20" />
+						<AbsDimension x="300" y="20" />
 					</Size>
 					<Anchors>
 						<Anchor point="TOPLEFT">
@@ -123,7 +134,7 @@
 					<Size x="356" y="35" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="269" y="-362" />
+							<Offset x="269" y="-388" />
 						</Anchor>
 					</Anchors>
 				</FontString>
@@ -131,7 +142,7 @@
 					<Size x="80" y="25" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="378" y="-446" />
+							<Offset x="378" y="-472" />
 						</Anchor>
 					</Anchors>
 				</FontString>
@@ -139,7 +150,7 @@
 					<Size x="21" y="20" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="280" y="-60" />
+							<Offset x="350" y="-60" />
 						</Anchor>
 					</Anchors>
 					<FontHeight val="10" />
@@ -148,7 +159,7 @@
 					<Size x="80" y="20" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="378" y="-271" />
+							<Offset x="378" y="-297" />
 						</Anchor>
 					</Anchors>
 				</FontString>
@@ -156,7 +167,7 @@
 					<Size x="49" y="20" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="336" y="-289" />
+							<Offset x="336" y="-315" />
 						</Anchor>
 					</Anchors>
 				</FontString>
@@ -164,7 +175,7 @@
 					<Size x="46" y="20" />
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset x="395" y="-289" />
+							<Offset x="400" y="-315" />
 						</Anchor>
 					</Anchors>
 				</FontString>
@@ -174,52 +185,52 @@
 			<CheckButton name="CheckButton11" inherits="InterfaceOptionsSmallCheckButtonTemplate" text="Automatic generate new team after combat.">
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset x="31" y="-397" />
+						<Offset x="31" y="-423" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
 					<OnLoad>
 						Frame1_Checkbutton_OnLoad(self)
-						self.tooltipText = 'Generate a new team if our \ncurrent team is low on health.'
+						self.tooltipText = 'Generate a new team if our current team is low on health.'
 					</OnLoad>
 				</Scripts>
 			</CheckButton>
 			<CheckButton name="CheckButton14" inherits="InterfaceOptionsSmallCheckButtonTemplate" text="Use &quot;Battle Pet Bandage&quot; to heal/revive pets.">
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset x="31" y="-369" />
+						<Offset x="31" y="-395" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
 					<OnLoad>
 						Frame1_Checkbutton_OnLoad(self)
-						self.tooltipText = '\"Battle Pet Bandage\" Generate a new team if our \ncurrent team is low on health.'
+						self.tooltipText = '\"Battle Pet Bandage\" Generate a new team if our current team is low on health.'
 					</OnLoad>
 				</Scripts>
 			</CheckButton>
 			<CheckButton name="CheckButton13" inherits="InterfaceOptionsSmallCheckButtonTemplate" text="Automatic release poor, common, and uncommon pets if more than one.">
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset x="31" y="-447" />
+						<Offset x="31" y="-473" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
 					<OnLoad>
 						Frame1_Checkbutton_OnLoad(self)
-						self.tooltipText = 'WARNING! Might be dangerous if \nwe release pets we do not want to release'
+						self.tooltipText = 'WARNING! Might be dangerous if we release pets we do not want to release'
 					</OnLoad>
 				</Scripts>
 			</CheckButton>
 			<CheckButton name="CheckButton12" inherits="InterfaceOptionsSmallCheckButtonTemplate" text="Use &quot;Revive Battle Pets&quot; to heal/revive team after combat.">
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset x="31" y="-341" />
+						<Offset x="31" y="-367" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
 					<OnLoad>
 						Frame1_Checkbutton_OnLoad(self)
-						self.tooltipText = 'If we can cannot generate a new \nteam due to general low health of all of our pets.'
+						self.tooltipText = 'If we can cannot generate a new team due to general low health of all of our pets.'
 					</OnLoad>
 				</Scripts>
 			</CheckButton>
@@ -268,13 +279,67 @@
 					</OnLoad>
 				</Scripts>
 			</Slider>
+			<CheckButton name="CheckButtonIncludeOnlyRare" inherits="InterfaceOptionsSmallCheckButtonTemplate" text="Use only rare pets when creating a team.">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="200" y="-117" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						Frame1_Checkbutton_OnLoad(self)
+						self.tooltipText = 'If this is not checked, then the team may include non-rare pets when a rare pet of the appropriate level cannot be found. Higher quality pets are still given priority for the same level.'
+					</OnLoad>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="CheckButtonPrioritizeLevel" inherits="InterfaceOptionsSmallCheckButtonTemplate" text="Choose pets closest to the chosen level before selecting by quality.">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="200" y="-145" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						Frame1_Checkbutton_OnLoad(self)
+						self.tooltipText = 'If this is not checked, then better quality pets are chosen first before selecting by level difference from the desired level. This option has no affect if only rare pets are included.'
+					</OnLoad>
+				</Scripts>
+			</CheckButton>
+			<EditBox name="EditBoxLevelKeepMinimum" inherits="InputBoxTemplate" enableKeyboard="true" letters="1" numeric="true" autoFocus="false">
+				<Size>
+					<AbsDimension x="15" y="20" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="510" y="-201" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						self:SetText('0')
+					</OnLoad>
+				</Scripts>
+			</EditBox>
+			<CheckButton name="CheckButtonRandomize" inherits="InterfaceOptionsSmallCheckButtonTemplate" text="Choose pets of the same level and quality randomly.">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="200" y="-173" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						Frame1_Checkbutton_OnLoad(self)
+						self.tooltipText = 'If this is not checked, then pets of the same level and quality are chosen by name.'
+					</OnLoad>
+				</Scripts>
+			</CheckButton>
 			<EditBox name="EditBox_swap_pet_health_threshold" inherits="InputBoxTemplate" enableKeyboard="true" letters="2" numeric="true" autoFocus="false">
 				<Size>
 					<AbsDimension x="20" y="20" />
 				</Size>
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset x="105" y="-289" />
+						<Offset x="116" y="-315" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
@@ -289,7 +354,7 @@
 				</Size>
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset x="380" y="-289" />
+						<Offset x="381" y="-315" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
@@ -304,7 +369,7 @@
 				</Size>
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset x="440" y="-289" />
+						<Offset x="445" y="-315" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
@@ -322,7 +387,20 @@
 				<Scripts>
 					<OnLoad>
 						Frame1_Checkbutton_OnLoad(self)
-						self.tooltipText = 'Will try to setup strongest \nrandom team according to selected wild pet.'
+						self.tooltipText = 'Will try to setup strongest random team according to selected wild pet.'
+					</OnLoad>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="CheckButtonEquipSafariHat" inherits="InterfaceOptionsSmallCheckButtonTemplate" text="Automatically equip and unequip Safari Hat.">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="31" y="-262" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						Frame1_Checkbutton_OnLoad(self)
+						self.tooltipText = 'Equips the Safari Hat so that you get extra pet XP at the end of the battle. Re-equips the previously equipped helmet at the end of the battle. If the helmet was an heirloom helmet then the player will get extra player XP as well.'
 					</OnLoad>
 				</Scripts>
 			</CheckButton>
@@ -332,7 +410,7 @@
 				</Size>
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset x="254" y="-60" />
+						<Offset x="324" y="-60" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
