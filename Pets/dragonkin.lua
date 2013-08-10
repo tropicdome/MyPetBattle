@@ -16,11 +16,11 @@ end
 if petName == "Azure Whelpling" then
 	dragonkin_abilities = 
 		{
-			{"Surge of Power", 	},	-- Slot 3
 			{"Claw", 			},	-- Slot 1
 			{"Breath", 			},	-- Slot 1
 			{"Arcane Storm", 	},	-- Slot 2
 			{"Wild Magic", 		},	-- Slot 2
+			{"Surge of Power", 	},	-- Slot 3
 			{"Ice Tomb", 		},	-- Slot 3
 		}
 elseif petName == "Crimson Whelpling" or petName == "Onyxian Whelpling" or petName == "Spawn of Onyxia" then

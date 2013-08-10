@@ -223,10 +223,9 @@ end
 -- New improved team setup
 function MyPetBattle.setTeam(avgLevel)
 --	print("Set team v2")
-	-- /run MyPetBattle.setTeam(14) 
-    ret = nil
+	-- /run MyPetBattle.setTeam(14)
 
-	print("|cffff8000MPB|r: |cFF4169E1Setting team...! (with level "..avgLevel..")")
+	print("|cffff8000MPB|r: |cFF4169E1Setting team...!")
 
 	-- Check if string and convert to number
 	if type(avgLevel) == "string" then avgLevel = tonumber(avgLevel) end
@@ -365,14 +364,6 @@ function MyPetBattle.setTeam(avgLevel)
 		pet3_end = -3
 		pet3_step = -1
 	end
-    -- ianw I'm not getting these sliders. I want one more, equal, 1 less and don't care about rarity
-    rarityDontCare =false
-    if MPB_OpponentPetLevel ~= nill then
-        pet3_start = 1
-        pet3_end = -1
-        pet3_step = -1
-        rarityDontCare = true
-    end
 	for p_ = pet3_start, pet3_end, pet3_step do
 		if pet3_set or MPB_LOCK_PET3 then break end -- Also check if pet is locked
 		for n_ = 1, numPets do
@@ -382,10 +373,7 @@ function MyPetBattle.setTeam(avgLevel)
 			local healthPercent = health / maxHealth
 
 			local petIsSummonable = C_PetJournal.PetIsSummonable(petID) -- Check if we can actually summon the pet e.g. alliance/horde only (also works for revoked)
-            -- ianw - override rarity
-            if rarityDontCare == true then
-                rarity = 4
-            end
+
 			-- Check if we own the pet, it is a battle pet, it is alive and of rare quality
 			if owned and petIsSummonable and canBattle and not isRevoked and healthPercent > healthThreshold and rarity == 4 and level == avgLevel+p_ and petID ~= pet1_guid and petID ~= pet2_guid then
 				-- Set found pet to pet 3	
@@ -406,19 +394,17 @@ function MyPetBattle.setTeam(avgLevel)
 	-- Print to chat
 	if (pet1_set or MPB_LOCK_PET1) and (pet2_set or MPB_LOCK_PET2) and (pet3_set or MPB_LOCK_PET3) then
 		print("|cffff8000MPB|r: |cFFADFF2FDone setting team!")
-        ret =true
 	else
 		print("|cffff8000MPB|r: |cFFFF0033 Could not set a team, please check health, levels or set the team manually!")
 		if not pet1_set and not MPB_LOCK_PET1 then print("- Failed to set pet 1") end
 		if not pet2_set and not MPB_LOCK_PET2 then print("- Failed to set pet 2") end
 		if not pet3_set and not MPB_LOCK_PET3 then print("- Failed to set pet 3") end
-        ret = nil
 	end
 
 	-- Update the WoW pet journal UI with our new pets
 	PetJournal_UpdatePetLoadOut() 
 	
-	return ret
+	return
 end
 
 function MyPetBattle.revive_and_heal_Pets()
