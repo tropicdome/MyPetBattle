@@ -25,27 +25,28 @@ The flags cover a range of states.
 
 MyPetBattleState.SET_TEAM_START                     = 200   -- begin setting team
     MyPetBattleState.FLAG_SET_TEAM_IN_PROGRESS      = false
-        MyPetBattleState.TRANSFER_PET_LIST          = 201   -- send/receive pet list        :   send our pet list first time
-        MyPetBattleState.TRANSFER_PET_LIST_AGAIN    = 202   -- send/receive pet list        :   send our pet list every second
-        MyPetBattleState.RECIEVED_PET_LIST          = 203   -- received pet list            :   send pet list with acknowledge first time
-        MyPetBattleState.RECIEVED_PET_LIST_AGAIN    = 204   -- received pet list            :   send pet list with acknowledge every second
-        MyPetBattleState.RECIEVED_PET_LIST_ACK      = 205   -- received pet list with ack   :   time to set the team
-        MyPetBattleState.SET_TEAM                   = 206   -- finish setting team          :   set the team
-        MyPetBattleState.SET_TEAM_IN_PROGRESS       = 207
-        MyPetBattleState.SET_TEAM_AGAIN             = 208   -- retry setting team           :   this may occur once during login if it's too early to set the team
-    MyPetBattleState.SET_TEAM_DONE                  = 209
+        MyPetBattleState.TRANSFER_PET_LIST          = 201   -- send/receive pet list            :   send our pet list first time
+        MyPetBattleState.TRANSFER_PET_LIST_AGAIN    = 202   -- send/receive pet list            :   send our pet list every second
+        MyPetBattleState.RECEIVED_PET_LIST_QUEUED   = 203   -- received pet list while queued   :   send pet list with acknowledge first time
+        MyPetBattleState.RECEIVED_PET_LIST          = 204   -- received pet list                :   send pet list with acknowledge first time
+        MyPetBattleState.RECEIVED_PET_LIST_AGAIN    = 205   -- received pet list                :   send pet list with acknowledge every second
+        MyPetBattleState.RECEIVED_PET_LIST_ACK      = 206   -- received pet list with ack       :   time to set the team
+        MyPetBattleState.SET_TEAM                   = 207   -- finish setting team              :   set the team
+        MyPetBattleState.SET_TEAM_IN_PROGRESS       = 208
+        MyPetBattleState.SET_TEAM_AGAIN             = 209   -- retry setting team               :   this may occur once during login if it's too early to set the team
+    MyPetBattleState.SET_TEAM_DONE                  = 210
 
-MyPetBattleState.BATTLE_OPENED                      = 400   -- battle opened                :   set at PET_BATTLE_OPENING_DONE
+MyPetBattleState.BATTLE_OPENED                      = 400   -- battle opened                    :   set at PET_BATTLE_OPENING_DONE
     MyPetBattleState.FLAG_BATTLE_IN_PROGRESS        = false
-        MyPetBattleState.BATTLE_IN_PROGRESS         = 500   -- check forfeit                :   during this time, forfeit may occur - go to battle close state
+        MyPetBattleState.BATTLE_IN_PROGRESS         = 500   -- check forfeit                    :   during this time, forfeit may occur - go to battle close state
             MyPetBattleState.FLAG_ALLOW_FORFEIT     = false
-        MyPetBattleState.BATTLE_FORFEIT_DONE        = 501   -- forfeit timer gone           :   do nothing
-        MyPetBattleState.BATTLE_CLOSED              = 600   -- battle closed                :   set at PET_BATTLE_CLOSE
-        MyPetBattleState.BATTLE_CLOSED_IN_PROGRESS  = 601   --                              :   wait 5 seconds after closing
-    MyPetBattleState.BATTLE_CLOSED_DONE             = 602   -- battle closed 2              :   do nothing
+        MyPetBattleState.BATTLE_FORFEIT_DONE        = 501   -- forfeit timer gone               :   do nothing
+        MyPetBattleState.BATTLE_CLOSED              = 600   -- battle closed                    :   set at PET_BATTLE_CLOSE
+        MyPetBattleState.BATTLE_CLOSED_IN_PROGRESS  = 601   --                                  :   wait 5 seconds after closing
+    MyPetBattleState.BATTLE_CLOSED_DONE             = 602   -- battle closed 2                  :   do nothing
 
 MyPetBattleVars = {}
-MyPetBattleVars.state = MyPetBattleState.SET_TEAM_START
+MyPetBattleVars.state = 0
 local MPB_onUpdate
 
 function MyPetBattle.setState(state, immediate)
@@ -59,6 +60,32 @@ function MyPetBattle.setState(state, immediate)
 		end
 	end
 end
+--]
+
+	
+--[
+MyPetBattleMatchPos = {}
+    -- match message character position constants:
+	MyPetBattleMatchPos.MATCH             = 1  -- m=match
+	MyPetBattleMatchPos.ACK               = 2  --  a=acknowledge
+	MyPetBattleMatchPos.FORFEIT           = 3  --   f=forfeit
+	MyPetBattleMatchPos.LEADER            = 4  --    L=Leader (leader of the party UnitIsGroupLeader("player"))
+	MyPetBattleMatchPos.SORT_METHOD       = 5  --     1=MPB.SORT_METHOD
+	MyPetBattleMatchPos.USE_NON_RARE      = 6  --      1=MPB.USE_NON_RARE
+	MyPetBattleMatchPos.SLOT_1_LOCK       = 8  --        ##=slot 1 locked level
+	MyPetBattleMatchPos.SLOT_2_LOCK       = 10 --          ##=slot 2 locked level
+	MyPetBattleMatchPos.SLOT_3_LOCK       = 12 --            ##=slot 3 locked level
+	MyPetBattleMatchPos.START_LEVEL       = 15 --               ##=levelRange.start
+	MyPetBattleMatchPos.LEVEL_STEP        = 17 --                 ?=level_step +/-
+	MyPetBattleMatchPos.MIN_KEEP          = 18 --                  #=number to keep of each level
+	MyPetBattleMatchPos.LEVELS            = 20 --                    ###=count (0-9) of pets for each level (1-25)
+                                               --                    #=total count for a level
+                                               --                     #=useable non_rare count
+                                               --                      #=useable rare count
+	MyPetBattleMatchPos.JOIN_PVP          = 95 --                                                                                               p=join PvP
+                                               --
+                                               -- mafL10 121200 24-1 111222333444555666777888999000111222333444555666777888999000111222333444555p
+                                               -- m...01 000025 01+3 111222333444555666777888999000111222333444555666777888999000111222333444555.
 --]
 
 RegisterAddonMessagePrefix("MPB")
@@ -78,7 +105,7 @@ local mypetbattle_frame, events = CreateFrame("Frame"), {};
 --------------------------------------------------------
 -- LOAD A LOT OF STUFF WHEN THE ADDON HAS BEEN LOADED --
 function events:ADDON_LOADED(...)
---	print("ADDON_LOADED")
+	-- print("ADDON_LOADED", ...)
 	local addonName = ...
 	if addonName == "MyPetBattle" then
 		---------------------------------------------------------------
@@ -154,10 +181,13 @@ function events:ADDON_LOADED(...)
 			MPB.USE_NON_RARE = false
 		end
 		
-		if MPB.PRIORITIZE_LEVEL == nil then
-			-- Set this to true if you want pets to be chosen first by rarity and second by level (within the selected allowable level range), instead of first by level and second by rarity.
-			MPB.PRIORITIZE_LEVEL = false
+		if MPB.SORT_METHOD == nil then
+			MPB.SORT_METHOD = MPB.PRIORITIZE_LEVEL and 1 or 0
+				-- 0: pets chosen first by rarity and second by level (within the selected allowable level range).
+				-- 1: pets chosen first by level difference and second by rarity.
+				-- 2: pets chosen first by level and second by level difference and third by rarity.
 		end
+		MPB.PRIORITIZE_LEVEL = nil -- replaced by MPB.SORT_METHOD
 		
 		if MPB.RANDOMIZE == nil then
 			-- Set this to true if you want pets to be chosen randomly instead of name.
@@ -203,7 +233,7 @@ function events:ADDON_LOADED(...)
 		Slider_pet2_level:SetValue(MPB_CONFIG_TEAMSETUP_PET2_LEVEL_ADJUSTMENT)
 		Slider_pet3_level:SetValue(MPB_CONFIG_TEAMSETUP_PET3_LEVEL_ADJUSTMENT)
 		CheckButtonIncludeOnlyRare:SetChecked(not MPB.USE_NON_RARE)
-		CheckButtonPrioritizeLevel:SetChecked(MPB.PRIORITIZE_LEVEL)
+		DropDownSortMethod_Init(DropDownSortMethod)
 		CheckButtonRandomize:SetChecked(MPB.RANDOMIZE)
 		EditBoxLevelKeepMinimum:SetText(MPB.KEEP_MINIMUM_NUM_OF_A_LEVEL)
 	
@@ -267,7 +297,8 @@ function events:PLAYER_LOGIN(...)				--
 end
 
 function events:PLAYER_ENTERING_WORLD(...)				-- 
---	print("PLAYER_ENTERING_WORLD")
+	-- mypetbattle_debug = true
+	if mypetbattle_debug then print("PLAYER_ENTERING_WORLD", ...) end
 end
 
 function events:PET_BATTLE_ABILITY_CHANGED(...)				-- 
@@ -502,9 +533,15 @@ function events:PET_BATTLE_OVER(...)						-- Pet battle over (someone won)
 	print("|cffff8000MPB|r: |cFF00FFFFGame Over!")
 end
 
+local needFirstSetTeam = true
 function events:UPDATE_SUMMONPETS_ACTION(...)					-- 
 	if mypetbattle_debug then print("UPDATE_SUMMONPETS_ACTION", ...) end
-	-- only one team gets this event so it's not useful if you want for each battle a random team or a team that matches the levels of the enemy team 
+	-- After battle, only one team gets this event so it's not useful if you want for each battle a random team or a team that matches the levels of the enemy team.
+	-- The event occurs at startup after the PetJournal is properly loaded.
+	if needFirstSetTeam then
+		MyPetBattle.setState(MyPetBattleState.SET_TEAM_START, false)
+		needFirstSetTeam = nil
+	end
 end
 
 function events:COMPANION_UPDATE(...)					-- 
@@ -524,7 +561,7 @@ function events:PET_BATTLE_PET_ROUND_PLAYBACK_COMPLETE(...)	--
 	local round = ...
 	local roundstring = "|cffff8000MPB|r: Round " .. (round + 1) .. " - "
 	
-	local doMyPetBattle = mypetbattle_enabled or (mypetbattle_wintrade_enabled and round <= math.random(0,2)) -- ATTACK A RANDOM NUMBER OF TIMES BETWEEN 1-3 IF WE ARE DOING WT (0 AND 2 SINCE ROUND 0 EXISTS)
+	local doMyPetBattle = mypetbattle_enabled -- or (mypetbattle_wintrade_enabled and round <= math.random(0,2)) -- ATTACK A RANDOM NUMBER OF TIMES BETWEEN 1-3 IF WE ARE DOING WT (0 AND 2 SINCE ROUND 0 EXISTS)
 	
 	if doMyPetBattle then
 		-------------------------------------
@@ -533,6 +570,8 @@ function events:PET_BATTLE_PET_ROUND_PLAYBACK_COMPLETE(...)	--
 			for i=1,3 do
 				if MyPetBattle.hp(i) > 0 then
 					C_PetBattles.ChangePet(i)
+					print(roundstring .. "|cFFFF3300Changing pet!")
+					return
 				end
 			end
 		end
@@ -640,26 +679,25 @@ function events:PET_BATTLE_PET_ROUND_PLAYBACK_COMPLETE(...)	--
 		spell = mechanical()
 	end
 
+	local actionIndex = MyPetBattle.getSpellSlotIndex(spell)
+	local spellID, spellName, spellIcon, _, _, _, _, _ = C_PetBattles.GetAbilityInfo(petOwner, petIndex, actionIndex)
+				
 	if doMyPetBattle then
 		----------------------------------------------
 		-- IF WE HAVE SPELL WE CAN CAST, THEN CAST! --
 		if spell ~= nil and spell ~= "UNKNOWN" then	
-			local actionIndex = MyPetBattle.getSpellSlotIndex(spell)
-			
-			local spellID, spellName, spellIcon, _, _, _, _, _ = C_PetBattles.GetAbilityInfo(petOwner, petIndex, actionIndex)
-				
 			print(roundstring .. "|cffFF4500Casting\124r \124T"..spellIcon..":0\124t \124cff4e96f7\124HbattlePetAbil:"..spellID..":0:0:0\124h["..spell.."]\124h\124r");
 --			print("actionIndex: ", actionIndex)
 			C_PetBattles.UseAbility(actionIndex) -- USE PET ABILITY 
 		-- IF THE PET IS UNKNOWN, THEN CAST THE FIRST AVAILABLE SPELL SO WE WILL AT LEAST ATTACK
 		elseif spell == "UNKNOWN" then
-			print("Pet is unknown, casting first spell available")
+			print(roundstring .. "|cffFF4500Pet is unknown, casting first spell available")
 			C_PetBattles.UseAbility(1) -- USE PET ABILITY 1
 		end
     elseif mypetbattle_debug then
         ------------------------------------------------------------------------------
 		-- IF WE'RE NOT ENABLED BUT IN DEBUG MODE THEN SHOW WHAT WE WOULD HAVE CAST --
-		print(roundstring .. "|cffFF4500Would be Casting: ", spell)
+		print(roundstring .. "|cffFF4500Would be casting\124r \124T"..spellIcon..":0\124t \124cff4e96f7\124HbattlePetAbil:"..spellID..":0:0:0\124h["..(spell or "null").."]\124h\124r");
 	end
 end
 
@@ -681,7 +719,7 @@ end
 
 function events:PET_BATTLE_QUEUE_PROPOSAL_ACCEPTED(...)		-- 
 	if mypetbattle_debug then print("PET_BATTLE_QUEUE_PROPOSAL_ACCEPTED", ...) end
-	print("|cffff8000MPB|r: Pet Battle PvP queue accepted")
+	print("|cffff8000MPB|r: Pet Battle PvP match accepted")
 end
 
 function events:PET_BATTLE_QUEUE_PROPOSAL_DECLINED(...)		-- 
@@ -695,13 +733,13 @@ function events:PET_BATTLE_QUEUE_PROPOSE_MATCH(...)			--
 	-- Sync setup for wt
 	if mypetbattle_wintrade_enabled then
 		MPB_SyncTimeSent = GetTime()
-		if mypetbattle_debug then print("Queue popped, sending sync message: "..MPB_SyncTimeSent) end
+		print("|cffff8000MPB|r: Queue popped, sending sync message! " .. MPB_SyncTimeSent)
 		SendAddonMessage("MPB", "s"..MPB_SyncTimeSent, "PARTY")
 	end
 	
 	-- Automatic accept PvP queue popup if enabled	
 	if (mypetbattle_join_pvp and not mypetbattle_wintrade_enabled) then
-		if mypetbattle_debug then print("Auto-accepting pet PvP match!") end
+		print("|cffff8000MPB|r: Auto-accepting pet PvP match!")
 		C_PetBattles.AcceptQueuedPVPMatch()
 	end
 end
@@ -792,10 +830,24 @@ function events:CHAT_MSG_ADDON(...)							--
 			MPB_SyncTimeReceived = tonumber(string.sub(message,2))
 			if mypetbattle_debug then print("We received sync message: "..MPB_SyncTimeReceived.." from "..prefix) end
 		elseif (string.sub(message,1,1) == "m") then
-			if MyPetBattleVars.state >= MyPetBattleState.TRANSFER_PET_LIST and MyPetBattleVars.state <= MyPetBattleState.RECIEVED_PET_LIST_AGAIN then
+			if MyPetBattleVars.state >= MyPetBattleState.TRANSFER_PET_LIST and MyPetBattleVars.state <= MyPetBattleState.RECEIVED_PET_LIST_AGAIN then
 				MyPetBattleVars.petListEnemy = message
-				MyPetBattle.setState(MyPetBattleState.RECIEVED_PET_LIST, true)
+				MyPetBattle.setState(MyPetBattleState.RECEIVED_PET_LIST, true)
+			else
+				-- We're getting messages from our WT buddy. Maybe we should ensure that we're in a state to accept them.
+				if mypetbattle_wintrade_enabled and MPB.MATCH_PET_LEVELS_DURING_WT then
+					if not MyPetBattleState.FLAG_SET_TEAM_IN_PROGRESS and not MyPetBattleState.FLAG_BATTLE_IN_PROGRESS then
+						if string.sub(message,2,2) ~= "a" then
+							if not C_PetBattles.IsInBattle() then
+								MyPetBattleVars.petListEnemy = message
+								MyPetBattle.setState(MyPetBattleState.RECEIVED_PET_LIST_QUEUED, true)
+							end
+						end
+					end
+				end
 			end
+		elseif (string.sub(message,1,1) == "t") then
+			MyPetBattleVars.loadOutEnemy = message
 		end
 	end
 end
@@ -824,6 +876,8 @@ MPB_timerSetTeamInterval = 1 -- 1 second timer for setting team
 
 MPB_timerStartPVPMatchingCountdown = 0
 MPB_timerStartPVPMatchingAfterSetTeamInterval = 2
+MPB_timerStartPVPMatchingAfterStopPVPMatching = 2
+MPB_timerStartPVPMatchingAfterDeclineQueuedPVPMatch = 2
 MPB_timerStartPVPMatchingInterval = 5
 
 MPB_timerAcceptPVPMatchmakingCountdown = 0
@@ -874,22 +928,42 @@ MPB_onUpdate = function (self,elapsed)
 		MyPetBattle.setState(MyPetBattleState.TRANSFER_PET_LIST_AGAIN, false)
 	end
 
-	if MyPetBattleVars.state == MyPetBattleState.RECIEVED_PET_LIST then
-		if mypetbattle_debug then print("MyPetBattleState.RECIEVED_PET_LIST") end
+	if MyPetBattleVars.state == MyPetBattleState.RECEIVED_PET_LIST_QUEUED then
+		if mypetbattle_debug then print("MyPetBattleState.RECEIVED_PET_LIST_QUEUED") end
+		print("|cffff8000MPB|r: |cFF4169E1Received the enemy's pet list while queued.")
+		MyPetBattleState.FLAG_SET_TEAM_IN_PROGRESS = true
+		if C_PetBattles.GetPVPMatchmakingInfo() == "queued" then
+			print("|cffff8000MPB|r: |cFF4169E1Stopping existing queue.")
+			MPB_timerStartPVPMatchingCountdown = MPB_timerStartPVPMatchingAfterStopPVPMatching
+			C_PetBattles.StopPVPMatchmaking()
+		end
+		MyPetBattle.setState(MyPetBattleState.RECEIVED_PET_LIST, false)
+	end
+
+	if MyPetBattleVars.state == MyPetBattleState.RECEIVED_PET_LIST then
+		if mypetbattle_debug then print("MyPetBattleState.RECEIVED_PET_LIST") end
 		MPB_timerSetTeamCountdown = MPB_timerSetTeamInterval
-		MyPetBattle.sendPetList() -- send our pet list again but with acknowledge this time
 		
+		if not mypetbattle_join_pvp then
+			if string.sub(MyPetBattleVars.petListEnemy,MyPetBattleMatchPos.JOIN_PVP,MyPetBattleMatchPos.JOIN_PVP) == "p" then
+				mypetbattle_join_pvp = true
+				CheckButtonJoinPvP:SetChecked(mypetbattle_join_pvp)
+				print("|cffff8000MPB|r: |cFF00FF00PvP enabled by other player")
+			end
+		end
+		MyPetBattle.sendPetList() -- send our pet list again but with acknowledge this time
+
 		if string.sub(MyPetBattleVars.petListEnemy,2,2) == "a" then
-			print("|cffff8000MPB|r: |cFF4169E1Recieved the enemy's pet list with acknowledgement of your pet list.")
-			MyPetBattle.setState(MyPetBattleState.RECIEVED_PET_LIST_ACK, false)
+			print("|cffff8000MPB|r: |cFF4169E1Received the enemy's pet list with acknowledgement of your pet list.")
+			MyPetBattle.setState(MyPetBattleState.RECEIVED_PET_LIST_ACK, false)
 		else
-			print("|cffff8000MPB|r: |cFF4169E1Recieved the enemy's pet list and waiting for acknowledgement of your pet list.")
-			MyPetBattle.setState(MyPetBattleState.RECIEVED_PET_LIST_AGAIN, false)
+			print("|cffff8000MPB|r: |cFF4169E1Received the enemy's pet list and waiting for acknowledgement of your pet list.")
+			MyPetBattle.setState(MyPetBattleState.RECEIVED_PET_LIST_AGAIN, false)
 		end
 	end
 
-	if MyPetBattleVars.state == MyPetBattleState.RECIEVED_PET_LIST_ACK then
-		if mypetbattle_debug then print("MyPetBattleState.RECIEVED_PET_LIST_ACK") end
+	if MyPetBattleVars.state == MyPetBattleState.RECEIVED_PET_LIST_ACK then
+		if mypetbattle_debug then print("MyPetBattleState.RECEIVED_PET_LIST_ACK") end
 		MyPetBattle.setState(MyPetBattleState.SET_TEAM, false)
 	end
 
@@ -917,7 +991,7 @@ MPB_onUpdate = function (self,elapsed)
 		MyPetBattleState.FLAG_BATTLE_IN_PROGRESS = true
 
 		-- STOPWATCH FOR WT
-		if mypetbattle_wintrade_enabled then
+		if mypetbattle_wintrade_enabled or mypetbattle_auto_forfeit then
 			if Stopwatch_IsPlaying() then Stopwatch_Clear() end
 			Stopwatch_StartCountdown(0, 0, MPB_FORFEIT_TIMER+5) -- SET STOP WATCH TO COUNT DOWN FROM MPB_FORFEIT_TIMER + 5 SEC. +5 FOR MINOR ADJUSTMENT BECAUSE FORFEIT ANIMATION TAKES ABOUT 5 SEC
 			Stopwatch_Play() -- STARTS THE STOP WATCH
@@ -933,10 +1007,19 @@ MPB_onUpdate = function (self,elapsed)
 		
 		print("|cffff8000MPB|r: We have to fight " .. C_PetBattles.GetNumPets(LE_BATTLE_PET_ENEMY) .. " enemy pets")
 		-- Auto-select first available pet
-		if C_PetBattles.ShouldShowPetSelect() == true and (mypetbattle_enabled or mypetbattle_wintrade_enabled) then
-			for i=1,3 do
-				if MyPetBattle.hp(i) > 0 then
-					C_PetBattles.ChangePet(i)
+		
+		if mypetbattle_enabled or mypetbattle_wintrade_enabled then
+			calculatePetLoadOutEnemy()
+			if mypetbattle_wintrade_enabled and MyPetBattleVars.loadOutEnemyCurrent ~= MyPetBattleVars.loadOutEnemy then
+				print("|cffff8000MPB|r: |cFFFF3300Forfeiting due to wrong enemy!")
+				C_PetBattles.ForfeitGame()
+			elseif C_PetBattles.ShouldShowPetSelect() == true then
+				for i=1,3 do
+					if MyPetBattle.hp(i) > 0 then
+						C_PetBattles.ChangePet(i)
+						print("|cffff8000MPB|r: |cFFFF3300Selecting pet at start of fight!")
+						break
+					end
 				end
 			end
 		end
@@ -1000,8 +1083,8 @@ MPB_onUpdate = function (self,elapsed)
 	end
 
 	if MPB_timerSetTeamCountdown <= 0 then
-		if MyPetBattleVars.state == MyPetBattleState.TRANSFER_PET_LIST_AGAIN or MyPetBattleVars.state == MyPetBattleState.RECIEVED_PET_LIST_AGAIN then
-			if mypetbattle_debug then print(MyPetBattleVars.state == MyPetBattleState.TRANSFER_PET_LIST_AGAIN and "MyPetBattleState.TRANSFER_PET_LIST_AGAIN" or "MyPetBattleState.RECIEVED_PET_LIST_AGAIN") end
+		if MyPetBattleVars.state == MyPetBattleState.TRANSFER_PET_LIST_AGAIN or MyPetBattleVars.state == MyPetBattleState.RECEIVED_PET_LIST_AGAIN then
+			if mypetbattle_debug then print(MyPetBattleVars.state == MyPetBattleState.TRANSFER_PET_LIST_AGAIN and "MyPetBattleState.TRANSFER_PET_LIST_AGAIN" or "MyPetBattleState.RECEIVED_PET_LIST_AGAIN") end
 		
 			if mypetbattle_wintrade_enabled and MPB.MATCH_PET_LEVELS_DURING_WT then
 				MPB_timerSetTeamCountdown = MPB_timerSetTeamInterval
@@ -1009,7 +1092,7 @@ MPB_onUpdate = function (self,elapsed)
 				if MyPetBattleVars.state == MyPetBattleState.TRANSFER_PET_LIST_AGAIN then
 					print("|cffff8000MPB|r: |cFF4169E1Sent your pet list again and waiting for the enemy's pet list.")
 				else
-					print("|cffff8000MPB|r: |cFF4169E1Recieved the enemy's pet list and still waiting for acknowledgement of your pet list.")
+					print("|cffff8000MPB|r: |cFF4169E1Received the enemy's pet list and still waiting for acknowledgement of your pet list.")
 				end
 			else
 				print("|cffff8000MPB|r: |cFFFF0000Aborting team level match")
@@ -1022,9 +1105,10 @@ MPB_onUpdate = function (self,elapsed)
 		if MPB_timerStartPVPMatchingCountdown <= 0 then
 			-- CHECK IF WE SHOULD BE IN THE PVP MATCHMAKING QUEUE, BUT WE ARE NOT
 			if mypetbattle_join_pvp and not C_PetBattles.IsInBattle() and (C_PetBattles.GetPVPMatchmakingInfo() == nil) then
-				if mypetbattle_debug then print("timer StartPVPMatchmaking") end
+				print("|cffff8000MPB|r: Joining pet battle PvP queue")
 				MPB_timerStartPVPMatchingCountdown = MPB_timerStartPVPMatchingInterval
 				C_PetBattles.StartPVPMatchmaking()
+				MyPetBattle.sendPetLoadOut()
 			end
 		end
 	end
@@ -1079,7 +1163,7 @@ MPB_onUpdate = function (self,elapsed)
 			-- IF SYNC RECEIVED AND WITHING THRESHOLD, THEN ACCEPT
 			if syncDifference < syncThreshold then 
 				if MPB_timerAcceptPVPMatchmakingCountdown <= 0 then
-					if mypetbattle_debug then print("Sync is ok, accepting battle")	end			-- FOR DEBUGGING
+					print("|cffff8000MPB|r: Sync is ok, accepting battle")
 					C_PetBattles.AcceptQueuedPVPMatch()
 					-- RESET COUNTER AFTER ACCEPTING QUEUE
 					MPB_syncCounter = 0
@@ -1089,8 +1173,9 @@ MPB_onUpdate = function (self,elapsed)
 				end
 			-- COUNT syncThreshold SECONDS BEFORE DECLINING
 			elseif MPB_syncCounter >= syncThreshold then 
-				if mypetbattle_debug then print("Not in sync, declining battle") end 		-- FOR DEBUGGING
+				print("|cffff8000MPB|r: Not in sync, declining battle")
 				C_PetBattles.DeclineQueuedPVPMatch()
+				MPB_timerStartPVPMatchingCountdown = MPB_timerStartPVPMatchingAfterDeclineQueuedPVPMatch
 			end
 		else
 			-- IF NO QUEUE HAS POPPED YET MAKE SURE THE COUNTER IS 0
@@ -1120,16 +1205,17 @@ function SlashCmdList.MYPETBATTLE(msg, editbox)
 		mypetbattle_join_pvp = not mypetbattle_join_pvp
 		if mypetbattle_join_pvp then 
 			status = "\124cFF00FF00PvP enabled"
-			if mypetbattle_wintrade_enabled and MPB.MATCH_PET_LEVELS_DURING_WT then
+			if mypetbattle_wintrade_enabled and MPB.MATCH_PET_LEVELS_DURING_WT and not MyPetBattleState.FLAG_SET_TEAM_IN_PROGRESS then
 				MyPetBattle.setState(MyPetBattleState.SET_TEAM_START, true)
 			else
 				-- Our timer will call StartPVPMatchmaking
 			end
 		else 
 			status = "\124cFFFF0000PvP disabled"
-			-- if C_PetBattles.GetPVPMatchmakingInfo ~= nil then
+			if C_PetBattles.GetPVPMatchmakingInfo() == "queued" then
+				MPB_timerStartPVPMatchingCountdown = MPB_timerStartPVPMatchingAfterStopPVPMatching
 				C_PetBattles.StopPVPMatchmaking()
-			-- end
+			end
 		end
 		print("|cffff8000MPB|r:", status)
 	elseif msg == "capture_rares" then

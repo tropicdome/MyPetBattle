@@ -1,7 +1,7 @@
 ﻿-- Add the custom configuration panel to the Interface Options menu
 function Frame1Panel_OnLoad(panel)
 	-- Set the name for the Category for the Panel.
-	panel.name = "MPB Options Panel"
+	panel.name = "My Pet Battle"
 
 	-- Set FontString "Version" to the TOC version number
 	FontString_version:SetText("Version: "..GetAddOnMetadata("MyPetBattle", "Version"))
@@ -34,7 +34,7 @@ function Frame1Panel_Close()
 	MPB_CONFIG_TEAMSETUP_PET3_LEVEL_ADJUSTMENT = Slider_pet3_level:GetValue()
 
 	MPB.USE_NON_RARE = not CheckButtonIncludeOnlyRare:GetChecked() and true or false
-	MPB.PRIORITIZE_LEVEL = CheckButtonPrioritizeLevel:GetChecked() and true or false
+	MPB.SORT_METHOD = DropDownSortMethod:GetValue()
 	MPB.RANDOMIZE = CheckButtonRandomize:GetChecked() and true or false
 	MPB.KEEP_MINIMUM_NUM_OF_A_LEVEL = tonumber(EditBoxLevelKeepMinimum:GetText()) or 0
 		
@@ -59,3 +59,74 @@ function Frame1Panel_CancelOrLoad()
 
 end
 
+function DropDownSortMethod_Init (self)
+	self.defaultValue = 0;
+	self.oldValue = MPB.SORT_METHOD;
+	self.value = self.oldValue or self.defaultValue;
+	self.tooltip = "Sorting priority for choosing pets";
+
+	UIDropDownMenu_SetWidth(self, 90);
+	UIDropDownMenu_Initialize(self, DropDownSortMethod_Initialize);
+	UIDropDownMenu_SetSelectedValue(self, self.value);
+
+	self.SetValue =
+		function (self, value)
+			self.value = value;
+			UIDropDownMenu_SetSelectedValue(self, value);
+		end;
+	self.GetValue =
+		function (self)
+			return UIDropDownMenu_GetSelectedValue(self);
+		end
+	self.RefreshValue =
+		function (self)
+			UIDropDownMenu_Initialize(self, DropDownSortMethod_Initialize);
+			UIDropDownMenu_SetSelectedValue(self, self.value);
+		end
+end
+
+
+function DropDownSortMethod_OnClick(self)
+	DropDownSortMethod:SetValue(self.value);
+end
+
+function DropDownSortMethod_Initialize()
+	local selectedValue = UIDropDownMenu_GetSelectedValue(DropDownSortMethod);
+	local info = UIDropDownMenu_CreateInfo();
+
+	info.text = "Rarity";
+	info.func = DropDownSortMethod_OnClick;
+	info.value = 0;
+	if ( info.value == selectedValue ) then
+		info.checked = 1;
+	else
+		info.checked = nil;
+	end
+	info.tooltipTitle = "Rarity";
+	info.tooltipText = "Pets are selected by rarity first, then level difference, then level";
+	UIDropDownMenu_AddButton(info);
+
+	info.text = "Level Difference";
+	info.func = DropDownSortMethod_OnClick;
+	info.value = 1;
+	if ( info.value == selectedValue ) then
+		info.checked = 1;
+	else
+		info.checked = nil;
+	end
+	info.tooltipTitle = "Level Difference";
+	info.tooltipText = "Pets are selected by level difference first, then rarity, then level";
+	UIDropDownMenu_AddButton(info);
+
+	info.text = "Level";
+	info.func = DropDownSortMethod_OnClick;
+	info.value = 2;
+	if ( info.value == selectedValue ) then
+		info.checked = 1;
+	else
+		info.checked = nil;
+	end
+	info.tooltipTitle = "Level";
+	info.tooltipText = "Pets are selected by level first, then level difference, then rarity";
+	UIDropDownMenu_AddButton(info);
+end
