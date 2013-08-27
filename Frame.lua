@@ -4,7 +4,7 @@ function CheckButton1_OnClick()
 end
 
 -- Automatic queue and join pet battle PvP
-function CheckButton2_OnClick()
+function CheckButtonJoinPvP_OnClick()
 	SlashCmdList.MYPETBATTLE('join_pvp')
 end
 
@@ -59,7 +59,7 @@ end
 
 -- Open configuration panel
 function Button_open_config_panel_OnClick()
-	InterfaceOptionsFrame_OpenToCategory("MPB Options Panel")
+	InterfaceOptionsFrame_OpenToCategory("My Pet Battle")
 end
 
 -- Show the text for checkbuttons

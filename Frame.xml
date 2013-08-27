@@ -227,7 +227,7 @@
 					</OnClick>
 				</Scripts>
 			</CheckButton>
-			<CheckButton name="CheckButton2" inherits="UICheckButtonTemplate" text="Join PvP">
+			<CheckButton name="CheckButtonJoinPvP" inherits="UICheckButtonTemplate" text="Join PvP">
 				<Size x="14" y="14" />
 				<Anchors>
 					<Anchor point="TOPLEFT">
@@ -236,7 +236,7 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						CheckButton2_OnClick()
+						CheckButtonJoinPvP_OnClick()
 					</OnClick>
 				</Scripts>
 			</CheckButton>

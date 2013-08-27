@@ -292,19 +292,39 @@
 					</OnLoad>
 				</Scripts>
 			</CheckButton>
-			<CheckButton name="CheckButtonPrioritizeLevel" inherits="InterfaceOptionsSmallCheckButtonTemplate" text="Choose pets closest to the chosen level before selecting by quality.">
+			<Frame name="DropDownSortMethod" inherits="UIDropDownMenuTemplate" enableMouse="true">
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset x="200" y="-145" />
+						<Offset x="185" y="-145" />
 					</Anchor>
 				</Anchors>
+				<Layers>
+					<Layer level="BACKGROUND">
+						<FontString name="$parentLabel" inherits="GameFontHighlight" text="Sort Method">
+							<Anchors>
+								<Anchor point="TOPLEFT" relativePoint="TOPRIGHT">
+									<Offset>
+										<AbsDimension x="0" y="-6"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
 				<Scripts>
 					<OnLoad>
-						Frame1_Checkbutton_OnLoad(self)
-						self.tooltipText = 'If this is not checked, then better quality pets are chosen first before selecting by level difference from the desired level. This option has no affect if only rare pets are included.'
+						self.type = CONTROLTYPE_DROPDOWN
 					</OnLoad>
+					<OnEnter>
+						if ( not self.isDisabled ) then
+							GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT")
+							GameTooltip:SetText(self.tooltip, nil, nil, nil, nil, 1)
+						end
+					</OnEnter>
+					<OnEvent function="DropDownSortMethod_OnEvent"/>
+					<OnLeave function="GameTooltip_Hide"/>
 				</Scripts>
-			</CheckButton>
+			</Frame>
 			<EditBox name="EditBoxLevelKeepMinimum" inherits="InputBoxTemplate" enableKeyboard="true" letters="1" numeric="true" autoFocus="false">
 				<Size>
 					<AbsDimension x="15" y="20" />

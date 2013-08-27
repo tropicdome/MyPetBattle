@@ -265,7 +265,7 @@ end
 local ASCENDING = 1
 local DESCENDING = 2
 
-function MyPetBattle.getCompareFunc(var,func,direction)
+function MyPetBattle.getCompareFunc(func,var,direction)
 	return function(a,b)
 		local avar = a[var]
 		local bvar = b[var]
@@ -295,7 +295,7 @@ function MyPetBattle.composeSortFunction(funcstart, ...)
 		local name = args[i-1];
 		local direction = args[i]
 		--print ("composeSortFunction", name, direction, func)
-		func = MyPetBattle.getCompareFunc(name,func,direction)
+		func = MyPetBattle.getCompareFunc(func,name,direction)
 	end
 	return func
 end
@@ -406,51 +406,42 @@ function MyPetBattle.setTeam(avgLevel)
 
 	MyPetBattleVars.levelRange = {step = MPB.MATCH_PET_LEVELS_LEVEL_STEP}
 	local levelRange = MyPetBattleVars.levelRange
-	local prioritize = {level = MPB.PRIORITIZE_LEVEL}
+	local sortMethod = {value = MPB.SORT_METHOD}
+
+	local function GetSortFunction(func, sortMethod, levelStep, suffix)
+		local sortFunction
+		if sortMethod == 0 then
+			sortFunction = MyPetBattle.composeSortFunction(func, "rarityGroup"..suffix,DESCENDING,"leveldiff",ASCENDING,"level"..suffix,levelStep > 0 and ASCENDING or DESCENDING)
+		elseif sortMethod == 1 then
+			sortFunction = MyPetBattle.composeSortFunction(func, "leveldiff",ASCENDING,"rarityGroup"..suffix,DESCENDING,"level"..suffix,levelStep > 0 and ASCENDING or DESCENDING)
+		elseif sortMethod == 2 then
+			sortFunction = MyPetBattle.composeSortFunction(func, "level"..suffix,levelStep > 0 and ASCENDING or DESCENDING,"leveldiff",ASCENDING,"rarityGroup"..suffix,DESCENDING)
+		end
+		sortFunction = MyPetBattle.composeSortFunction(sortFunction, "levelOutOfRange",ASCENDING)
+		return sortFunction
+	end
 
 	MyPetBattleVars.neededLevels = {}
 	MyPetBattleVars.neededLevelsEnemy = {}
 	MyPetBattleVars.commonLevels = {}
 
-	local enemyIsLeader, enemyUseNonRare, enemyAutoForfeit, enemyNumKeepOfLevel
-		
 	local doMatchLevels = mypetbattle_wintrade_enabled and MPB.MATCH_PET_LEVELS_DURING_WT
 	if doMatchLevels then
+		local enemyIsLeader, enemyUseNonRare, enemyAutoForfeit, enemyNumKeepOfLevel
 
-        -- MATCH_POS_ constants:
-        local MATCH_POS_MATCH                   = 1  -- m=match
-        local MATCH_POS_ACK                     = 2  --  a=acknowledge
-        local MATCH_POS_FORFEIT                 = 3  --   f=forfeit
-        local MATCH_POS_LEADER                  = 4  --    L=Leader (leader of the party UnitIsGroupLeader("player"))
-        local MATCH_POS_PRIORITIZE_LEVEL        = 5  --     1=MPB.PRIORITIZE_LEVEL
-        local MATCH_POS_USE_NON_RARE            = 6  --      1=MPB.USE_NON_RARE
-        local MATCH_POS_SLOT_1_LOCK             = 8  --        ##=slot 1 locked level
-        local MATCH_POS_SLOT_2_LOCK             = 10 --          ##=slot 2 locked level
-        local MATCH_POS_SLOT_3_LOCK             = 12 --            ##=slot 3 locked level
-        local MATCH_POS_START_LEVEL             = 15 --               ##=levelRange.start
-        local MATCH_POS_LEVEL_STEP              = 17 --                 ?=level_step +/-
-        local MATCH_POS_MIN_KEEP                = 18 --                  #=number to keep of each level
-        local MATCH_POS_LEVELS                  = 20 --                    ###=count (0-9) of pets for each level (1-25)
-                                                     --                    #=total count for a level
-                                                     --                     #=useable non_rare count
-                                                     --                      #=useable rare count
-
-                                                     -- mafL10 121200 24-1 111222333444555666777888999000111222333444555666777888999000111222333444555
-                                                     -- m...01 000025 01+3 111222333444555666777888999000111222333444555666777888999000111222333444555
-
-		enemyAutoForfeit = string.sub(MyPetBattleVars.petListEnemy, MATCH_POS_FORFEIT, MATCH_POS_FORFEIT) == "f"
-		levelRange.startEnemy = tonumber(string.sub(MyPetBattleVars.petListEnemy, MATCH_POS_START_LEVEL, MATCH_POS_START_LEVEL + 1))
-		levelRange.stepEnemy = tonumber(string.sub(MyPetBattleVars.petListEnemy, MATCH_POS_LEVEL_STEP, MATCH_POS_LEVEL_STEP).."1")
-		enemyUseNonRare = string.sub(MyPetBattleVars.petListEnemy, MATCH_POS_USE_NON_RARE, MATCH_POS_USE_NON_RARE) == "1"
-		enemyNumKeepOfLevel = tonumber(string.sub(MyPetBattleVars.petListEnemy, MATCH_POS_MIN_KEEP, MATCH_POS_MIN_KEEP))
-		prioritize.levelEnemy = string.sub(MyPetBattleVars.petListEnemy, MATCH_POS_PRIORITIZE_LEVEL, MATCH_POS_PRIORITIZE_LEVEL) == "1"
+		enemyAutoForfeit = string.sub(MyPetBattleVars.petListEnemy, MyPetBattleMatchPos.FORFEIT, MyPetBattleMatchPos.FORFEIT) == "f"
+		levelRange.startEnemy = tonumber(string.sub(MyPetBattleVars.petListEnemy, MyPetBattleMatchPos.START_LEVEL, MyPetBattleMatchPos.START_LEVEL + 1))
+		levelRange.stepEnemy = tonumber(string.sub(MyPetBattleVars.petListEnemy, MyPetBattleMatchPos.LEVEL_STEP, MyPetBattleMatchPos.LEVEL_STEP).."1")
+		enemyUseNonRare = string.sub(MyPetBattleVars.petListEnemy, MyPetBattleMatchPos.USE_NON_RARE, MyPetBattleMatchPos.USE_NON_RARE) == "1"
+		enemyNumKeepOfLevel = tonumber(string.sub(MyPetBattleVars.petListEnemy, MyPetBattleMatchPos.MIN_KEEP, MyPetBattleMatchPos.MIN_KEEP))
+		sortMethod.valueEnemy = tonumber(string.sub(MyPetBattleVars.petListEnemy, MyPetBattleMatchPos.SORT_METHOD, MyPetBattleMatchPos.SORT_METHOD))
 
 		if mypetbattle_auto_forfeit ~= enemyAutoForfeit then
 			enemyIsLeader = mypetbattle_auto_forfeit
 		elseif mypetbattle_auto_forfeit then
 			print("|cffff8000MPB|r: |cFFFF0033Both players can't auto forfeit! Change the auto forfeit option.")
 			return
-		elseif UnitIsGroupLeader("player") ~= (string.sub(MyPetBattleVars.petListEnemy, MATCH_POS_LEADER, MATCH_POS_LEADER) == "L") then
+		elseif UnitIsGroupLeader("player") ~= (string.sub(MyPetBattleVars.petListEnemy, MyPetBattleMatchPos.LEADER, MyPetBattleMatchPos.LEADER) == "L") then
 			enemyIsLeader = not UnitIsGroupLeader("player")
 		else
 			print("|cffff8000MPB|r: |cFFFF0033Could not determine the leader! Change the auto forfeit option or promote yourself or the enemy to leader.")
@@ -474,15 +465,15 @@ function MyPetBattle.setTeam(avgLevel)
 		MyPetBattleVars.petLevelsEnemy = {}
 		for n_ = 1,25 do
 			MyPetBattleVars.petLevelsEnemy[n_] = {
-				t = tonumber(string.sub(MyPetBattleVars.petListEnemy, MATCH_POS_LEVELS + n_ * 3 - 3, MATCH_POS_LEVELS + n_ * 3 - 3)),
-				un = tonumber(string.sub(MyPetBattleVars.petListEnemy, MATCH_POS_LEVELS + n_ * 3 - 2, MATCH_POS_LEVELS + n_ * 3 - 2)),
-				ur = tonumber(string.sub(MyPetBattleVars.petListEnemy, MATCH_POS_LEVELS + n_ * 3 - 1, MATCH_POS_LEVELS + n_ * 3 - 1))
+				t = tonumber(string.sub(MyPetBattleVars.petListEnemy, MyPetBattleMatchPos.LEVELS + n_ * 3 - 3, MyPetBattleMatchPos.LEVELS + n_ * 3 - 3)),
+				un = tonumber(string.sub(MyPetBattleVars.petListEnemy, MyPetBattleMatchPos.LEVELS + n_ * 3 - 2, MyPetBattleMatchPos.LEVELS + n_ * 3 - 2)),
+				ur = tonumber(string.sub(MyPetBattleVars.petListEnemy, MyPetBattleMatchPos.LEVELS + n_ * 3 - 1, MyPetBattleMatchPos.LEVELS + n_ * 3 - 1))
 			}
 		end
 
 		-- check the list of pets the enemy has locked, we need to match these levels
 		for s_ = 1,3 do
-			local enemyLockedLevel = tonumber(string.sub(MyPetBattleVars.petListEnemy, MATCH_POS_SLOT_1_LOCK + s_ * 2 - 2, MATCH_POS_SLOT_1_LOCK + s_ * 2 - 1))
+			local enemyLockedLevel = tonumber(string.sub(MyPetBattleVars.petListEnemy, MyPetBattleMatchPos.SLOT_1_LOCK + s_ * 2 - 2, MyPetBattleMatchPos.SLOT_1_LOCK + s_ * 2 - 1))
 			if enemyLockedLevel > 0 then
 				print("|cffff8000MPB|r: Enemy Pet " .. s_ .. ": Locked Level: " .. enemyLockedLevel)
 				table.insert(MyPetBattleVars.neededLevels, enemyLockedLevel)
@@ -513,15 +504,10 @@ function MyPetBattle.setTeam(avgLevel)
 		end
 		
 		local function HandleLockedPets(suffix, autoForfeit, numKeepOfLevel, useNonRare, failMessage)
-			--print ("HandleLockedPets", "suffix", suffix, "autoForfeit", autoForfeit, "numKeepOfLevel", numKeepOfLevel, "useNonRare", useNonRare, "prioritize.level"..suffix, prioritize["level"..suffix], "levelRange.step"..suffix, levelRange["step"..suffix])
+			--print ("HandleLockedPets", "suffix", suffix, "autoForfeit", autoForfeit, "numKeepOfLevel", numKeepOfLevel, "useNonRare", useNonRare, "sortMethod.value"..suffix, sortMethod["value"..suffix], "levelRange.step"..suffix, levelRange["step"..suffix])
 			--print('======================')
-			local sortFunction
-			if prioritize["level"..suffix] then
-				sortFunction = MyPetBattle.composeSortFunction(nil, "levelOutOfRange",ASCENDING,"leveldiff",ASCENDING,"rarityGroup",DESCENDING,"level",levelRange["step"..suffix] > 0 and ASCENDING or DESCENDING)
-			else
-				sortFunction = MyPetBattle.composeSortFunction(nil, "levelOutOfRange",ASCENDING,"rarityGroup",DESCENDING,"leveldiff",ASCENDING,"level",levelRange["step"..suffix] > 0 and ASCENDING or DESCENDING)
-			end
-		
+			local sortFunction = GetSortFunction(nil, sortMethod["value"..suffix], levelRange["step"..suffix], "")
+			
 			for i_ = 1,#MyPetBattleVars["neededLevels"..suffix] do
 				local neededLevel = MyPetBattleVars["neededLevels"..suffix][i_]
 				MyPetBattleVars.petList["neededLevels" .. suffix .. i_] = {}
@@ -567,12 +553,7 @@ function MyPetBattle.setTeam(avgLevel)
 		--print('======================')
 		local sortFunction
 		for _, suffix in pairs({enemyIsLeader and "" or "Enemy", enemyIsLeader and "Enemy" or ""}) do
-			--print("prioritize.level"..suffix, prioritize["level"..suffix])
-			if prioritize["level"..suffix] then
-				sortFunction = MyPetBattle.composeSortFunction(sortFunction, "levelOutOfRange",ASCENDING,"leveldiff",ASCENDING,"rarityGroup"..suffix,DESCENDING,"level"..suffix,levelRange["step"..suffix] > 0 and ASCENDING or DESCENDING)
-			else
-				sortFunction = MyPetBattle.composeSortFunction(sortFunction, "levelOutOfRange",ASCENDING,"rarityGroup"..suffix,DESCENDING,"leveldiff",ASCENDING,"level"..suffix,levelRange["step"..suffix] > 0 and ASCENDING or DESCENDING)
-			end
+			sortFunction = GetSortFunction(sortFunction, sortMethod["value"..suffix], levelRange["step"..suffix], suffix)
 		end
 		
 		-- Choose our remaining slot levels and remove them from both lists.
@@ -614,9 +595,9 @@ function MyPetBattle.setTeam(avgLevel)
 				print("|cffff8000MPB|r: |cFFFF0033You don't have a pet to match the levels of any of the enemy's pets.")
 				return
 			end
-		end
+		end -- for
 
-	end
+	end -- if doMatchLevels
 
 	--print('======================')
 
@@ -667,8 +648,9 @@ function MyPetBattle.setTeam(avgLevel)
 
 			local function selectPetTeamCandidatesHandler(pet)
 				local healthPercent = pet.health / pet.maxHealth
-				if healthPercent > healthThreshold and pet.level >= levelRange["lowest"..s_] and pet.level <= levelRange["highest"..s_] and (doMatchLevels or mypetbattle_auto_forfeit or MyPetBattleVars.petLevels[pet.level].t > MPB.KEEP_MINIMUM_NUM_OF_A_LEVEL) then
+				if healthPercent > healthThreshold and pet.level >= levelRange["lowest"..s_] and (pet.level <= levelRange["highest"..s_] or pet.level == 25) and (doMatchLevels or mypetbattle_auto_forfeit or MyPetBattleVars.petLevels[pet.level].t > MPB.KEEP_MINIMUM_NUM_OF_A_LEVEL) then
 					pet.leveldiff = math.abs(pet.level - levelRange["start"..s_]) -- levels closest to levelRange["start"..s_] take priority
+					pet.levelOutOfRange = (pet.level > levelRange["highest"..s_])
 					pet.rarityGroup = (pet.rarity == 4) and 4 or doMatchLevels and 1 or pet.rarity -- group rarity by rare and non-rare.
 					pet.random = math.random()
 					table.insert(MyPetBattleVars.petList[s_], pet)
@@ -679,13 +661,8 @@ function MyPetBattle.setTeam(avgLevel)
 
 			if #MyPetBattleVars.petList[s_] > 0 then
 				-- print("starting sorting slot " .. s_)
-				local sortFunction
-				if prioritize.level then
-					sortFunction = MyPetBattle.composeSortFunction(nil, "leveldiff",ASCENDING,"rarityGroup",DESCENDING,"level",levelRange["step"..s_] > 0 and ASCENDING or DESCENDING,"rarity",DESCENDING,MPB.RANDOMIZE and "random" or "speciesName",ASCENDING,"petID",ASCENDING)
-				else
-					sortFunction = MyPetBattle.composeSortFunction(nil, "rarityGroup",DESCENDING,"leveldiff",ASCENDING,"level",levelRange["step"..s_] > 0 and ASCENDING or DESCENDING,"rarity",DESCENDING,MPB.RANDOMIZE and "random" or "speciesName",ASCENDING,"petID",ASCENDING)
-				end
-
+				local sortFunction = MyPetBattle.composeSortFunction(nil, "rarity",DESCENDING,MPB.RANDOMIZE and "random" or "speciesName",ASCENDING,"petID",ASCENDING)
+				sortFunction = GetSortFunction(sortFunction, sortMethod.value, levelRange["step"..s_], "")
 				table.sort(MyPetBattleVars.petList[s_], sortFunction)
 				-- Set found pet to pet slot	
 				local petGUID = C_PetJournal.GetPetLoadOutInfo(s_)
@@ -722,7 +699,11 @@ function MyPetBattle.setTeam(avgLevel)
 	end
 
 	-- Update the WoW pet journal UI with our new pets
-	PetJournal_UpdatePetLoadOut() 
+	if PetJournal_UpdatePetLoadOut then
+		PetJournal_UpdatePetLoadOut()
+	else
+		print("|cffff8000MPB|r: |cFFFF0033PetJournal_UpdatePetLoadOut isn't defined!")
+	end
 end
 
 function MyPetBattle.revive_and_heal_Pets()
@@ -782,16 +763,16 @@ end
 function MyPetBattle.sendPetList()
 	MyPetBattle.countPets()
 
-	-- output the message string; see "MATCH_POS_ constants" above for the message layout
+	-- output the message string; see "MyPetBattleMatchPos constants" above for the message layout
 	
 	MyPetBattleVars.petListPlayer = (
 		"m"
-		..((MyPetBattleVars.state == MyPetBattleState.RECIEVED_PET_LIST or
-		    MyPetBattleVars.state == MyPetBattleState.RECIEVED_PET_LIST_AGAIN or
-		    MyPetBattleVars.state == MyPetBattleState.RECIEVED_PET_LIST_ACK) and "a" or ".")
+		..((MyPetBattleVars.state == MyPetBattleState.RECEIVED_PET_LIST or
+		    MyPetBattleVars.state == MyPetBattleState.RECEIVED_PET_LIST_AGAIN or
+		    MyPetBattleVars.state == MyPetBattleState.RECEIVED_PET_LIST_ACK) and "a" or ".")
 		..(mypetbattle_auto_forfeit and "f" or ".")
 		..(UnitIsGroupLeader("player") and "L" or ".")
-		..(MPB.PRIORITIZE_LEVEL and "1" or "0")
+		..(MPB.SORT_METHOD)
 		..(MPB.USE_NON_RARE and "1" or "0")
 		.." "
 		..(string.sub(tostring(MyPetBattleVars.lockedpetlevels[1] + 100),2,3))
@@ -812,8 +793,30 @@ function MyPetBattle.sendPetList()
 			..((MyPetBattleVars.petLevels[n_].ur > 9) and 9 or MyPetBattleVars.petLevels[n_].ur)
 		)
 	end
+	
+	MyPetBattleVars.petListPlayer = MyPetBattleVars.petListPlayer .. (mypetbattle_join_pvp and "p" or ".")
 
 	SendAddonMessage("MPB", MyPetBattleVars.petListPlayer, "PARTY")
+end
+
+function calculatePetLoadOutEnemy()
+	local petOwnerEnemy = LE_BATTLE_PET_ENEMY
+	MyPetBattleVars.loadOutEnemyCurrent = "t"
+	for s_ = 1, 3 do
+		local speciesID = C_PetBattles.GetPetSpeciesID(petOwnerEnemy, s_)
+		local level = C_PetBattles.GetLevel(petOwnerEnemy, s_)
+		MyPetBattleVars.loadOutEnemyCurrent = MyPetBattleVars.loadOutEnemyCurrent .. (s_ == 1 and "" or ",") .. (speciesID or "") .. ":" .. (level or "")
+	end
+end
+
+function MyPetBattle.sendPetLoadOut()
+	MyPetBattleVars.loadOut = "t"
+	for s_ = 1, 3 do
+		local petGUID = C_PetJournal.GetPetLoadOutInfo(s_)
+		local speciesID, _, level = C_PetJournal.GetPetInfoByPetID(petGUID) 
+		MyPetBattleVars.loadOut = MyPetBattleVars.loadOut .. (s_ == 1 and "" or ",") .. (speciesID or "") .. ":" .. (level or "")
+	end
+	SendAddonMessage("MPB", MyPetBattleVars.loadOut, "PARTY")
 end
 
 -----------------------------------------------------------------
