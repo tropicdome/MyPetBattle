@@ -299,12 +299,12 @@ elseif petName == "Elder Python" then
 elseif petName == "Amethyst Spiderling" or petName == "Ash Spiderling" or petName == "Desert Spider" or petName == "Dusk Spiderling" or petName == "Feverbite Hatchling" or petName == "Forest Spiderling" or petName == "Jumping Spider" or petName == "Skittering Cavern Crawler" or petName == "Smolderweb Hatchling" or petName == "Spider" or petName == "Twilight Spider" or petName == "Venomspitter Hatchling" or petName == "Widow Spiderling" then
 	beast_abilities = 
 		{
-			{"Strike", 			},	-- Slot 1
-			{"Poison Spit", 	},	-- Slot 1
 			{"Sticky Web",		not MyPetBattle.debuff("Webbed") },  -- Slot 2
 			{"Brittle Webbing", not MyPetBattle.debuff("Brittle Webbing") },  -- Slot 2
 			{"Leech Life",		MyPetBattle.debuff("Webbed") or MyPetBattle.debuff("Brittle Webbing") },  -- Slot 3
 			{"Spiderling Swarm", MyPetBattle.debuff("Webbed") or MyPetBattle.debuff("Brittle Webbing") },  -- Slot 3
+			{"Strike", 			},	-- Slot 1
+			{"Poison Spit", 	},	-- Slot 1
 		}
 elseif petName == "Crystal Spider" then
 	beast_abilities = 
