@@ -17,9 +17,9 @@ if petName == "Fel Flame" or petName == "Searing Scorchling" then
 	elemental_abilities = 
 		{
 			{"Scorched Earth", 	not MyPetBattle.currentWeather("Scorched Earth") },	-- Slot 2
-			{"Conflagrate", 	MyPetBattle.debuff("Immolate") or MyPetBattle.currentWeather("Scorched Earth") },	-- Slot 3
+			{"Conflagrate", 	MyPetBattle.debuff("Immolate") or MyPetBattle.debuff("Flamethrower") or MyPetBattle.currentWeather("Scorched Earth") },	-- Slot 3
 			{"Immolation", 		not MyPetBattle.buff("Immolation") },	-- Slot 3
-			{"Immolate", 		not MyPetBattle.debuff("Immolate") },	-- Slot 2
+			{"Immolate", 		not MyPetBattle.debuff("Immolate") and not MyPetBattle.debuff("Flamethrower") and not MyPetBattle.currentWeather("Scorched Earth") },	-- Slot 2
 			{"Burn", 			},	-- Slot 1
 			{"Flame Breath", 	},	-- Slot 1
 		}
@@ -87,7 +87,7 @@ elseif petName == "Pandaren Fire Spirit" then
 	elemental_abilities = 
 		{
 			{"Cauterize", 		MyPetBattle.hp() < 0.7 },	-- Slot 3
-			{"Immolate", 		not MyPetBattle.debuff("Immolate") },	-- Slot 2
+			{"Immolate", 		not MyPetBattle.debuff("Immolate") and not MyPetBattle.debuff("Flamethrower") and not MyPetBattle.currentWeather("Scorched Earth") },	-- Slot 2
 			{"Burn", 			},	-- Slot 1
 			{"Magma Wave", 		},	-- Slot 1
 			{"Flamethrower", 	},	-- Slot 2
@@ -182,8 +182,8 @@ elseif petName == "Core Hound Pup" then
 elseif petName == "Dark Phoenix Hatchling" then
 	elemental_abilities = 
 		{
-			{"Conflagrate", 	MyPetBattle.debuff("Immolate") or MyPetBattle.currentWeather("Scorched Earth") },	-- Slot 3
-			{"Immolate", 		not MyPetBattle.debuff("Immolate") },	-- Slot 2
+			{"Conflagrate", 	MyPetBattle.debuff("Immolate") or MyPetBattle.debuff("Flamethrower") or MyPetBattle.currentWeather("Scorched Earth") },	-- Slot 3
+			{"Immolate", 		not MyPetBattle.debuff("Immolate") and not MyPetBattle.debuff("Flamethrower") and not MyPetBattle.currentWeather("Scorched Earth") },	-- Slot 2
 			{"Darkflame", 		},	-- Slot 2
 			{"Burn", 			},	-- Slot 1
 			{"Laser", 			},	-- Slot 1
@@ -192,20 +192,20 @@ elseif petName == "Dark Phoenix Hatchling" then
 elseif petName == "Lil' Ragnaros" then
 	elemental_abilities = 
 		{
-			{"Conflagrate", 	MyPetBattle.debuff("Immolate") or MyPetBattle.currentWeather("Scorched Earth") },	-- Slot 2
+			{"Conflagrate", 	MyPetBattle.debuff("Immolate") or MyPetBattle.debuff("Flamethrower") or MyPetBattle.currentWeather("Scorched Earth") },	-- Slot 2
+			{"Flamethrower", 	not MyPetBattle.debuff("Immolate") and not MyPetBattle.debuff("Flamethrower") and not MyPetBattle.currentWeather("Scorched Earth") },	-- Slot 3
+			{"Sons of the Flame",},	-- Slot 3
+			{"Magma Trap", 		},	-- Slot 2
 			{"Sulfuras Smash", 	},	-- Slot 1
 			{"Magma Wave", 		},	-- Slot 1
-			{"Magma Trap", 		},	-- Slot 2
-			{"Flamethrower", 	},	-- Slot 3
-			{"Sons of the Flame",},	-- Slot 3
 		}
 elseif petName == "Phoenix Hatchling" then
 	elemental_abilities = 
 		{
 			{"Cauterize", 		MyPetBattle.hp() < 0.7 },	-- Slot 2
 			{"Immolation", 		not MyPetBattle.buff("Immolation") },	-- Slot 3
-			{"Immolate", 		not MyPetBattle.debuff("Immolate") },	-- Slot 2
-			{"Conflagrate", 	MyPetBattle.debuff("Immolate") or MyPetBattle.currentWeather("Scorched Earth") },	-- Slot 3
+			{"Immolate", 		not MyPetBattle.debuff("Immolate") and not MyPetBattle.debuff("Flamethrower") and not MyPetBattle.currentWeather("Scorched Earth") },	-- Slot 2
+			{"Conflagrate", 	MyPetBattle.debuff("Immolate") or MyPetBattle.debuff("Flamethrower") or MyPetBattle.currentWeather("Scorched Earth") },	-- Slot 3
 			{"Burn", 			},	-- Slot 1
 			{"Peck", 			},	-- Slot 1
 		}
@@ -332,7 +332,7 @@ elseif petName == "Cinder Kitten" then
 	elemental_abilities = 
 		{
 			{"Scorched Earth", 	not MyPetBattle.currentWeather("Scorched Earth") },	-- Slot 3
-			{"Immolate", 		not MyPetBattle.debuff("Immolate") },	-- Slot 2
+			{"Immolate", 		not MyPetBattle.debuff("Immolate") and not MyPetBattle.debuff("Flamethrower") and not MyPetBattle.currentWeather("Scorched Earth") },	-- Slot 2
 			{"Leap", 			MyPetBattle.currentPetSpeed(1) < MyPetBattle.currentPetSpeed(2) and not MyPetBattle.buff("Speed Boost") },	-- Slot 2 -- If your (1) speed is slower than you enemy (2) and not boosted
 			{"Claw", 			},	-- Slot 1
 			{"Rend", 			},	-- Slot 1
@@ -383,8 +383,8 @@ elseif petName == "Spirit of Summer" then
 		{
 			{"Scorched Earth", 	not MyPetBattle.currentWeather("Scorched Earth") },	-- Slot 2
 			{"Immolation", 		not MyPetBattle.buff("Immolation") },	-- Slot 3
-			{"Immolate", 		not MyPetBattle.debuff("Immolate") },	-- Slot 2
-			{"Conflagrate", 	MyPetBattle.debuff("Immolate") or MyPetBattle.currentWeather("Scorched Earth") },	-- Slot 3
+			{"Immolate", 		not MyPetBattle.debuff("Immolate") and not MyPetBattle.debuff("Flamethrower") and not MyPetBattle.currentWeather("Scorched Earth") },	-- Slot 2
+			{"Conflagrate", 	MyPetBattle.debuff("Immolate") or MyPetBattle.debuff("Flamethrower") or MyPetBattle.currentWeather("Scorched Earth") },	-- Slot 3
 			{"Burn", 			},	-- Slot 1
 			{"Flame Breath", 	},	-- Slot 1
 		}
