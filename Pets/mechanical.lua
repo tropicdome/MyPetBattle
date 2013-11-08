@@ -242,12 +242,12 @@ elseif petName == "Warbot" then
 elseif petName == "Menagerie Custodian" then
 	mechanical_abilities = 
 		{
+			{"Ion Cannon",		MyPetBattle.hp() < 0.35 },	-- Slot 3
+			{"Shock and Awe", 	},	-- Slot 2
 			{"Zap", 			},	-- Slot 1
 			{"Overtune", 		},	-- Slot 1
-			{"Shock and Awe", 	},	-- Slot 2
 			{"Demolish", 		},	-- Slot 2
 			{"Lock-On",			},	-- Slot 3
-			{"Ion Cannon",		},	-- Slot 3
 		}	
 elseif petName == "Pocket Reaver" then
 	mechanical_abilities = 
@@ -266,12 +266,12 @@ elseif petName == "Pocket Reaver" then
 elseif petName == "Darkmoon Tonk" then
 	mechanical_abilities = 
 		{
-			{"Missile", 		},	-- Slot 1
-			{"Charge", 			},	-- Slot 1
+			{"Ion Cannon", 		MyPetBattle.hp() < 0.35 },	-- Slot 3
 			{"Shock and Awe", 	},	-- Slot 2
 			{"Minefield", 		},	-- Slot 2
+			{"Missile", 		},	-- Slot 1
+			{"Charge", 			},	-- Slot 1
 			{"Lock-On", 		},	-- Slot 3
-			{"Ion Cannon", 		},	-- Slot 3
 		}	
 elseif petName == "Darkmoon Zeppelin" then
 	mechanical_abilities = 
