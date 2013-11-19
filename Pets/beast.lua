@@ -56,6 +56,16 @@ elseif petName == "Tito" then
 			{"Howl", 			},	-- Slot 2
 			{"Buried Treasure", },	-- Slot 3
 		}
+elseif petName == "Moon Moon" then
+	beast_abilities = 
+		{
+			{"Moon Fang",		},	-- Slot 1
+			{"Bite", 			},	-- Slot 1
+			{"Howl", 			},	-- Slot 2
+			{"Crouch",			},	-- Slot 2
+			{"Moon Tears", 		},	-- Slot 3
+			{"Moon Dance", 		},	-- Slot 3
+		}
 ---------------
 -- DIREHORNS --
 ---------------
@@ -92,6 +102,16 @@ elseif petName == "Feline Familiar" then
 			{"Call Darkness", 	},	-- Slot 2
 			{"Prowl", 			},	-- Slot 3
 		}
+elseif petName == "Xu-Fu, Cub of Xuen" then
+	beast_abilities = 
+		{
+			{"Spirit Claws", 	},	-- Slot 1
+			{"Bite", 			},	-- Slot 1
+			{"Feed", 			},	-- Slot 2
+			{"Moonfire", 		},	-- Slot 2
+			{"Vengeance", 		},	-- Slot 3
+			{"Prowl", 			},	-- Slot 3
+		}
 -------------
 -- INSECTS --
 -------------
@@ -114,6 +134,16 @@ elseif petName == "Silithid Hatchling" then
 			{"Hiss", 			},	-- Slot 2
 			{"Swarm", 			},	-- Slot 3
 			{"Sandstorm", 		},	-- Slot 3
+		}
+elseif petName == "Kovok" then
+	beast_abilities = 
+		{
+			{"Poison Fang", 	},	-- Slot 1
+			{"Body Slam", 		},	-- Slot 1
+			{"Pheromones", 		},	-- Slot 2
+			{"Digest Brains", 	},	-- Slot 2
+			{"Black Claw", 		},	-- Slot 3
+			{"Puncture Wound", 	},	-- Slot 3
 		}
 -------------
 -- LIZARDS --
@@ -250,6 +280,16 @@ elseif petName == "Silent Hedgehog" then
 elseif petName == "Sumprush Rodent" then
 	beast_abilities = 
 		{
+			{"Survival", 		MyPetBattle.hp() < 0.3 },	-- Slot 2
+			{"Bite", 			},	-- Slot 1
+			{"Powerball", 		},	-- Slot 1
+			{"Spirit Spikes", 	},	-- Slot 2
+			{"Flank", 			},	-- Slot 2
+			{"Vengeance", 		},	-- Slot 3
+		}
+elseif petName == "Vengeful Porcupette" then
+	beast_abilities = 
+		{
 			{"Survival", 		MyPetBattle.hp() < 0.3 },	-- Slot 3
 			{"Gnaw", 			},	-- Slot 1
 			{"Tail Slap", 		},	-- Slot 1
@@ -292,6 +332,16 @@ elseif petName == "Elder Python" then
 			{"Huge Fang", 		},	-- Slot 2
 			{"Burrow", 			},	-- Slot 3
 			{"Slither", 		},	-- Slot 3
+		}
+elseif petName == "Death Adder Hatchling" then
+	beast_abilities = 
+		{
+			{"Burrow", 			},	-- Slot 3
+			{"Poison Fang", 	},	-- Slot 1
+			{"Vicious Fang", 	},	-- Slot 1
+			{"Puncture Wound", 	},	-- Slot 2
+			{"Crouch", 			},	-- Slot 2
+			{"Blinding Poison", },	-- Slot 3
 		}
 ------------
 -- SPIDERS --
@@ -368,6 +418,16 @@ elseif petName == "Stunted Shardhorn" then
 			{"Horn Attack", 	},	-- Slot 2
 			{"Trumpet Strike", 	},	-- Slot 3
 			{"Stampede",		},	-- Slot 3
+		}
+elseif petName == "Zao, Calfling of Niuzao" then
+	beast_abilities = 
+		{
+			{"Headbutt", 		},	-- Slot 2
+			{"Trample", 		},	-- Slot 1
+			{"Horn Gore", 		},	-- Slot 1
+			{"Wish", 			},	-- Slot 2
+			{"Niuzao's Charge", },	-- Slot 3
+			{"Dominance",		},	-- Slot 3
 		}
 -------------------
 -- MISCELLANEOUS --
