@@ -86,12 +86,12 @@ elseif petName == "Mr. Bigglesworth" then
 elseif petName == "Scourged Whelpling" then
 	undead_abilities = 
 		{
+			{"Plagued Blood", 	not MyPetBattle.debuff("Plagued Blood") },	-- Slot 3
+			{"Death and Decay", not MyPetBattle.debuff("Death and Decay") },	-- Slot 2
+			{"Dreadful Breath", MyPetBattle.currentWeather("Cleansing Rain") },	-- Slot 3
+			{"Call Darkness", 	not MyPetBattle.currentWeather("Darkness") },	-- Slot 2
 			{"Shadowflame", 	},	-- Slot 1
 			{"Tail Sweep", 		},	-- Slot 1
-			{"Call Darkness", 	},	-- Slot 2
-			{"Death and Decay", },	-- Slot 2
-			{"Plagued Blood", 	},	-- Slot 3
-			{"Dreadful Breath", },	-- Slot 3
 		}
 elseif petName == "Stitched Pup" then
 	undead_abilities = 
