@@ -204,7 +204,7 @@
 				<Scripts>
 					<OnLoad>
 						Frame1_Checkbutton_OnLoad(self)
-						self.tooltipText = '\"Battle Pet Bandage\" Generate a new team if our current team is low on health.'
+						self.tooltipText = '\"Battle Pet Bandage\".'
 					</OnLoad>
 				</Scripts>
 			</CheckButton>

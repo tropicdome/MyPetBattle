@@ -733,7 +733,7 @@ function events:PET_BATTLE_QUEUE_PROPOSE_MATCH(...)			--
 	-- Sync setup for wt
 	if mypetbattle_wintrade_enabled then
 		MPB_SyncTimeSent = GetTime()
-		print("|cffff8000MPB|r: Queue popped, sending sync message! " .. MPB_SyncTimeSent)
+		if mypetbattle_debug then print("|cffff8000MPB|r: Queue popped, sending sync message! " .. MPB_SyncTimeSent) end
 		SendAddonMessage("MPB", "s"..MPB_SyncTimeSent, "PARTY")
 	end
 	
