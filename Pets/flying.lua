@@ -191,6 +191,16 @@ elseif petName == "Imperial Moth" then
 			{"Moth Balls", 		},	-- Slot 2
 			{"Moth Dust", 		},	-- Slot 3
 		}
+elseif petName == "Skywisp Moth" then
+	flying_abilities = 
+		{
+			{"Call Lightning", 	},	-- Slot 3
+			{"Counterspell", 	MyPetBattle.currentPetSpeed(1) > MyPetBattle.currentPetSpeed(2) },	-- Slot 2
+			{"Cocoon Strike", 	},	-- Slot 2
+			{"Slicing Wind", 	},	-- Slot 1
+			{"Reckless Strike", },	-- Slot 1
+			{"Moth Dust", 		},	-- Slot 3
+		}
 
 --------------
 -- MYTHICAL --
